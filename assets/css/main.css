@@ -141,11 +141,17 @@ section:nth-child(even) { background: var(--navy-800); }
 }
 .nav-links a:hover { color: var(--orange-lt); }
 
+.nav-links a {
+  position: relative;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
 .nav-links a.active {
   color: var(--white);
-  border: 1px solid rgba(232, 98, 26, 0.5);
-  border-radius: 4px;
-  padding: 3px 8px;
+  border-color: rgba(232, 98, 26, 0.45);
   background: rgba(232, 98, 26, 0.08);
 }
 

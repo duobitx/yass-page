@@ -62,19 +62,22 @@
   var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
   if (!sections.length || !navLinks.length) return;
 
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        var id = entry.target.id;
-        navLinks.forEach(function (link) {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-        });
+  function updateActive() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var offset = 100;
+    var current = '';
+
+    sections.forEach(function (section) {
+      if (section.offsetTop - offset <= scrollY) {
+        current = section.id;
       }
     });
-  }, {
-    rootMargin: '-60px 0px -55% 0px',
-    threshold: 0
-  });
 
-  sections.forEach(function (section) { observer.observe(section); });
+    navLinks.forEach(function (link) {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
 })();
