@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ESA Φ-lab funded research into disruptive technologies for decentralized storage and provenance tracking of Earth Observation data.">
+  <meta name="theme-color" content="#050b18">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="EDFS – Decentralized Storage &amp; Provenance of EO Data">
+  <meta property="og:description" content="ESA Φ-lab funded research into disruptive technologies for decentralized storage and provenance tracking of Earth Observation data.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cloudferro.github.io/edfs-site/">
+
+  <title>EDFS – Decentralized Storage &amp; Provenance of EO Data</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="#hero" class="nav-logo" aria-label="EDFS home">
+        <span class="logo-accent">EDFS</span>
+        <span class="logo-badge">ESA Φ-lab</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#objectives">Objectives</a></li>
+        <li><a href="#use-cases">Use Cases</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#partners">Partners</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Announcement banner -->
+  <div class="announcement-banner" role="complementary" aria-label="Upcoming events">
+    <div class="container">
+      <div class="banner-inner">
+        <span class="banner-tag">Upcoming Events</span>
+        <span class="banner-vdivider" aria-hidden="true"></span>
+        <div class="banner-events">
+          <span class="banner-item">
+            <span class="banner-date">June 15</span> &mdash; Final Review at ESRIN
+          </span>
+          <span class="banner-sep" aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+          <span class="banner-item">
+            <span class="banner-date">June 25</span> &mdash; EDFS Workshop at PHiNovation 2026
+          </span>
+          <span class="banner-sep" aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+          <a href="https://philab.esa.int/phinnovation/" target="_blank" rel="noopener noreferrer" class="banner-link">philab.esa.int/phinnovation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section id="hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="hero-tag">ESA Φ-lab &mdash; Theme 2</div>
+
+          <h1 class="hero-title">
+            Decentralized Storage<br>
+            &amp; Provenance for<br>
+            <span class="accent">EO Data</span>
+          </h1>
+
+          <p class="hero-project-title">
+            Disruptive Technologies for Decentralized Storage and Provenance of EO Data &mdash; Theme 2
+          </p>
+
+          <p class="hero-subtitle">
+            EDFS investigates disruptive technologies for decentralized storage and provenance tracking of Earth Observation data, developing a working file transfer engine, satellite constellation simulator, and provenance framework under ESA Φ-lab funding.
+          </p>
+
+          <div class="hero-cta">
+            <a href="#summary" class="btn btn-primary">Learn More</a>
+            <a href="#objectives" class="btn btn-outline">View Objectives</a>
+          </div>
+        </div>
+
+        <div class="hero-card" aria-label="Project at a glance">
+          <div class="hero-card-title">Project at a Glance</div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Prime Contractor</div>
+              <div class="info-value">CloudFerro S.A. <span style="color:var(--grey-md)">(PL)</span></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Sub-Contractor</div>
+              <div class="info-value">DuoBit Sp. z o.o. <span style="color:var(--grey-md)">(PL)</span></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Funded By</div>
+              <div class="info-value">ESA Φ-lab (European Space Agency)</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">ESA Contract No</div>
+              <div class="info-value"><code>4000148100/25/I-NS</code></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div>
+              <div class="info-label">Programme</div>
+              <div class="info-value">Disruptive Technologies — Theme 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         SUMMARY
+         ============================================================ -->
+    <section id="summary">
+      <div class="container">
+        <span class="section-label">Overview</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Project <span>Summary</span></h2>
+
+        <div class="summary-grid">
+          <div class="summary-text">
+            <p>
+              The EDFS project (<strong>Disruptive Technologies for Decentralized Storage and
+              Provenance of EO Data, Theme 2</strong>) is an ESA Φ-lab funded research activity
+              executed by CloudFerro (Poland) and DuoBit (Poland).
+            </p>
+            <p>
+              The project develops a proof-of-concept framework combining a decentralized
+              file transfer engine (EDFS) with a satellite constellation simulator featuring
+              an interactive GUI, energy cycle simulation, and a curated reference test
+              dataset for EO data validation.
+            </p>
+            <p>
+              The project runs under ESA Contract No. 4000148100/25/I-NS and concludes
+              with a Final Review and Live Demo at ESRIN in June 2026.
+            </p>
+
+            <blockquote class="highlight-block">
+              "Ensuring that EO data is not only accessible but verifiably trustworthy
+              from acquisition to final use is the cornerstone of the EDFS vision."
+            </blockquote>
+          </div>
+
+          <div>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="stat-number">Φ-lab</div>
+                <div class="stat-desc">ESA's innovation lab funding this research</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">DLT</div>
+                <div class="stat-desc">Distributed Ledger Technology at the core</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">EO</div>
+                <div class="stat-desc">Earth Observation data focus across full lifecycle</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         BACKGROUND
+         ============================================================ -->
+    <section id="background">
+      <div class="container">
+        <span class="section-label">Context</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Background &amp; <span>Motivation</span></h2>
+
+        <p class="bg-intro">
+          The exponential growth of satellite constellations and EO sensors is
+          generating petabytes of data daily. While data volumes grow, the
+          infrastructure to manage, distribute, and verify this data has lagged
+          behind — creating critical gaps in trust, sovereignty, and scalability.
+        </p>
+
+        <div class="background-content">
+          <div class="bg-card">
+            <h3>Growing EO Data Volumes</h3>
+            <p>
+              Satellite constellations generate increasing volumes of Earth Observation
+              data daily. Traditional centralized storage infrastructures face challenges
+              in scalability, resilience, and data sovereignty that require new
+              architectural approaches.
+            </p>
+          </div>
+
+          <div class="bg-card">
+            <h3>Provenance &amp; Trust</h3>
+            <p>
+              Tracking the full lineage of EO data — from raw acquisition through
+              processing and distribution — is critical for scientific reproducibility
+              and compliance. Existing systems lack immutable, verifiable provenance
+              mechanisms.
+            </p>
+          </div>
+
+          <div class="bg-card">
+            <h3>Decentralized Technologies</h3>
+            <p>
+              Emerging decentralized storage and distributed ledger technologies offer
+              new primitives for building resilient, trustless data infrastructure.
+              EDFS systematically evaluates and implements these for real EO data
+              scenarios.
+            </p>
+          </div>
+
+          <div class="bg-card">
+            <h3>ESA Φ-lab Programme</h3>
+            <p>
+              ESA's Φ-lab funds disruptive, early-stage research pushing boundaries of
+              space data utilization. EDFS is part of the Disruptive Technologies
+              programme Theme 2, alongside parallel projects exploring complementary
+              approaches.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         OBJECTIVES
+         ============================================================ -->
+    <section id="objectives">
+      <div class="container">
+        <span class="section-label">Goals</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Project <span>Objectives</span></h2>
+
+        <p class="objectives-intro">
+          EDFS is structured around four core technical objectives that together deliver
+          a comprehensive proof-of-concept framework for decentralized EO data management.
+        </p>
+
+        <ol class="objectives-list">
+          <li class="obj-item">
+            <span class="obj-num">OBJ 01</span>
+            <div class="obj-text">
+              <h3>EDFS File Transfer Engine</h3>
+              <p>
+                Design and implement a decentralized file transfer engine capable of
+                storing, retrieving, and managing Earth Observation data across
+                distributed nodes, with performance benchmarking against centralized
+                baselines.
+              </p>
+            </div>
+          </li>
+
+          <li class="obj-item">
+            <span class="obj-num">OBJ 02</span>
+            <div class="obj-text">
+              <h3>Satellite Constellation Simulator</h3>
+              <p>
+                Develop a satellite constellation simulator with an interactive graphical
+                user interface (GUI) enabling visualization of orbital parameters, ground
+                station coverage, and data relay scenarios relevant to EO data
+                distribution.
+              </p>
+            </div>
+          </li>
+
+          <li class="obj-item">
+            <span class="obj-num">OBJ 03</span>
+            <div class="obj-text">
+              <h3>Energy Cycle Simulation</h3>
+              <p>
+                Implement a satellite energy consumption and recharge simulation module
+                covering solar panel exposure and shading cycles, providing realistic
+                power budget modelling for constellation scenarios.
+              </p>
+            </div>
+          </li>
+
+          <li class="obj-item">
+            <span class="obj-num">OBJ 04</span>
+            <div class="obj-text">
+              <h3>Reference Test Dataset</h3>
+              <p>
+                Compile and publish a curated reference test dataset for EO data
+                provenance validation, enabling reproducible benchmarking of the EDFS
+                framework against real-world Earth Observation data characteristics.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         USE CASES
+         ============================================================ -->
+    <section id="use-cases">
+      <div class="container">
+        <span class="section-label">Validation</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Use <span>Cases</span></h2>
+
+        <p class="bg-intro">
+          EDFS is validated against three operational use cases derived from the project's
+          Use Case Definition document (ESA-DECENTRALIZED-STORAGE-UCD-0001). Each use case
+          drives the design, implementation, and benchmarking of the EDFS prototype.
+        </p>
+
+        <div class="background-content">
+          <div class="bg-card">
+            <h3>UC 01 &mdash; Rapid Disaster Response</h3>
+            <p>
+              An Earth Observation satellite acquires imagery of a disaster event and
+              immediately distributes it in chunks across the decentralised EDFS network
+              &mdash; via both satellite and ground-station nodes &mdash; to accelerate
+              delivery of urgent data to relief planning teams. Expected impact: measurable
+              reduction in time-to-availability compared to the standard Near-Real-Time
+              baseline of 2&ndash;4 hours.
+            </p>
+          </div>
+
+          <div class="bg-card">
+            <h3>UC 02 &mdash; Continuous Line of Sight for LEO Satellites</h3>
+            <p>
+              A satellite with constrained ground communication windows sends mission
+              telemetry in small chunks via EDFS to any satellite currently in Line of
+              Sight. Corrective command files are uploaded to EDFS and delivered to the
+              affected satellite during its next available pass. Expected impact:
+              near-real-time command and telemetry delivery with target success rate
+              &ge;&nbsp;95% under degraded connectivity.
+            </p>
+          </div>
+
+          <div class="bg-card">
+            <h3>UC 03 &mdash; Situation-Aware Data Routing</h3>
+            <p>
+              Using knowledge of orbital parameters and node capabilities, a satellite
+              dynamically routes data only to nodes that minimise power consumption while
+              maximising bandwidth efficiency &mdash; adapting in real time to changing
+              Line of Sight and resource constraints. Expected impact: energy consumption
+              reduction with indicative target &ge;&nbsp;20%; improved replication
+              performance with Priority-Aware Routing versus baseline.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         NEWS
+         ============================================================ -->
+    <section id="news">
+      <div class="container">
+        <span class="section-label">Updates</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Latest <span>News</span></h2>
+
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-card-badge">
+              <span class="badge-tag">UPCOMING EVENT</span>
+              <span class="badge-date">June 15, 2026</span>
+            </div>
+            <div class="news-card-body">
+              <h3>Final Review at ESRIN</h3>
+              <p>
+                The EDFS project final review will take place at ESA's ESRIN facility
+                in Frascati, Italy. The team will present project results and demonstrate
+                the EDFS file transfer engine and satellite constellation simulator to
+                ESA representatives.
+              </p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-card-badge">
+              <span class="badge-tag">UPCOMING EVENT</span>
+              <span class="badge-date">June 25, 2026</span>
+            </div>
+            <div class="news-card-body">
+              <h3>EDFS at PHiNovation 2026</h3>
+              <p>
+                EDFS will be presented at PHiNovation &mdash; ESA Φ-lab's flagship
+                innovation event. The team will showcase the live EDFS demo and satellite
+                constellation simulator to the broader space innovation community. More
+                information at philab.esa.int/phinnovation/
+              </p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-card-badge">
+              <span class="badge-tag">MILESTONE</span>
+              <span class="badge-date">May 11, 2026</span>
+            </div>
+            <div class="news-card-body">
+              <h3>Experimentation Phase Launched</h3>
+              <p>
+                The EDFS consortium kicked off the experimentation phase, initiating the
+                first series of controlled tests across all three defined use cases &mdash;
+                Rapid Disaster Response, Continuous Line of Sight, and Situation-Aware
+                Data Routing. Experiments are executed in a Kubernetes-based simulation
+                environment with automated observability and fault injection.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         PARTNERS
+         ============================================================ -->
+    <section id="partners">
+      <div class="container">
+        <span class="section-label">Consortium</span>
+        <div class="divider"></div>
+        <h2 class="section-title">Project <span>Partners</span></h2>
+
+        <p class="partners-intro">
+          EDFS is executed by a Polish consortium combining deep expertise in
+          cloud infrastructure for space data and distributed ledger technologies.
+        </p>
+
+        <div class="partners-grid">
+          <div class="partner-card">
+            <div class="partner-role">Prime Contractor</div>
+            <div class="partner-name">CloudFerro</div>
+            <div class="partner-country">Poland</div>
+            <p class="partner-desc">
+              A leading European cloud operator and managed services provider
+              specializing in Earth Observation and space data infrastructure.
+              CloudFerro operates CREODIAS — one of Europe's largest EO cloud
+              platforms — and brings deep expertise in large-scale geospatial
+              data management and ESA data infrastructure projects.
+            </p>
+          </div>
+
+          <div class="partner-card">
+            <div class="partner-role">Sub-Contractor</div>
+            <div class="partner-name">DuoBit</div>
+            <div class="partner-country">Poland</div>
+            <p class="partner-desc">
+              A Polish software development company specializing in distributed
+              systems, backend engineering, and advanced software architecture.
+              DuoBit leads the technical implementation of the EDFS engine and
+              simulator components within the consortium.
+            </p>
+          </div>
+
+          <div class="partner-card">
+            <div class="partner-role">Funding Agency</div>
+            <div class="partner-name">ESA Φ-lab</div>
+            <div class="partner-country">Europe</div>
+            <p class="partner-desc">
+              The European Space Agency's Phi-lab incubates disruptive technologies
+              for future space missions and Earth Observation applications. Φ-lab
+              funds early-stage research that bridges cutting-edge technology
+              with real operational space data challenges.
+            </p>
+          </div>
+        </div>
+
+        <div class="funder-section">
+          <div class="funder-label">This project is funded by</div>
+          <div class="funder-card">
+            <div class="funder-info">
+              <h3>European Space Agency — Φ-lab</h3>
+              <p>
+                EDFS is funded under the ESA Φ-lab Open Space Innovation Platform (OSIP)
+                programme, supporting disruptive technologies for the future of Earth
+                Observation. The views expressed are those of the project team and do not
+                necessarily reflect the official position of ESA.
+              </p>
+              <div class="contract-badge">Contract: 4000148100/25/I-NS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="nav-logo" style="font-size:1.2rem;">
+            <span class="logo-accent">EDFS</span>
+            <span class="logo-badge">ESA Φ-lab</span>
+          </div>
+          <p>Disruptive Technologies for Decentralized Storage and Provenance of Earth Observation Data — Theme 2.</p>
+        </div>
+
+        <div>
+          <div class="footer-heading">Navigate</div>
+          <ul class="footer-links">
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#background">Background</a></li>
+            <li><a href="#objectives">Objectives</a></li>
+            <li><a href="#use-cases">Use Cases</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#partners">Partners</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-heading">Contract Info</div>
+          <div class="footer-meta">
+            <span>ESA Contract No:</span>
+            <span style="font-family:'JetBrains Mono',monospace; color: #f57c3a; font-size:0.78rem;">4000148100/25/I-NS</span>
+            <span style="margin-top:0.5rem;">Prime Contractor:</span>
+            <span>CloudFerro S.A. (PL)</span>
+            <span style="margin-top:0.5rem;">Sub-Contractor:</span>
+            <span>DuoBit Sp. z o.o. (PL)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-project-title">
+          Disruptive Technologies for Decentralized Storage and Provenance of EO Data &mdash; Theme 2
+        </span>
+        <span>
+          &copy; 2026 CloudFerro S.A. &amp; DuoBit &mdash; All rights reserved.
+        </span>
+        <span class="esa-flag">
+          Funded by ESA Φ-lab &mdash; European Space Agency
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
