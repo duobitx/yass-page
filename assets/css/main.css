@@ -141,6 +141,14 @@ section:nth-child(even) { background: var(--navy-800); }
 }
 .nav-links a:hover { color: var(--orange-lt); }
 
+.nav-links a.active {
+  color: var(--white);
+  border: 1px solid rgba(232, 98, 26, 0.5);
+  border-radius: 4px;
+  padding: 3px 8px;
+  background: rgba(232, 98, 26, 0.08);
+}
+
 /* Mobile nav */
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
 .nav-toggle span {

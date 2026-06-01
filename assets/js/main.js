@@ -56,3 +56,25 @@
   draw();
   window.addEventListener('resize', function () { resize(); initStars(); });
 })();
+
+(function () {
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  if (!sections.length || !navLinks.length) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function (link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, {
+    rootMargin: '-60px 0px -55% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(function (section) { observer.observe(section); });
+})();
