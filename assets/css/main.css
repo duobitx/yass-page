@@ -817,6 +817,14 @@ section:nth-child(even) { background: var(--navy-800); }
 
 .footer-nav-logo { font-size: 1.2rem; }
 
+.policy-contact-heading { margin-top: 0; }
+
+.policy-contact-note {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--grey-md);
+}
+
 .footer-contract-no {
   font-family: var(--font-mono);
   color: var(--orange-lt);
