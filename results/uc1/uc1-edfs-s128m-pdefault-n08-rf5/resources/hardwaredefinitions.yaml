@@ -1,0 +1,58 @@
+apiVersion: int.esa.yass/v1
+kind: HardwareDefinition
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"HardwareDefinition","metadata":{"annotations":{},"name":"ground-station-hwdef"},"spec":{"batteryCapacityWh":1000,"batteryChargeW":1000,"cpu":"1500m","energyConsumption":{"lowPowerBaseW":0,"normalPowerBaseW":0,"perkByteDiskRD":0,"perkByteDiskWR":0,"perkByteTXWh":0},"lowPowerThresholdWh":0,"memory":"4Gi"}}
+  creationTimestamp: "2026-06-04T19:07:09Z"
+  generation: 2
+  name: ground-station-hwdef
+  resourceVersion: "1595679"
+  uid: 83a7d52f-e228-4d7a-b535-ca5635872e6e
+spec:
+  batteryCapacityWh: 1000
+  batteryChargeW: 1000
+  cpu: 1500m
+  energyConsumption:
+    lowPowerBaseW: 0
+    normalPowerBaseW: 0
+    perkByteDiskRD: 0
+    perkByteDiskWR: 0
+    perkByteTXWh: 0
+  lowPowerThresholdWh: 0
+  memory: 4Gi
+---
+apiVersion: int.esa.yass/v1
+description: |
+  Name: OneWeb Gen-1 (Ku-/Ka-band comms satellite)
+  Mass: ~150 kg (vs ~1100 kg for Sentinel-2)
+  Orbit: ~1200 km altitude, 87.9° inclination, 18 orbital planes × 36 sats
+         in the full constellation (we use a sub-sample for UC sweeps).
+  OBC class: ARM-grade SoC, much lighter than Sentinel-2's ERC-32.
+  Payload: comms relay, not Earth observation — no large image buffers
+           so on-board storage is modest.
+  Battery / solar: ~5 kWh capacity, ~800 W average charge from panels.
+kind: HardwareDefinition
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","description":"Name: OneWeb Gen-1 (Ku-/Ka-band comms satellite)\nMass: ~150 kg (vs ~1100 kg for Sentinel-2)\nOrbit: ~1200 km altitude, 87.9° inclination, 18 orbital planes × 36 sats\n       in the full constellation (we use a sub-sample for UC sweeps).\nOBC class: ARM-grade SoC, much lighter than Sentinel-2's ERC-32.\nPayload: comms relay, not Earth observation — no large image buffers\n         so on-board storage is modest.\nBattery / solar: ~5 kWh capacity, ~800 W average charge from panels.\n","kind":"HardwareDefinition","metadata":{"annotations":{},"name":"oneweb"},"spec":{"batteryCapacityWh":5000,"batteryChargeW":800,"cpu":"250m","diskSpace":"50Gi","energyConsumption":{"lowPowerBaseW":300,"normalPowerBaseW":500,"perkByteDiskRD":0.00001,"perkByteDiskWR":0.00002,"perkByteTXWh":0.00001},"lowPowerThresholdWh":500,"memory":"1536Mi"}}
+  creationTimestamp: "2026-06-04T19:07:09Z"
+  generation: 2
+  name: oneweb
+  resourceVersion: "659379"
+  uid: 8ae7282e-add3-41b1-bac2-fc842967f916
+spec:
+  batteryCapacityWh: 5000
+  batteryChargeW: 800
+  cpu: 250m
+  diskSpace: 50Gi
+  energyConsumption:
+    lowPowerBaseW: 300
+    normalPowerBaseW: 500
+    perkByteDiskRD: 1e-05
+    perkByteDiskWR: 2e-05
+    perkByteTXWh: 1e-05
+  lowPowerThresholdWh: 500
+  memory: 1536Mi
+---

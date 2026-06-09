@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uc4-edfs-pdefault-td45m-n21-rf3 — resources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../../../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../../../index.html">YASS results</a>
+   / <a href="../../index.html">uc4</a> / <a href="../index.html">uc4-edfs-pdefault-td45m-n21-rf3</a> / resources
+</div>
+
+<h1>Kubernetes resources — <code>uc4-edfs-pdefault-td45m-n21-rf3</code></h1>
+<p class="muted">The manifests below are the exact custom resources this run was
+created from. Apply them (after the YASS operator + HardwareDefinitions are
+installed) to reproduce the experiment.</p>
+<div class="doc">
+<pre>kubectl apply -f hardwaredefinitions.yaml
+kubectl apply -f layout.yaml
+kubectl apply -f experimentdefinition.yaml
+kubectl apply -f experiment.yaml</pre>
+</div>
+<h2>Files</h2>
+<ul class="files">
+  <li><a href="experiment.yaml">experiment.yaml</a> — Experiment — the run instance (engine, RF, simulationStartTime)</li><li><a href="experimentdefinition.yaml">experimentdefinition.yaml</a> — ExperimentDefinition — behaviours, agents, faults, maxDuration</li><li><a href="hardwaredefinitions.yaml">hardwaredefinitions.yaml</a> — HardwareDefinitions (oneweb / ground-station specs)</li><li><a href="layout.yaml">layout.yaml</a> — Layout — constellation topology (FsNodes, orbits)</li>
+</ul>
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

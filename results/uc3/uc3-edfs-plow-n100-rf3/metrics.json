@@ -1,0 +1,32 @@
+{
+  "run_id": "uc3-edfs-plow-n100-rf3",
+  "engine": "edfs",
+  "file_size": "256M",
+  "sat_count": 100,
+  "priority": "low",
+  "rf": 3,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-08T05:15:08Z",
+  "duration_s": 931.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:14:31Z",
+  "first_gs": 886.739771115,
+  "last_gs": 886.739771115,
+  "mean_gs": 886.739771115,
+  "n_gs": 1,
+  "gs_reached": 1,
+  "files_to_gs": 1,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "oneweb-0027"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 1,
+  "produced": 1.0,
+  "notes": "\u2014",
+  "tx_mib": 614.9779500961304,
+  "peak_cpu": 730.0,
+  "peak_mem_mib": 225.453125
+}

@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uc2-edfs-pdefault-n01-rf3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../../index.html">YASS results</a>
+   / <a href="../index.html">uc2</a> / uc2-edfs-pdefault-n01-rf3
+</div>
+
+<h1><code>uc2-edfs-pdefault-n01-rf3</code>
+  <span class="badge">edfs</span>
+  <span class="badge ok">Success</span>
+</h1>
+
+
+<h2>Parameters</h2>
+<table class="kpi">
+<tr><th>parameter</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>engine</th><td>edfs</td><td>—</td><td>Storage/transport engine under test (edfs or tus)</td></tr>
+
+<tr><th>priority</th><td>default</td><td>—</td><td>File priority class (low/default/high; EDFS PAR)</td></tr>
+
+<tr><th>sat_count</th><td>1</td><td>sats</td><td>Number of satellites in the constellation</td></tr>
+
+<tr><th>RF</th><td>3</td><td>copies</td><td>EDFS replication factor (n/a for TUS)</td></tr>
+
+</table>
+
+
+<h2>KPIs</h2>
+<table class="kpi">
+<tr><th>KPI</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>state</th><td>Success</td><td>—</td><td>Terminal experiment state (Success/TimedOut/Failure)</td></tr>
+
+<tr><th>exec_date</th><td>2026-06-09 00:26 UTC</td><td>UTC</td><td>Wall-clock date/time the experiment was launched (CR creationTimestamp)</td></tr>
+
+<tr><th>duration</th><td>12m 46s</td><td>—</td><td>Experiment duration on the simulation clock (simulationStartTime → experimentTime)</td></tr>
+
+<tr><th>sim_start</th><td>2026-05-16 23:59 UTC</td><td>UTC</td><td>Simulation clock at experiment start (simulationStartTime)</td></tr>
+
+<tr><th>sim_end</th><td>2026-05-17 00:11 UTC</td><td>UTC</td><td>Simulation clock when the experiment finished (experimentTime)</td></tr>
+
+<tr><th>produced</th><td>1</td><td>files</td><td>Files produced by the producer agent(s)</td></tr>
+
+<tr><th>files_to_GS</th><td>1</td><td>count</td><td>Distinct produced files that reached at least one ground station</td></tr>
+
+<tr><th>delivery_success_rate</th><td>100</td><td>%</td><td>Distinct files reaching ≥1 GS as a percentage of files produced (UC2/UC5 primary KPI)</td></tr>
+
+<tr><th>all_delivered</th><td>yes</td><td>—</td><td>Whether every produced file reached a ground station</td></tr>
+
+<tr><th>first_GS_delivery_s</th><td>754</td><td>s</td><td>Time from sim start until the first produced file reached any ground station</td></tr>
+
+<tr><th>last_GS_delivery_s</th><td>754</td><td>s</td><td>Time from sim start until the last produced file reached a ground station (all-delivered time)</td></tr>
+
+<tr><th>GS_reached</th><td>6</td><td>count</td><td>Ground stations that received the file (from received_total — independent of the delivery-time metric)</td></tr>
+
+<tr><th>distinct_receivers</th><td>6</td><td>count</td><td>Distinct nodes that received a file (GS + relays)</td></tr>
+
+<tr><th>TX_MiB</th><td>500</td><td>MiB</td><td>Total network bytes transmitted, all nodes</td></tr>
+
+<tr><th>peak_cpu_m</th><td>170</td><td>millicores</td><td>Peak CPU across all containers</td></tr>
+
+<tr><th>peak_mem_MiB</th><td>143</td><td>MiB</td><td>Peak memory across all containers</td></tr>
+
+<tr><th>notes</th><td>—</td><td>—</td><td>Data-quality flags for this run (missing metrics, undelivered files)</td></tr>
+
+</table>
+
+<h2>Charts (interactive)</h2>
+<p class="cap">Node colours are consistent across every chart and the graph:
+  <span style="color:#f58518">■ ground station</span> ·
+  <span style="color:#4c78a8">■ relay satellite</span> ·
+  <span style="color:#54a24b">■ producer</span>.</p>
+<div class="charts">
+  <div class="chart"><h3>Per-target delivery time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cDeliv"></canvas></div>
+    <div class="cap">Seconds from file creation until each target node held the complete file. Bars coloured by node kind; the delivery KPI is the earliest ground-station bar.</div></div>
+  <div class="chart"><h3>Network TX over time (MiB)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cNetTs"></canvas></div>
+    <div class="cap">Cumulative TX summed across all nodes, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>CPU and memory over time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cResTs"></canvas></div>
+    <div class="cap">Aggregate CPU (millicores, left axis) and memory (MiB, right axis) across all containers, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>Network TX by node (top 20)</h3>
+    <div class="canvas-box" style="height:240px"><canvas id="cNet"></canvas></div>
+    <div class="cap">Total bytes transmitted per node over the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak CPU per node (top 20)</h3>
+    <div class="canvas-box" style="height:240px"><canvas id="cCpuNode"></canvas></div>
+    <div class="cap">Peak CPU (millicores) reached by each fsNode during the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak memory per node (top 20)</h3>
+    <div class="canvas-box" style="height:240px"><canvas id="cMemNode"></canvas></div>
+    <div class="cap">Peak memory (MiB) reached by each fsNode during the run, coloured by node kind.</div></div>
+</div>
+
+
+<h2>File propagation graph</h2>
+<div class="chart">
+  <div class="graph-controls">
+    <label>file <select id="gFile"></select></label>
+    <button id="gPlay" class="badge">▶ play</button>
+    <label>speed <select id="gSpeed">
+      <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+      <option value="1" selected>1×</option><option value="2">2×</option>
+      <option value="4">4×</option><option value="8">8×</option>
+      <option value="16">16×</option><option value="32">32×</option>
+      <option value="64">64×</option></select></label>
+    <input id="gTime" type="range" min="0" step="0.1">
+    <span id="gTimeLbl" class="muted"></span>
+  </div>
+  <div id="gNet" class="graph-box"></div>
+  <div class="cap"><span style="color:#f58518">■ ground station</span> · <span style="color:#4c78a8">● relay satellite</span> · <span style="color:#54a24b">● producer</span> (same colours as the charts). <b>Spread tree</b>: one edge <code>from → to</code> per node = where it <b>first</b> acquired the file by the selected time. Grouped per file; 0-byte control messages omitted; times bucketed to ~2&nbsp;s for cross-node clock skew. Timeline spans the whole experiment (0&nbsp;= simulation start). Delivery completeness is the <b>File deliveries</b> table below. <span id="gSrc" class="muted"></span></div>
+</div>
+
+<h2>File transfer graph (rate)</h2>
+<div class="chart">
+  <div class="graph-controls">
+    <label>file <select id="tFile"></select></label>
+    <button id="tPlay" class="badge">▶ play</button>
+    <label>speed <select id="tSpeed">
+      <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+      <option value="1" selected>1×</option><option value="2">2×</option>
+      <option value="4">4×</option><option value="8">8×</option>
+      <option value="16">16×</option><option value="32">32×</option>
+      <option value="64">64×</option></select></label>
+    <label>window <select id="tWin">
+      <option value="5">5 s</option><option value="10" selected>10 s</option>
+      <option value="20">20 s</option><option value="60">60 s</option></select></label>
+    <input id="tTime" type="range" min="0" step="0.1">
+    <span id="tTimeLbl" class="muted"></span>
+  </div>
+  <div id="tNet" class="graph-box"></div>
+  <div class="cap">Same nodes; edge <code>from → to</code> = bytes transferred <b>within the trailing window</b> ending at the selected time (instantaneous flow). <b>Edge colour = bandwidth</b> (bits/s, blue = low → red = high); label shows the rate. Play to watch where traffic moves moment-to-moment. Timeline is the simulation clock (0&nbsp;= simulation start), shared with the charts above.</div>
+</div>
+
+
+
+<h2>File deliveries</h2>
+<table class="deliveries">
+<tr><th>file</th><th>received by</th><th>delivery (s from creation)</th><th>time from start</th><th>#fsNodes with file</th></tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>oneweb-0027 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>11s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 754.2s</td>
+  <td>12m 45s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 754.2s</td>
+  <td>12m 45s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 754.3s</td>
+  <td>12m 45s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 754.3s</td>
+  <td>12m 45s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 754.4s</td>
+  <td>12m 45s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>oneweb-0027_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 754.5s</td>
+  <td>12m 45s from start</td>
+  <td>7</td>
+</tr>
+
+</table>
+
+
+
+<h2>Charts</h2>
+<div class="charts">
+  
+  <div class="chart"><img src="charts/network_tx.png" alt="charts/network_tx.png"><div class="cap">charts/network_tx.png</div></div>
+  
+  <div class="chart"><img src="gnuplot/delivery.png" alt="gnuplot/delivery.png"><div class="cap">gnuplot/delivery.png</div></div>
+  
+</div>
+
+
+<h2>Files</h2>
+<ul class="files">
+  <li><a href="resources/index.html">Kubernetes resources</a> — manifests to reproduce this run (hardwaredefinitions, layout, experimentdefinition, experiment)</li>
+  <li><a href="metrics.json">metrics.json</a> — KPIs as JSON</li>
+  <li><a href="raw-parquet.tar">raw-parquet.tar</a> — raw metrics &amp; events as typed, zstd-compressed Parquet (one file per series; read with pandas/polars/DuckDB)</li>
+</ul>
+
+<script>
+const D = {"delivery": {"estrack-new-norcia": {"s": 754.2, "gs": true, "kind": "gs"}, "estrack-kiruna": {"s": 754.2, "gs": true, "kind": "gs"}, "estrack-redu": {"s": 754.3, "gs": true, "kind": "gs"}, "estrack-santa-maria": {"s": 754.3, "gs": true, "kind": "gs"}, "estrack-cebreros": {"s": 754.4, "gs": true, "kind": "gs"}, "estrack-malargue": {"s": 754.5, "gs": true, "kind": "gs"}}, "producers": ["oneweb-0027"], "pal": {"gs": "#f58518", "sat": "#4c78a8", "prod": "#54a24b", "tx": "#72b7b2", "rx": "#e45756", "cpu": "#b279a2", "mem": "#eeca3b", "vol": "#9d755d"}, "net": {"nodes": ["estrack-kiruna", "estrack-santa-maria", "estrack-new-norcia", "estrack-cebreros", "estrack-redu", "oneweb-0027", "estrack-kourou", "estrack-malargue"], "tx": [120.5, 100.3, 99.1, 46.7, 46.3, 34.8, 31.7, 21.0], "kind": ["gs", "gs", "gs", "gs", "gs", "prod", "gs", "gs"]}, "net_ts": {"t": [20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245, 260, 275, 290, 305, 320, 335, 350, 365, 380, 395, 410, 425, 440, 455, 470, 485, 500, 515, 530, 545, 560, 575, 590, 605, 620, 635, 650, 665, 680, 695, 710, 725, 740, 755, 770, 785, 800, 815, 830, 845, 860, 875, 890, 905, 920, 935, 950, 965, 980, 995, 1010, 1025, 1040, 1055], "tx": [0.41, 0.95, 1.35, 1.86, 2.1, 2.27, 2.54, 2.95, 3.4, 3.86, 4.28, 4.73, 5.19, 5.64, 6.07, 6.57, 7.03, 7.48, 7.91, 8.36, 8.81, 9.26, 9.69, 10.19, 10.64, 11.1, 11.4, 11.68, 11.97, 12.46, 12.89, 13.4, 13.85, 14.3, 14.61, 14.89, 15.17, 15.61, 16.02, 16.53, 16.96, 17.4, 17.8, 18.24, 18.67, 19.11, 19.51, 20.18, 87.71, 184.71, 482.54, 491.69, 492.25, 492.8, 493.28, 493.85, 494.39, 494.9, 495.38, 495.89, 496.37, 496.89, 497.37, 497.94, 498.29, 498.61, 499.0, 499.47, 499.96, 500.47]}, "res_ts": {"t": [5, 20, 35, 50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200, 215, 230, 245, 260, 275, 290, 305, 320, 335, 350, 365, 380, 395, 410, 425, 440, 455, 470, 485, 500, 515, 530, 545, 560, 575, 590, 605, 620, 635, 650, 665, 680, 695, 710, 725, 740, 755, 770, 785, 800, 815, 830, 845, 860, 875, 890, 905, 920, 935, 950, 965, 980, 995, 1010, 1025, 1040, 1055], "cpu": [50.0, 30.0, 30.0, 10.0, 60.0, 30.0, 30.0, 30.0, 40.0, 20.0, 20.0, 10.0, 60.0, 60.0, 40.0, 40.0, 40.0, 30.0, 40.0, 30.0, 40.0, 20.0, 50.0, 60.0, 60.0, 50.0, 30.0, 60.0, 50.0, 30.0, 60.0, 30.0, 10.0, 30.0, 20.0, 30.0, 50.0, 50.0, 30.0, 50.0, 70.0, 50.0, 30.0, 30.0, 20.0, 30.0, 30.0, 10.0, 60.0, 80.0, 890.0, 860.0, 60.0, 70.0, 80.0, 70.0, 70.0, 40.0, 60.0, 30.0, 50.0, 70.0, 90.0, 40.0, 120.0, 40.0, 70.0, 70.0, 90.0, 50.0, 40.0], "mem": [1165.75, 1269.3, 1297.47, 1307.41, 1341.16, 1344.8, 1347.67, 1351.94, 1367.8, 1325.05, 1325.26, 1325.49, 1325.01, 1326.69, 1328.78, 1330.83, 1329.74, 1316.22, 1316.51, 1317.61, 1302.55, 1302.98, 1303.48, 1303.92, 1317.08, 1317.23, 1317.51, 1317.94, 1319.15, 1319.32, 1319.52, 1319.64, 1324.12, 1324.26, 1324.68, 1325.31, 1346.8, 1347.12, 1347.91, 1348.07, 1332.55, 1332.64, 1332.87, 1333.0, 1345.35, 1345.53, 1345.78, 1345.95, 1336.84, 1459.61, 1489.91, 1541.65, 1638.29, 1638.71, 1639.95, 1641.74, 1625.86, 1628.17, 1628.49, 1629.21, 1617.55, 1599.01, 1600.48, 1602.44, 1527.45, 1528.61, 1528.94, 1528.78, 1535.03, 1498.36, 1493.13]}, "cpu_by_node": {"nodes": ["estrack-kiruna", "estrack-kourou", "estrack-malargue", "estrack-new-norcia", "estrack-redu", "estrack-santa-maria", "estrack-cebreros", "oneweb-0027"], "vals": [230.0, 160.0, 160.0, 130.0, 130.0, 130.0, 120.0, 40.0], "kind": ["gs", "gs", "gs", "gs", "gs", "gs", "gs", "prod"]}, "mem_by_node": {"nodes": ["oneweb-0027", "estrack-santa-maria", "estrack-redu", "estrack-kourou", "estrack-cebreros", "estrack-new-norcia", "estrack-malargue", "estrack-kiruna"], "vals": [271.4, 229.7, 218.3, 214.2, 214.1, 212.4, 206.4, 203.5], "kind": ["prod", "gs", "gs", "gs", "gs", "gs", "gs", "gs"]}};
+const grid = 'rgba(168,184,208,.14)', txt = '#cdd7ea', P = D.pal;
+Chart.defaults.color = txt; Chart.defaults.borderColor = grid;
+const kc = k => (P && P[k]) || '#888';   // node-kind colour (gs / sat / prod) — same everywhere
+const nodeBars = (id, labels, vals, kinds, label, horiz) => {
+  if(!labels || !labels.length) return;
+  // value axis is x when bars are horizontal, y otherwise — title it with the
+  // unit-bearing label (e.g. "TX MiB", "peak CPU (millicores)") so every bar
+  // chart shows its unit even though the legend is hidden.
+  const valAxis = horiz ? 'x' : 'y';
+  new Chart(id,{type:'bar',data:{labels:labels,datasets:[{label:label,data:vals,
+      backgroundColor:(kinds||labels.map(()=>'sat')).map(kc)}]},
+    options:{indexAxis:horiz?'y':'x',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{[valAxis]:{title:{display:true,text:label}}}}});
+};
+const dk = Object.keys(D.delivery);
+// Per-target delivery — one bar per target, coloured by node kind (gs/sat/prod)
+new Chart(cDeliv,{type:'bar',data:{labels:dk,datasets:[{label:'delivery (s)',
+    data:dk.map(k=>D.delivery[k].s),backgroundColor:dk.map(k=>kc(D.delivery[k].kind))}]},
+  options:{indexAxis:'x',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{title:{display:true,text:'seconds'}} }}});
+// U1 — cumulative TX over time
+if(D.net_ts&&D.net_ts.t&&D.net_ts.t.length)new Chart(cNetTs,{type:'line',data:{labels:D.net_ts.t,
+  datasets:[{label:'TX MiB',data:D.net_ts.tx,borderColor:P.tx,pointRadius:0,tension:.2}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'s from start'}},y:{title:{display:true,text:'MiB (cumulative)'}}}}});
+// U2 — CPU (left axis) + memory (right axis) over time
+if(D.res_ts&&D.res_ts.t&&D.res_ts.t.length)new Chart(cResTs,{type:'line',data:{labels:D.res_ts.t,
+  datasets:[{label:'CPU millicores',data:D.res_ts.cpu,borderColor:P.cpu,pointRadius:0,tension:.2,yAxisID:'y'},
+            {label:'memory MiB',data:D.res_ts.mem,borderColor:P.mem,pointRadius:0,tension:.2,yAxisID:'y1'}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{
+    x:{title:{display:true,text:'s from start'}},
+    y:{position:'left',title:{display:true,text:'CPU (millicores)'}},
+    y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'memory (MiB)'}}}}});
+// U3 — TX by node, kind-coloured
+const netHoriz = 'y' === 'y';
+nodeBars('cNet', D.net.nodes, D.net.tx, D.net.kind, 'TX MiB', netHoriz);
+// U4 / U5 — peak CPU + memory per node, kind-coloured
+if(D.cpu_by_node)nodeBars('cCpuNode', D.cpu_by_node.nodes, D.cpu_by_node.vals, D.cpu_by_node.kind, 'peak CPU (millicores)', D.cpu_by_node.nodes.length>8);
+if(D.mem_by_node)nodeBars('cMemNode', D.mem_by_node.nodes, D.mem_by_node.vals, D.mem_by_node.kind, 'peak memory (MiB)', D.mem_by_node.nodes.length>8);
+</script>
+
+
+<script>
+const G = {"source": "block_recv", "files": ["oneweb-0027_0"], "nodes": [{"id": "estrack-cebreros", "kind": "gs", "producer": false}, {"id": "estrack-kiruna", "kind": "gs", "producer": false}, {"id": "estrack-kourou", "kind": "gs", "producer": false}, {"id": "estrack-malargue", "kind": "gs", "producer": false}, {"id": "estrack-new-norcia", "kind": "gs", "producer": false}, {"id": "estrack-redu", "kind": "gs", "producer": false}, {"id": "estrack-santa-maria", "kind": "gs", "producer": false}, {"id": "oneweb-0027", "kind": "sat", "producer": true}], "events": [{"t": 722.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 6154.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 6154.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 6154.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 6154.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 6154.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 6154.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-kourou", "bytes": 6154.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 726.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 728.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 730.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-kourou", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 732.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 744.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 744.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 744.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 744.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 744.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 746.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 748.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 750.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 752.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 754.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 756.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 758.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 760.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-redu", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 762.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-redu", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-redu", "bytes": 262158.0}, {"t": 764.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-redu", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-santa-maria", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kourou", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-kiruna", "to": "estrack-malargue", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-cebreros", "to": "estrack-santa-maria", "bytes": 262158.0}, {"t": 766.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 262158.0}], "tree": [{"t": 722.0, "file": "oneweb-0027_0", "from": "oneweb-0027", "to": "estrack-new-norcia", "bytes": 10492474.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-cebreros", "bytes": 5773630.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-malargue", "bytes": 5249314.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-malargue", "to": "estrack-kourou", "bytes": 1048632.0}, {"t": 724.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-kiruna", "bytes": 10492474.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-redu", "bytes": 5249314.0}, {"t": 722.0, "file": "oneweb-0027_0", "from": "estrack-new-norcia", "to": "estrack-santa-maria", "bytes": 10492474.0}], "acq": {"oneweb-0027_0": {"estrack-new-norcia": 722.0, "estrack-santa-maria": 722.0, "estrack-redu": 722.0, "estrack-cebreros": 722.0, "estrack-kiruna": 724.0, "estrack-malargue": 724.0, "estrack-kourou": 724.0, "oneweb-0027": 0.0}}, "tmax": 766.0};
+(function(){
+  if(!G || !G.events.length) return;
+  // Per-file edge colours — deliberately distinct from the node-kind palette
+  // (orange/blue/green) and the metric palette, so a file's edges are never
+  // confused with a node kind.
+  const palette=['#9467bd','#e377c2','#17becf','#bcbd22','#7f7f7f','#c5b0d5','#9edae5','#dbdb8d'];
+  const fcol={}; G.files.forEach((f,i)=>fcol[f]=palette[i%palette.length]);
+  const fmt=b=>b>=1048576?(b/1048576).toFixed(1)+' MiB':b>=1024?(b/1024).toFixed(0)+' KiB':b+' B';
+  // Rate-graph edge colour = bandwidth (bytes/s, log-scaled blue→red over the model's
+  // ~100 kbit/s … 10 Gbit/s range); label/tooltip show bits/s.
+  const fmtRate=bps=>bps*8>=1e6?(bps*8/1e6).toFixed(1)+' Mbit/s':(bps*8/1e3).toFixed(0)+' kbit/s';
+  const rateColor=bps=>{const n=Math.max(0,Math.min(1,(Math.log10(bps+1)-4)/5.5));return 'hsl('+Math.round(240*(1-n))+',75%,55%)';};
+  const tmax=G.tmax||0;
+  // One factory builds both graphs. With a window control (o.win) edges show bytes
+  // in the trailing window (rate); otherwise cumulative bytes up to t (propagation).
+  function makeGraph(o){
+    const sel=document.getElementById(o.sel), tEl=document.getElementById(o.time),
+          lbl=document.getElementById(o.lbl), playBtn=document.getElementById(o.play),
+          spEl=document.getElementById(o.speed), winEl=o.win?document.getElementById(o.win):null;
+    const DATA = o.data || G.events;
+    const all=document.createElement('option'); all.value='__all__';
+    all.text='all files ('+G.files.length+')'; sel.add(all);
+    G.files.forEach(f=>{const op=document.createElement('option');op.value=f;op.text=f;sel.add(op);});
+    tEl.max=tmax; tEl.value=tmax;
+    if(o.src){const s=document.getElementById(o.src); if(s) s.textContent='source: '+G.source;}
+    const nodesDS=new vis.DataSet(G.nodes.map(n=>{
+      const nd={ id:n.id, label:n.id,
+        shape:n.kind==='gs'?'square':'dot',  // producer keeps its node-type shape
+        color:n.producer?{background:'#21331a',border:D.pal.prod}
+              :(n.kind==='gs'?{background:'#3a2a14',border:D.pal.gs}:{background:'#1d2633',border:D.pal.sat}),
+        borderWidth:n.producer?3:1, font:{color:'#cfd6e4'}};
+      if(o.pos && o.pos[n.id]){ nd.x=o.pos[n.id].x; nd.y=o.pos[n.id].y; }  // shared layout
+      return nd;}));
+    const edgesDS=new vis.DataSet();
+    // With a shared precomputed layout, physics is off from the start so both graphs
+    // place every fsNode at the same coordinates; otherwise stabilize then freeze.
+    const net=new vis.Network(document.getElementById(o.net),{nodes:nodesDS,edges:edgesDS},{
+      edges:{arrows:'to',smooth:{type:'dynamic'}}, interaction:{hover:true},
+      physics: o.pos ? false : {stabilization:{iterations:200}}});
+    if(!o.pos) net.once('stabilizationIterationsDone',()=>net.setOptions({physics:false}));
+    function rebuild(){
+      const t=parseFloat(tEl.value), file=sel.value;
+      const win=winEl?parseFloat(winEl.value):null;
+      lbl.textContent=(win!=null?('window '+win+'s · t≤'):'t≤')+t.toFixed(1)+' / '+tmax.toFixed(1)+' s';
+      const agg={};
+      for(const e of DATA){
+        if(e.t>t) continue;
+        if(win!=null && e.t<=t-win) continue;
+        if(file!=='__all__' && e.file!==file) continue;
+        const af=G.acq&&G.acq[e.file]; if(af){const a=af[e.from]; if(a==null||a>e.t) continue;}  // sender must already hold the file
+        const key=e.from+'\x01'+e.to+'\x01'+e.file;
+        agg[key]=(agg[key]||0)+e.bytes;
+      }
+      const edges=[];
+      for(const key in agg){
+        const p=key.split('\x01'), b=agg[key];
+        let col, title, lab, w;
+        if(win!=null){                       // rate graph: colour + label by bandwidth
+          const bps=b/win;
+          col=rateColor(bps); title=p[2]+': '+fmtRate(bps)+' ('+fmt(b)+' / '+win+'s)';
+          lab=file==='__all__'?'':fmtRate(bps);
+          w=Math.max(1,Math.log10(b+1));
+        }else{                                // propagation/spread tree: colour by file only
+          // No edge label or tooltip: the only per-edge number we have is the
+          // block_recv-traced bytes of this single hop, which under-counts the real
+          // transfer and misleads — so show nothing rather than a wrong figure.
+          col=fcol[p[2]]||'#888'; lab=''; w=2;   // title left undefined -> no tooltip
+        }
+        edges.push({id:key,from:p[0],to:p[1],color:{color:col},
+          width:w,title:title,
+          label:lab,font:{color:'#cfd6e4',size:11,strokeWidth:0}});
+      }
+      edgesDS.clear(); edgesDS.add(edges);
+    }
+    tEl.oninput=rebuild; sel.onchange=rebuild; if(winEl) winEl.onchange=rebuild;
+    // 1× is real-time: one simulated second per wall-clock second. The speed
+    // selector multiplies that (e.g. 8× advances 8 simulated seconds per second).
+    const TICK_MS=100;
+    let timer=null;
+    playBtn.onclick=function(){
+      if(timer){clearInterval(timer);timer=null;this.textContent='▶ play';return;}
+      this.textContent='⏸ pause';
+      if(parseFloat(tEl.value)>=tmax) tEl.value=0;
+      timer=setInterval(()=>{
+        const spd=parseFloat(spEl&&spEl.value)||1;
+        const step=(TICK_MS/1000)*spd;
+        let v=parseFloat(tEl.value)+step;
+        if(v>=tmax){v=tmax;clearInterval(timer);timer=null;playBtn.textContent='▶ play';}
+        tEl.value=v; rebuild();
+      },TICK_MS);
+    };
+    rebuild();
+  }
+  // Compute ONE layout from the full mesh (all nodes + all distinct edges) and reuse
+  // it for both graphs, so the same fsNode sits at the same spot in each.
+  function computeLayout(cb){
+    const seen={}, le=[];
+    for(const e of G.events){const k=e.from+'>'+e.to; if(!seen[k]){seen[k]=1; le.push({from:e.from,to:e.to});}}
+    const box=document.createElement('div');
+    box.style.cssText='position:absolute;left:-9999px;top:-9999px;width:900px;height:650px';
+    document.body.appendChild(box);
+    const tmp=new vis.Network(box,
+      {nodes:new vis.DataSet(G.nodes.map(n=>({id:n.id}))), edges:new vis.DataSet(le)},
+      {physics:{stabilization:{iterations:300}}});
+    let done=false;
+    const finish=()=>{ if(done) return; done=true;
+      let pos=null; try{ pos=tmp.getPositions(); }catch(e){}
+      tmp.destroy(); box.remove(); cb(pos); };
+    tmp.once('stabilizationIterationsDone',finish);
+    setTimeout(finish,5000);  // fallback if stabilization is slow or never fires
+  }
+  computeLayout(function(pos){
+    makeGraph({net:'gNet',sel:'gFile',time:'gTime',lbl:'gTimeLbl',play:'gPlay',speed:'gSpeed',src:'gSrc',data:G.tree,pos:pos});
+    makeGraph({net:'tNet',sel:'tFile',time:'tTime',lbl:'tTimeLbl',play:'tPlay',speed:'tSpeed',win:'tWin',data:G.events,pos:pos});
+  });
+})();
+</script>
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

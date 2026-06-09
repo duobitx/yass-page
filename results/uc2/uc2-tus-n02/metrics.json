@@ -1,0 +1,33 @@
+{
+  "run_id": "uc2-tus-n02",
+  "engine": "tus",
+  "file_size": "32M",
+  "sat_count": 2,
+  "priority": "-",
+  "rf": null,
+  "t_destroy": null,
+  "state": "TimedOut",
+  "exec_date": "2026-06-09T00:21:17Z",
+  "duration_s": 21596.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T05:58:56Z",
+  "first_gs": 755.209725673,
+  "last_gs": 2816.814284818,
+  "mean_gs": 1786.0120052455,
+  "n_gs": 2,
+  "gs_reached": 2,
+  "files_to_gs": 2,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "oneweb-0018",
+    "oneweb-0027"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 2,
+  "produced": 2.0,
+  "notes": "\u2014",
+  "tx_mib": 67.53411674499512,
+  "peak_cpu": 110.0,
+  "peak_mem_mib": 14.265625
+}

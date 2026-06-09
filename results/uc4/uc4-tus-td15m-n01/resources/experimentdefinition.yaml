@@ -1,0 +1,69 @@
+apiVersion: int.esa.yass/v1
+kind: ExperimentDefinition
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"ExperimentDefinition","metadata":{"annotations":{},"name":"uc4-tus-td15m-n01"},"spec":{"behaviours":[{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"5","FILE_PRIORITY":"high","FILE_SIZE":"32M","MAX_PHOTOS":"1","PHOTO_TARGETS":"uc4:0:0:1000000"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"producer","hardwareEvents":[{"name":"destroy","startOffset":"15m","type":"Destroy"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-cebreros"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-kiruna"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-kourou"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-malargue"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-new-norcia"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-redu"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-santa-maria"}],"maxDuration":"25m"}}
+  creationTimestamp: "2026-06-08T20:32:12Z"
+  generation: 1
+  name: uc4-tus-td15m-n01
+  resourceVersion: "3683524"
+  uid: 860a5eca-3979-4175-99cb-a19ae4a7bef7
+spec:
+  behaviours:
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "5"
+        FILE_PRIORITY: high
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+        PHOTO_TARGETS: uc4:0:0:1000000
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: producer
+    hardwareEvents:
+    - name: destroy
+      startOffset: 15m
+      type: Destroy
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-cebreros
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-kiruna
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-kourou
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-malargue
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-new-norcia
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-redu
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-santa-maria
+  maxDuration: 25m

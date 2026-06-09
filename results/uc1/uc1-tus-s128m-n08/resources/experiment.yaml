@@ -1,0 +1,153 @@
+apiVersion: int.esa.yass/v1
+kind: Experiment
+metadata:
+  annotations:
+    experiment-controller/restart-baseline: "0"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Experiment","metadata":{"annotations":{},"name":"uc1-tus-s128m-n08","namespace":"uc1-tus-s128m-n08"},"spec":{"engineContainers":[{"env":[{"name":"GROUND_STATIONS","value":"*"}],"image":"ghcr.io/duobitx/yass-tus-fs-engine:latest","imagePullPolicy":"Always","name":"engine-tus"}],"experimentDefRef":"uc1-tus-s128m-n08","layoutDefRef":"uc1-n08","runId":"uc1-tus-s128m-n08","simulationStartTime":"2026-05-16T23:59:00.000Z","start":true}}
+  creationTimestamp: "2026-06-08T02:02:43Z"
+  finalizers:
+  - experiment-controller/cleanup-fsNodes
+  generation: 1
+  name: uc1-tus-s128m-n08
+  namespace: uc1-tus-s128m-n08
+  resourceVersion: "38635112"
+  uid: f1f4d8ac-fb08-4839-893d-d685ba986806
+spec:
+  engineContainers:
+  - env:
+    - name: GROUND_STATIONS
+      value: '*'
+    image: ghcr.io/duobitx/yass-tus-fs-engine:latest
+    imagePullPolicy: Always
+    name: engine-tus
+    resources: {}
+  experimentDefRef: uc1-tus-s128m-n08
+  layoutDefRef: uc1-n08
+  runId: uc1-tus-s128m-n08
+  simulationStartTime: "2026-05-16T23:59:00Z"
+  start: true
+status:
+  conditions:
+  - lastTransitionTime: "2026-06-08T02:03:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentDefinition
+  - lastTransitionTime: "2026-06-08T02:03:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Layout
+  - lastTransitionTime: "2026-06-08T02:03:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Messaging
+  - lastTransitionTime: "2026-06-08T02:03:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: FsnodeBroadcast
+  - lastTransitionTime: "2026-06-08T02:03:27Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentExecutor
+  - lastTransitionTime: "2026-06-08T02:03:28Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: EventsWebapp
+  - lastTransitionTime: "2026-06-08T02:03:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: MetricsBridge
+  - lastTransitionTime: "2026-06-08T02:03:38Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Mqtt2prom
+  - lastTransitionTime: "2026-06-08T02:03:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: WebUi
+  - lastTransitionTime: "2026-06-08T02:09:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0027
+  - lastTransitionTime: "2026-06-08T02:09:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0018
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0013
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0008
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0006
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0026
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0017
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0010
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-new-norcia
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kiruna
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-redu
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-cebreros
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-santa-maria
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kourou
+  - lastTransitionTime: "2026-06-08T02:09:42Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-malargue
+  experimentState: Success
+  experimentTime: "2026-05-17T00:12:34Z"

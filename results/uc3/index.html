@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC3 — Priority-Aware Routing (EDFS only)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC3 — Priority-Aware Routing (EDFS only)
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC3 — Priority-Aware Routing (EDFS only)</h1>
+
+<div class="doc"><h2>Abstract</h2>
+<p>One satellite produces one large file. We re-run the same scenario for each
+of the three file priorities (<code>low</code>, <code>default</code>, <code>high</code>) on the same
+constellation topology and measure how long it takes the file to reach at
+least one ground station. The hypothesis is that the EDFS engine treats
+high-priority files preferentially (faster replication, less aggressive
+back-off under congestion), so a high-priority file should arrive
+<strong>measurably faster</strong> than a low-priority one on otherwise identical runs.</p>
+<p>This use case targets only <strong>EDFS</strong> — TUS has no notion of file priority on
+the wire, so the comparison is internal to EDFS, not engine-vs-engine.</p>
+<h2>Success Condition</h2>
+<p>Same mechanism as UC1: the run ends successfully the moment the first file reaches
+any ground station.</p>
+<h2>Detailed description</h2>
+<p>A single producer satellite writes one large file. The producer's agent
+sets <code>FILE_PRIORITY</code> to one of <code>low</code>, <code>default</code>, <code>high</code> and writes a
+<code>.priority</code> sentinel that <code>fs_engine_wrapper</code> propagates into the
+file's <code>Attributes</code> map (read by EDFS at replication time).</p>
+<p>For each constellation size we run three back-to-back experiments — one per
+priority value — with deterministic <code>simulationStartTime</code> so the orbital
+pass schedule and the GS visibility windows are bit-identical between runs.
+Anything different that we observe in time-to-first-delivery is then
+attributable to the priority handling, not orbital luck.</p>
+<p>The seven ESTRACK ground stations are the receivers; each terminates on
+the first RECEIVED with the configured <code>END_ON_ANY=true</code>.</p>
+<h2>Main goal</h2>
+<p>Establish a quantitative answer to: <strong>does EDFS's priority handling
+actually move the needle?</strong> Specifically:</p>
+<ul>
+<li>Time-to-first-delivery of a <code>high</code> file is statistically lower than that
+  of a <code>low</code> file at every sat_count we test.</li>
+<li>The ordering <code>high &lt; default &lt; low</code> is preserved at every sat_count
+  (monotonic).</li>
+<li>The effect should grow with sat_count: more peers → more chances for the
+  priority weighting to win the next-hop selection race.</li>
+</ul>
+<p>KPI: <strong><code>time_to_first_GS_delivery</code></strong> — at <code>sat_count ≥ 8</code>,
+<code>first_GS(high) ≤ 0.80 × first_GS(low)</code> (high-priority delivers at least
+<strong>20% faster</strong> than low — meaningful routing-preference, not noise).
+Secondary: <strong>priority monotonicity</strong> <code>first_GS(high) ≤ first_GS(default) ≤
+first_GS(low)</code> at every <code>sat_count</code>.</p>
+<h2>Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine</code></td>
+<td><code>edfs</code> only</td>
+<td>TUS has no priority semantics — out of scope.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td><code>low</code>, <code>default</code>, <code>high</code></td>
+<td>The variable of interest.</td>
+</tr>
+<tr>
+<td><code>sat_count</code></td>
+<td>1, 2, 8, 21, 100, 200</td>
+<td>Same Walker sweep as UC1.</td>
+</tr>
+<tr>
+<td><code>RF</code></td>
+<td>fixed at 3</td>
+<td>A single RF value isolates the priority effect; sweeping both would confound the analysis.</td>
+</tr>
+<tr>
+<td><code>gs_count</code></td>
+<td>fixed at 7 (ESTRACK)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>file_size</code></td>
+<td><code>256M</code> (spec: <code>1G</code>)</td>
+<td>Executed at <strong>256M</strong>. The UC was specified at <code>1G</code> — "large" so the transfer spans many passes and the priority weighting becomes visible (a tiny file delivers in one bounce, hiding priority). At 256M the transfer is ~4× shorter, weakening the priority signal: scope UC3 conclusions to the "256M regime" or re-run at 1G.</td>
+</tr>
+<tr>
+<td><code>simulationStartTime</code></td>
+<td>fixed across the three priority runs of one sat_count</td>
+<td>Cancels orbital luck. Use the same pinned epoch as UC1 (<code>2026-05-16T23:59:00.000Z</code>) unless a sat_count needs a different one.</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td><code>4h</code></td>
+<td>Generous: large file × low priority × no faults could still take a while.</td>
+</tr>
+</tbody>
+</table>
+<h2>Assumptions</h2>
+<ul>
+<li><strong>The inter-ground-station network is broadband and disturbance-free.</strong> Every
+  pair of ground stations is treated as permanently linked, independent of
+  orbital line-of-sight: the link is fixed at 10 Gbit/s with zero packet loss,
+  and only its propagation delay scales with the great-circle distance between
+  the two stations. Satellite links, by contrast, exist only while the two nodes
+  are in line-of-sight and their bandwidth degrades with distance. The only event
+  that can disturb a ground-station-to-ground-station link is a hardware failure
+  injected as a <code>HardwareEvent</code> (e.g. <code>NetworkFailure</code> or
+  <code>NetworkBandwidthReduced</code>) on one of the two stations.</li>
+</ul>
+<h2>Additional metrics</h2>
+<p>Beyond the headline <code>yass_file_delivery_seconds</code> (with the <code>priority</code> label
+exposed by the producer's agent on its own metrics):</p>
+<ul>
+<li>Throughput envelope: <code>rate(yass_network_tx_bytes_total)</code> over the
+  producer's run, plotted side-by-side per priority. We expect higher
+  effective throughput for <code>high</code>.</li>
+<li>Per-priority resource cost: total CPU and memory aggregated per run.
+  Important because faster delivery shouldn't come at unreasonable cost.</li>
+<li>Total network cost per priority: <code>sum(yass_network_tx_bytes_total)</code>
+  over the whole constellation. We expect <code>high</code> to ship roughly the same
+  byte volume as <code>low</code> (the file is the same size); a meaningful
+  difference here would mean the priority handling is also affecting
+  redundant transmissions, which is worth flagging.</li>
+<li>Block-level pickup rate on EDFS Tier-2 Loki events (<code>edfs_block</code>):
+  for the same file at different priorities, how quickly does each block
+  get pulled by peers? Direct signal of routing preference.</li>
+</ul></div>
+
+<h2>Variants (18)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>size</th><th>priority</th><th>sat</th><th>RF</th><th>firstGS(s)</th><th>state</th></tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n01-rf3/index.html">uc3-edfs-pdefault-n01-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>1</td><td>3</td><td>854</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n01-rf3/index.html">uc3-edfs-phigh-n01-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>1</td><td>3</td><td>854</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n01-rf3/index.html">uc3-edfs-plow-n01-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>1</td><td>3</td><td>855</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n02-rf3/index.html">uc3-edfs-pdefault-n02-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>2</td><td>3</td><td>839</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n02-rf3/index.html">uc3-edfs-phigh-n02-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>2</td><td>3</td><td>862</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n02-rf3/index.html">uc3-edfs-plow-n02-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>2</td><td>3</td><td>846</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n08-rf3/index.html">uc3-edfs-pdefault-n08-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>8</td><td>3</td><td>844</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n08-rf3/index.html">uc3-edfs-phigh-n08-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>8</td><td>3</td><td>849</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n08-rf3/index.html">uc3-edfs-plow-n08-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>8</td><td>3</td><td>865</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n21-rf3/index.html">uc3-edfs-pdefault-n21-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>21</td><td>3</td><td>844</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n21-rf3/index.html">uc3-edfs-phigh-n21-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>21</td><td>3</td><td>883</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n21-rf3/index.html">uc3-edfs-plow-n21-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>21</td><td>3</td><td>846</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n100-rf3/index.html">uc3-edfs-pdefault-n100-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>100</td><td>3</td><td>234</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n100-rf3/index.html">uc3-edfs-phigh-n100-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>100</td><td>3</td><td>705</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n100-rf3/index.html">uc3-edfs-plow-n100-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>100</td><td>3</td><td>887</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-pdefault-n200-rf3/index.html">uc3-edfs-pdefault-n200-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>200</td><td>3</td><td>409</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-phigh-n200-rf3/index.html">uc3-edfs-phigh-n200-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>high</td><td>200</td><td>3</td><td>338</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc3-edfs-plow-n200-rf3/index.html">uc3-edfs-plow-n200-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>low</td><td>200</td><td>3</td><td>877</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

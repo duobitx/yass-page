@@ -1,0 +1,11 @@
+UC1 — automatic comparison (EDFS vs TUS)
+
+n1 128M: EDFS 791s vs TUS 806s → 1.0× faster
+n2 128M: EDFS 792s vs TUS 807s → 1.0× faster
+n8 128M: EDFS 799s vs TUS 804s → 1.0× faster
+n8 128M: EDFS 794s vs TUS 804s → 1.0× faster
+n8 128M: EDFS 794s vs TUS 804s → 1.0× faster
+n8 128M: EDFS 805s vs TUS 804s → 1.0× slower
+n8 128M: EDFS 803s vs TUS 804s → 1.0× faster
+n8 256M: EDFS 845s vs TUS 870s → 1.0× faster
+n21 128M: EDFS 804s vs TUS 800s → 1.0× slower

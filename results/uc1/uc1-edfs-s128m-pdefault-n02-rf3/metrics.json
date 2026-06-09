@@ -1,0 +1,32 @@
+{
+  "run_id": "uc1-edfs-s128m-pdefault-n02-rf3",
+  "engine": "edfs",
+  "file_size": "128M",
+  "sat_count": 2,
+  "priority": "default",
+  "rf": 3,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-08T02:02:42Z",
+  "duration_s": 966.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:15:06Z",
+  "first_gs": 791.987042077,
+  "last_gs": 791.987042077,
+  "mean_gs": 795.452902701,
+  "n_gs": 7,
+  "gs_reached": 7,
+  "files_to_gs": 1,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "oneweb-0027"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 8,
+  "produced": 1.0,
+  "notes": "\u2014",
+  "tx_mib": 1435.0862560272217,
+  "peak_cpu": 270.0,
+  "peak_mem_mib": 201.7265625
+}

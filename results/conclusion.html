@@ -1,0 +1,2616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EDFS vs TUS — Conclusions (YASS / ESA)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .concl-wrap{max-width:980px;margin:0 auto;padding:0 18px}
+  .concl-section{margin:34px 0;padding-top:8px;border-top:1px solid rgba(0,0,0,.08)}
+  .concl-section img{max-width:100%;height:auto;border:1px solid rgba(0,0,0,.1);border-radius:8px;margin:10px 0;background:#fff}
+  .concl-section table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px}
+  .concl-section th,.concl-section td{border:1px solid rgba(0,0,0,.15);padding:6px 9px;text-align:left;vertical-align:top}
+  .concl-section th{background:rgba(37,99,235,.08)}
+  .concl-section blockquote{border-left:3px solid #2563eb;margin:10px 0;padding:4px 14px;color:#334155;background:rgba(37,99,235,.04)}
+  .concl-toc{background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.18);border-radius:10px;padding:14px 20px;margin:18px 0}
+  .concl-toc ul{margin:6px 0 0;padding-left:20px}
+  .concl-lead{font-size:15px;color:#475569}
+  code{font-family:'JetBrains Mono',monospace;font-size:.92em}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA &Phi;-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Use Cases</a></li>
+      <li><a href="conclusion.html">Conclusions</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap concl-wrap">
+<div class="crumbs"><a href="index.html">YASS results</a> &rsaquo; Conclusions</div>
+<h1>EDFS vs TUS — Experiment Conclusions</h1>
+<p class="concl-lead">File delivery from LEO satellite constellations to ground stations: latency, fault
+resilience, priority-aware routing, bandwidth/memory overhead, and Bitswap behaviour under intermittent
+connectivity. Empirical findings from the YASS UC1&ndash;UC5 sweeps, with an external-literature annex.</p>
+<div class="concl-toc"><strong>Contents</strong><ul>
+<li><a href="#summary">Executive Summary</a></li>
+<li><a href="#uc1">UC1 — Rapid Disaster Response</a></li>
+<li><a href="#uc2">UC2 — Continuous LOS Relay</a></li>
+<li><a href="#uc3">UC3 — Situation-Aware Routing (EDFS-only)</a></li>
+<li><a href="#uc4">UC4 — Satellite Failure</a></li>
+<li><a href="#uc5">UC5 — General Failure (EDFS-only)</a></li>
+<li><a href="#relwork">Related Work (external literature)</a></li>
+</ul></div>
+<section id="summary" class="concl-section">
+<h2 class="sec-anchor">Executive Summary</h2>
+<h1>EDFS vs TUS — Cross-UC Executive Summary</h1>
+<h2>Abstract</h2>
+<p>Across five use cases (UC1–UC5) the YASS satellite simulator compared EDFS (an IPFS/bitswap-based distributed store) against TUS (a resumable point-to-point upload modelling the current operational downlink standard) for delivering satellite imagery to ground assets (GA). The campaign establishes a single, consistent picture: EDFS buys resilience and favourable scaling — it relays content through surviving peers, survives producer failure, and delivers <em>faster</em> as the constellation grows — at a clear and quantifiable resource cost of roughly an order of magnitude more memory (~180–260 MiB vs ~13–15 MiB) plus much higher CPU and network transmit. TUS is functionally equivalent to EDFS only in the small, fault-free, direct-downlink regime, where it is dramatically lighter; it has no inter-satellite relay and therefore loses any file whose producer fails (UC4: 0/15 delivered) and produced 0% delivery at the largest rosters (n≥100) in UC1/UC2/UC4. The headline trade-off is robust, density-favouring delivery (EDFS) versus a minimal footprint with a single point of failure (TUS).</p>
+<h2>1. Verdict table</h2>
+<table>
+<thead>
+<tr>
+<th>UC</th>
+<th>scenario</th>
+<th>EDFS result</th>
+<th>TUS result</th>
+<th>who wins</th>
+<th>key caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UC1</td>
+<td>Rapid Disaster Response — single photo to first GA, no faults</td>
+<td>100% delivery at every n/RF; latency ~790 s at small n, drops to 122–207 s at n=100–200</td>
+<td>100% at n≤21 (~800 s, tied with EDFS); <strong>TimedOut at n=100/200 (0%)</strong></td>
+<td>EDFS at scale, tie at small n</td>
+<td>TUS large-n failure confounded by shared-cluster infra pressure; priority unobservable</td>
+</tr>
+<tr>
+<td>UC2</td>
+<td>Continuous LOS Relay — every sat one file, large-scale faults</td>
+<td>100% at n=1,2 and n=200 (RF=3); intermediate completeness partial &amp; RF-dependent (n=100: 5%→46% as RF 3→5); first GA as fast as 9.6 s</td>
+<td>100% only at n≤8; 90% at n=21; <strong>0% at n=100/200 (TimedOut)</strong></td>
+<td>EDFS (resilience), with completeness caveats</td>
+<td>TUS large-n failure confounded by infra; many EDFS resource rows are extraction gaps; some low/edge runs non-terminating</td>
+</tr>
+<tr>
+<td>UC3</td>
+<td>Situation-Aware Routing — single large file, no faults</td>
+<td>100% delivery in all 18 variants; latency ~850 s at n≤21 → 234 s (n100) / 338 s (n200)</td>
+<td>n/a (EDFS-only by design)</td>
+<td>EDFS (no baseline)</td>
+<td>priority unobservable; TX upper-bound only; partial GA-count rows at n200</td>
+</tr>
+<tr>
+<td>UC4</td>
+<td>Sat Failure over the pole — producer Destroyed before LOS</td>
+<td>Delivers (100%) in the large majority of viable runs (n≥2, high/default); n100 first GA ~60 s; one anomaly <code>phigh-td45m-n02</code> (probable export gap)</td>
+<td><strong>0 deliveries — all 15 variants TimedOut (0%)</strong></td>
+<td>EDFS decisively</td>
+<td>n01 (no peer) and plow non-delivery are by-design, not defects; 2 plow runs still Ongoing; priority unobservable</td>
+</tr>
+<tr>
+<td>UC5</td>
+<td>General Failure — finite photo set, large-scale non-Destroy faults</td>
+<td>All variants Success, every variant delivers ≥1 photo; first GA 14.3–569.6 s; <strong>full-set completeness partial</strong> (only n01 &amp; n08 RF=1 reach 100%; n21 RF=1 = 15%)</td>
+<td>n/a (EDFS-only by design)</td>
+<td>EDFS (no baseline)</td>
+<td>completeness RF-gated and noisy (n21: 15%→80%→50% as RF 1→3→5); small sample; priority unobservable</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Headline finding</h2>
+<p>The clearest, most decision-relevant result of the campaign is <strong>resilience under producer failure (UC4)</strong>: when a satellite captures a high-priority photo far over the pole and is then completely destroyed before reaching any ground station, <strong>EDFS relays the photo around the dead producer through another satellite's content-addressed replica and delivers it (100% in the large majority of viable n≥2 configurations), while TUS — having no inter-satellite relay — delivers 0 out of 15 variants (every TUS run TimedOut at 0%).</strong> This is the property TUS structurally cannot provide.</p>
+<p>The second headline is <strong>behaviour at scale</strong>: at large rosters (n≥100) TUS reaches 0% delivery in UC1, UC2 and UC4, whereas EDFS continues to deliver — from 34% up to 100% depending on use case and replication — and, counter-intuitively, EDFS delivers <em>fastest</em> at the largest constellations (e.g. UC1 122 s at n=100, UC2 first GA 9.6 s, UC3 234 s at n=100, UC4 ~60 s at n=100), because a denser constellation provides more relay candidates that contact a ground station sooner. (The TUS large-n=100/200 failures are partly confounded by shared-cluster infrastructure pressure — see limitations.)</p>
+<p><img alt="Cross-UC delivery success, EDFS vs TUS" src="assets/conclusion/cross_delivery_success.png" /></p>
+<h2>3. The cost</h2>
+<p>EDFS pays a consistent, quantifiable premium for content-addressing and bitswap relay, observed across all five use cases:</p>
+<ul>
+<li><strong>Memory:</strong> EDFS peak RAM is ~180–260 MiB (range across UCs ~125–304 MiB) versus TUS ~13–15 MiB — i.e. roughly <strong>13–15× more memory</strong> (up to ~24× in individual UC1 points). EDFS memory is essentially constellation-size-independent (UC3: stable ~213–247 MiB), which helps capacity planning.</li>
+<li><strong>CPU:</strong> TUS peak CPU stays at tens of millicores (~20–110 m). EDFS is far higher and scales with relay activity — hundreds of millicores at small n up to ~1950 m (UC1 n=200) and ~2730 m (UC2 n=100).</li>
+<li><strong>Network TX:</strong> TUS TX is small and tracks the payload (e.g. ~134–135 MiB per 128 MB transfer). EDFS TX is much larger because bitswap floods blocks to many peers and grows with n and RF. <strong>The absolute EDFS TX figures are an upper bound only</strong> — inflated ~4.46× by a known mqtt2prom exporter-pod duplication — so the EDFS≫TUS comparison must be read qualitatively, not as exact ratios. Even after correcting the inflation, EDFS moves substantially more bytes than TUS.</li>
+</ul>
+<p>In short: EDFS trades roughly an order of magnitude more RAM, several-fold more CPU, and far more network traffic for resilience and scaling that TUS cannot match.</p>
+<h2>4. Honest limitations of this dataset</h2>
+<p>These caveats bound every quantitative claim above and must accompany the deliverable:</p>
+<p>a. <strong>TX inflation (~4.46×).</strong> All EDFS <code>tx_MiB</code> values are inflated by a mqtt2prom exporter-pod duplication and are reported as an upper bound; treat EDFS-vs-TUS bandwidth qualitatively only. TUS TX is unaffected.</p>
+<p>b. <strong>RX missing.</strong> Network receive is unrecoverable (the world-controller ingress reads 0 on receivers); no RX metric is reported anywhere in the campaign.</p>
+<p>c. <strong>Metric-extraction gaps.</strong> Many variants report <code>peak_mem_MiB=0</code>, <code>peak_cpu=0</code> and/or <code>mean_gs</code>/<code>n_gs=0</code> under large rosters / Prometheus pressure. These are extraction gaps, not genuine zero usage, and are excluded from resource and mean-latency statistics. (UC4's <code>phigh-td45m-n02</code> 0-delivery row, with all-zero metrics, is treated as a probable export gap, not a relay failure.) Delivery (<code>first_gs</code>) derived from GA-receipt events remains valid on such rows.</p>
+<p>d. <strong>Priority unobservable.</strong> Across UC1–UC5, EDFS replicas are universally self-pinned and contention is negligible, so the priority axis (high/default/low) cannot be resolved; any apparent priority ordering is weak and noisy. No quantified priority-routing claim is made — UC3's situation-aware-routing objective in particular remains unproven and needs a dedicated contention experiment.</p>
+<p>e. <strong>TUS at scale confounded by infrastructure.</strong> The TUS n=100/n=200 0% delivery in UC1/UC2 coincided with heavy shared-cluster infrastructure pressure. Protocol behaviour and infrastructure contention are confounded; an independent re-run on an uncontended cluster is required before attributing TUS's large-roster failure purely to the protocol. (UC4's TUS 0% is <em>not</em> so confounded — it is the expected, structural no-relay outcome.)</p>
+<p>f. <strong>Unsettled UC4 runs.</strong> Two low-priority UC4 variants (<code>plow-td15m-n08</code>, <code>plow-td5m-n08</code>) were still Ongoing with partial export at the time of analysis; their final outcome is not settled.</p>
+<p>g. <strong>Small samples / noisy completeness.</strong> UC5 completeness across RF is non-monotonic and noisy (n21: 15%→80%→50% as RF 1→3→5) at a small sample; higher-repetition re-runs would tighten the RF-vs-completeness relationship.</p>
+<h2>5. Guidance — when to prefer EDFS vs TUS</h2>
+<p><strong>Prefer EDFS when:</strong>
+- <strong>Resilience matters</strong> — producers or links may fail before reaching a ground station. EDFS recovers content from surviving replicas (UC4: delivers where TUS delivers nothing; UC2/UC5: keeps delivering under large-scale faults).
+- <strong>Inter-satellite relay is needed</strong> — the producer is far from any ground station (over the pole) and must hand the file to a peer that downlinks it.
+- <strong>The constellation is large / dense</strong> — EDFS exploits more relay candidates to deliver sooner and at scale, exactly where TUS reached 0% in this campaign.
+- <strong>A modest per-node memory/CPU budget (a few hundred MiB, hundreds–thousands of millicores) and elevated bandwidth are acceptable</strong> in exchange for the above.</p>
+<p><strong>Prefer TUS when:</strong>
+- <strong>The footprint must be minimal</strong> — TUS uses ~13–15 MiB RAM, tens of millicores, and payload-sized TX, roughly an order of magnitude lighter than EDFS on every resource axis.
+- <strong>The topology is a simple, reliable direct downlink</strong> — small constellations with dependable producer-to-ground contact, no inter-satellite relay requirement, and no expectation of producer failure. In this regime TUS matched EDFS on latency (UC1: both ~790–807 s at small n) at a fraction of the cost.
+- <strong>No fault tolerance is required</strong> — there is no benefit to paying EDFS's overhead when every file's producer is guaranteed to reach a ground station within its own contact window.</p>
+<p>Net recommendation: adopt <strong>EDFS as the resilient relay transport for the operational, fault-prone, large-constellation regime</strong> that motivates this work, and retain <strong>TUS as a light-footprint option only for small, reliable, direct-downlink deployments</strong> — subject to closing the open items above (uncontended TUS-at-scale re-run, RX/TX instrumentation fixes, and a contention experiment to make priority observable).</p>
+</section>
+<section id="uc1" class="concl-section">
+<h2 class="sec-anchor">UC1 — Rapid Disaster Response</h2>
+<h1>UC1 Rapid Disaster Response — Conclusion</h1>
+<h2>Setup</h2>
+<p>A single satellite in the constellation captures a photograph of size <code>S</code> MB and the system must deliver that photo to at least one ground station (GA) as quickly as possible. We compare two transport engines under identical constellations and file sizes: EDFS (the IPFS/bitswap-based distributed store) and TUS (the resumable-upload baseline that models the current operational standard). The primary KPI is the time to first GA receipt (<code>first_gs</code>, in simulation seconds, derived from GA-receipt events and directly comparable across both engines). Secondary metrics are peak memory, peak CPU and network transmit (TX). All numbers quoted below are taken from the 23-variant UC1 metrics table; nothing is extrapolated.</p>
+<h2>Parameters</h2>
+<ul>
+<li>File size <code>S</code>: 128 MB and 256 MB</li>
+<li>Priority: default (normal), high, low (EDFS only carries a priority axis)</li>
+<li>Number of satellites <code>n</code>: 1, 2, 8, 21, 100, 200</li>
+<li>Replication factor <code>RF</code>: 1, 3, 5 (EDFS only; TUS has no RF)</li>
+</ul>
+<p><strong>Headline KPI: every successful run — both EDFS and TUS — achieved 100% delivery (1 file to GS) for the photo; the engines diverge not on whether they deliver but on how fast and at what cost, and TUS failed to deliver at all at <code>n=100</code> and <code>n=200</code> (both TimedOut), while EDFS delivered at every constellation size and, counter-intuitively, delivered fastest at the largest constellations (122.4 s at <code>n=100</code>, RF=5).</strong></p>
+<h2>1. Latency — time to first GA delivery</h2>
+<p>At small-to-moderate constellations the two engines are essentially tied. For 128 MB at <code>n=1..21</code> both sit around 790–807 s: EDFS <code>n=1</code> 790.7 s vs TUS <code>n=1</code> 805.8 s; EDFS <code>n=8</code> (RF=3) 793.7 s vs TUS <code>n=8</code> 803.8 s; EDFS <code>n=21</code> 803.8 s vs TUS <code>n=21</code> 799.9 s. The dominant term here is the orbital contact window — the producer simply has to wait until it (or a relay) is in line-of-sight of a GS — so the choice of transport barely moves the KPI.</p>
+<p>The picture changes sharply at scale, and in EDFS's favour. EDFS at <code>n=100</code> delivers in 154.0 s (RF=1), 164.3 s (RF=3) and 122.4 s (RF=5); at <code>n=200</code> in 207.1 s (RF=3). These are far below the ~800 s of the small constellations. This is the counter-intuitive scaling result: with more satellites there are more relay candidates, so the probability that <em>some</em> node holding (or able to fetch) the file is already in contact with a GS rises, and first delivery happens much sooner. TUS cannot exploit this — it has no relay path — and at <code>n=100</code> and <code>n=200</code> it TimedOut with no delivery at all (see caveat below).</p>
+<p>File size scales the latency as expected. At <code>n=8</code>, RF=3, EDFS goes from 793.7 s (128 MB) to 845.3 s (256 MB); TUS goes from 803.8 s (128 MB) to 869.8 s (256 MB). At <code>n=100</code>, RF=3 the 256 MB EDFS run took 767.7 s versus 164.3 s for 128 MB — the larger payload no longer fits comfortably inside the early contact window, so it falls back toward the contact-bound regime.</p>
+<p><img alt="Time to first GA delivery vs constellation size, EDFS vs TUS" src="uc1/conclusion-charts/uc1_delivery_vs_n.png" />
+<em>First-GA-delivery latency against number of satellites. EDFS (all RF) and TUS overlap at small <code>n</code>; EDFS drops to ~120–210 s at <code>n=100</code>–<code>200</code>, where TUS has no data point because it TimedOut.</em></p>
+<h2>2. Fault resilience</h2>
+<p>UC1 contains no injected satellite or ground failures (<code>td</code> is empty for every row), so resilience is not directly exercised here; it is the subject of UC2/UC4/UC5. What UC1 does establish is the structural precondition for resilience: EDFS's relay path lets a file reach a GS through nodes other than the original producer, which is exactly the mechanism that survives a producer failure in the fault use cases. TUS, with no relay, delivers only when the producer itself reaches a GS — a single point of failure that UC1's large-<code>n</code> TimedOut results already hint at.</p>
+<h2>3. Priority-aware routing</h2>
+<p>Priority was varied for EDFS only. At <code>n=8</code>, RF=3, 128 MB the three priorities are: high 805.3 s, default 793.7 s, low 803.3 s — a spread of ~12 s with default (normal) the <em>fastest</em>, i.e. no monotonic ordering. At <code>n=100</code>, RF=3 the spread is larger and again non-monotonic: high 199.7 s, default 164.3 s, low 838.3 s. The low-priority <code>n=100</code> outlier (838.3 s) is the only case where priority appears to bite, but it is a single noisy point. <strong>Priority is largely unobservable in these runs</strong>: every node self-pins the content universally and there is little to no network contention, so there is nothing for a priority scheme to arbitrate. We therefore do not claim a priority-routing benefit from UC1; any ordering seen is weak and within run-to-run noise.</p>
+<h2>4. Bandwidth / memory overhead</h2>
+<p>This is where the engines differ most clearly. EDFS carries a heavy content-addressing/bitswap footprint while TUS is extremely light.</p>
+<ul>
+<li><strong>Memory:</strong> EDFS peak memory ranges roughly 181–263 MiB across all UC1 variants (e.g. 181 MiB at <code>n=8</code> RF=3, 226 MiB at <code>n=8</code> 256 MB, 263 MiB at <code>n=100</code> high). TUS peak memory is 11–14 MiB throughout (14 MiB at <code>n=1</code>, 14 MiB at <code>n=8</code> 256 MB). EDFS uses more than an order of magnitude more RAM — roughly 13–24× — than TUS (the ratio spans ~12.9× at 181 MiB / 14 MiB up to ~23.9× at 263 MiB / 11 MiB).</li>
+<li><strong>CPU:</strong> TUS peak CPU stays at 20–70 m. EDFS is markedly higher and grows with constellation size: 230–510 m at small <code>n</code>, rising to 1260 m (<code>n=100</code> RF=5) and 1950 m (<code>n=200</code> RF=3).</li>
+<li><strong>Network TX:</strong> TUS TX is tiny and tracks the payload — 134–135 MiB for one 128 MB transfer, 268 MiB for 256 MB. EDFS reported TX is far larger and grows with <code>n</code> (e.g. 1456 MiB at <code>n=1</code>, 8520 MiB at <code>n=100</code> RF=1, 20526 MiB at <code>n=200</code> RF=3). <strong>The absolute EDFS TX figures are an upper bound only</strong> — they are inflated by roughly 4.46× by a known mqtt2prom exporter-pod duplication (see caveats). Even after deflating by that factor EDFS transmits substantially more than TUS, because bitswap floods blocks to multiple peers; the comparison should be read qualitatively (EDFS ≫ TUS), not as exact ratios.</li>
+</ul>
+<p><img alt="Peak memory and CPU, EDFS vs TUS" src="uc1/conclusion-charts/uc1_resources.png" />
+<em>Peak memory (MiB) and peak CPU (millicores) per variant. EDFS sits at ~180–260 MiB / hundreds-to-thousands of millicores; TUS sits at ~11–14 MiB / tens of millicores.</em></p>
+<p><img alt="Network TX, EDFS vs TUS (log scale)" src="uc1/conclusion-charts/uc1_tx.png" />
+<em>Transmitted bytes per variant on a log scale. EDFS TX is shown as an upper bound (≈4.46× exporter-duplication inflation); TUS TX (134–135 MiB at 128 MB, 268 MiB at 256 MB) is unaffected and tracks the payload size.</em></p>
+<h2>5. Bitswap / intermittent-connectivity behaviour</h2>
+<p>The cost in axis 4 is the direct consequence of how bitswap operates: rather than a single point-to-point upload, content is announced and flooded to fetching peers. In a constellation this is exactly what produces the favourable large-<code>n</code> latency (more peers → earlier contact with a GS) but also the high TX and CPU. RF in UC1 does not change <em>whether</em> the file is delivered — all RF=1/3/5 runs hit 100% delivery — it only sizes the pinset; delivery itself happens regardless of RF because bitswap propagates the file to any peer that fetches it. This is consistent with the broader finding that RF/STEP govern the cluster pinset, not propagation. No UC1 EDFS run failed to terminate; the non-termination of low-priority runs seen elsewhere is a UC4 phenomenon, not present here.</p>
+<h2>Data caveats</h2>
+<ul>
+<li><strong>EDFS TX inflation (~4.46×):</strong> EDFS <code>tx_MiB</code> is inflated by a mqtt2prom exporter-pod duplication. Treat every EDFS TX number as an upper bound and compare to TUS only qualitatively. TUS TX is unaffected.</li>
+<li><strong>No RX metric:</strong> network receive is unrecoverable (the world-controller ingress reads 0 on receivers), so RX is not reported anywhere in this analysis.</li>
+<li><strong>TUS TimedOut at <code>n=100</code> and <code>n=200</code>:</strong> at face value TUS does not deliver at scale (both rows show 0 files→GS, no <code>first_gs</code>). However these large-roster runs coincided with heavy infrastructure pressure on the shared cluster, so protocol behaviour and infrastructure contention are confounded. This result needs an independent re-run on an uncontended cluster before concluding TUS structurally fails at scale.</li>
+<li><strong>Priority unobservable:</strong> universal self-pin plus negligible contention means EDFS priority ordering is weak and noisy; no priority claim is made from UC1.</li>
+<li><strong>GS clocks comparable:</strong> <code>first_gs</code>/<code>mean_gs</code>/<code>last_gs</code> are simulation seconds from GA-receipt events and are directly comparable EDFS↔TUS; latency comparisons rest on these and are sound.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>For Rapid Disaster Response, EDFS and TUS are functionally equivalent in latency at small constellations (~790–807 s for 128 MB, contact-window-bound), but EDFS pulls decisively ahead as the constellation grows: it delivers in 122–207 s at <code>n=100</code>–<code>200</code> by exploiting relay candidates, where TUS TimedOut entirely (the latter pending an uncontended re-run to rule out infrastructure as the cause). EDFS also delivered at 100% across every size and RF tested. The price is overhead: EDFS consumes more than an order of magnitude more memory than TUS — roughly 13–24× (~180–260 MiB vs ~11–14 MiB) — substantially more CPU (up to ~1950 m vs ≤70 m), and far more network TX (qualitatively ≫ TUS even after correcting the ~4.46× inflation). The verdict for UC1 is that <strong>EDFS buys faster, more robust delivery at scale — the property that matters most for disaster response — at a clear and quantifiable resource cost, while priority-aware routing remains unproven under these low-contention conditions.</strong></p>
+</section>
+<section id="uc2" class="concl-section">
+<h2 class="sec-anchor">UC2 — Continuous LOS Relay</h2>
+<h1>UC2 — Conclusion</h1>
+<h2>Setup</h2>
+<p>UC2 (Continuous LOS Relay) exercises the relay path of the constellation under failure. Every satellite produces exactly one normal-priority file, and large-scale random failures are then injected on both satellites and ground stations. The main KPI is the time until <em>all</em> produced files have reached at least one ground asset (GA). The use case is run for both the EDFS (IPFS/bitswap-based) engine and the TUS (point-to-point upload) baseline, sweeping constellation size, replication factor (EDFS only), and file priority (EDFS only). Because failures remove producers and relays mid-flight, UC2 is primarily a test of <em>delivery completeness under fault</em>, not of raw latency.</p>
+<h2>Parameters</h2>
+<ul>
+<li>Engine: EDFS vs TUS</li>
+<li>Constellation size <code>n</code>: 1, 2, 8, 21, 100, 200</li>
+<li>Replication factor <code>RF</code> (EDFS only): 1, 3, 5</li>
+<li>File priority (EDFS only): default, high, low</li>
+<li>File size: fixed (one file per satellite, normal priority by use-case definition)</li>
+</ul>
+<p><strong>Headline KPI: EDFS delivers every file in the small (n=1, n=2) and very large (n=200) constellations (deliv% = 100) and survives producer/relay failure through its replicated cluster, whereas TUS reaches 100% only at n≤8 and produces 0% at n=100 and n=200 (TimedOut) — though the largest-roster TUS failures coincide with shared-cluster infrastructure pressure and require an independent re-run before any protocol claim is made.</strong></p>
+<h2>1. Latency — time to first GA delivery</h2>
+<p>Time to first GA receipt (<code>first_gs</code>, simulation seconds) is directly comparable across engines because it is derived from GA-receipt events.</p>
+<ul>
+<li>At the smallest sizes the two engines are effectively tied and gated by orbital geometry rather than protocol: EDFS n=1 first delivers at 754.2 s vs TUS n=1 at 742.8 s; EDFS n=2 at 764.5 s vs TUS n=2 at 755.2 s. These are within roughly 1–2% of each other, i.e. both are waiting for the first contact window.</li>
+<li>EDFS shows the counter-intuitive scaling already seen elsewhere in the campaign: larger constellations deliver <em>sooner</em>, because more relay candidates contact a GS earlier. EDFS <code>first_gs</code> falls from 754.2 s (n=1) to as low as 9.6 s at n=8 (RF=1) and 23.6 s at n=21 (RF=3), and is 329.7 s at n=200 (RF=3). Across the RF=3 variants the trend is monotone in size (23.6 s at n=21, 329.7 s at n=200), while the campaign-minimum EDFS first delivery (9.6 s) occurs at n=8 RF=1. TUS shows the same geometric trend at small sizes — 21.1 s (n=8), 10.0 s (n=21) — but then fails to deliver at all at n=100 and n=200 (no <code>first_gs</code>).</li>
+<li>RF strongly affects EDFS first-delivery time at fixed n: at n=100, <code>first_gs</code> is 43.8 s at RF=1, 109.0 s at RF=3, and 1682.4 s at RF=5 — i.e. a larger pinset does not accelerate first delivery here and the RF=5 case is far slower, consistent with bitswap/pinning overhead rather than faster propagation.</li>
+</ul>
+<p><img alt="EDFS delivery success vs constellation size, compared with TUS" src="uc2/conclusion-charts/uc2_delivery_success.png" />
+<em>Delivery success (% of produced files reaching a GA) as a function of constellation size, EDFS vs TUS.</em></p>
+<h2>2. Fault resilience — delivery under satellite/ground failure</h2>
+<p>This is the central UC2 axis: does delivery survive the injected failures?</p>
+<ul>
+<li>TUS delivers completely only while the constellation is small: deliv% = 100 at n=1, n=2 and n=8, drops to 90 at n=21 (19 of 21 files), and is 0 at n=100 and n=200 (TimedOut, 0 files→GS). Note that the n=2 and n=8 TUS runs are themselves <code>state=TimedOut</code> despite reaching deliv% = 100: full delivery was achieved only near or at the experiment time limit, so they count as successful on the delivery KPI but the time limit was binding. At face value this shows the point-to-point path collapsing once enough producers and links are lost; however, the n=100/n=200 TUS failures occurred under heavy-roster infrastructure pressure on the shared cluster and must be re-run in isolation before attributing the 0% purely to protocol behaviour.</li>
+<li>EDFS is markedly more variable but achieves full delivery at both ends of the size range: deliv% = 100 at n=1, n=2 (RF=3) and at n=200 (RF=3, 200 files→GS). At intermediate sizes its completeness is RF-dependent and often partial — see §5 — but not uniformly poor: at n=21 RF=3 (default priority) EDFS achieved 95% delivery (20 of 21 files, <code>mean_gs</code> = 613.4 s, n_gs = 130), the highest completeness seen at an intermediate size.</li>
+<li>The most important resilience result is that EDFS retains its replicated copies through producer failure: the cluster pinset and bitswap flood mean a file can still reach a GA after the producing satellite is gone, whereas TUS has no relay and loses any file whose producer/link is removed before its own contact window.</li>
+</ul>
+<h2>3. Priority-aware routing</h2>
+<p>Priority (default/high/low) is <strong>largely unobservable for EDFS in these runs</strong> because of universal self-pin and little contention; any ordering effect is weak and noisy and we do not claim a priority KPI. The few priority variants present even point the wrong way for "high helps":</p>
+<ul>
+<li>At n=8, RF=3: default delivered 38% while high <code>TimedOut</code> at 0% and low delivered only 12% (1 file). At n=100, RF=3: default delivered 5%, high 30%, low 16% (and the low run did not terminate). These differences are not monotone in priority and are dominated by run-to-run variance and the failure injection, not by priority-aware routing.</li>
+</ul>
+<p>No priority-based delivery-time or delivery-order claim can be supported from UC2; this is a measurement limitation (see Data caveats), not evidence that priority routing is absent in the engine.</p>
+<h2>4. Bandwidth / memory overhead</h2>
+<p>Resource figures are quoted only from variants where Prometheus extraction succeeded (non-zero peaks); all <code>peak_mem_MiB=0</code>/<code>peak_cpu=0</code> rows are extraction gaps and are excluded.</p>
+<ul>
+<li>Memory: EDFS carries the content-addressing/bitswap footprint — peak RAM of 143 MiB (n=1, RF=3), 249 MiB (n=21, RF=3), 304 MiB (n=100, high) and 185 MiB (n=100, low). TUS is far lighter: 14 MiB (n=2), 15 MiB (n=8), 15 MiB (n=21), 14 MiB (n=100), 12 MiB (n=200). EDFS therefore uses roughly an order of magnitude more memory per node (~140–300 MiB vs ~12–15 MiB).</li>
+<li>CPU: TUS peaks are modest and stable (90–110 mCPU at n=2/8/21). EDFS peaks scale with relay activity — 170 mCPU (n=1), 690 mCPU (n=21), and 2730 mCPU (n=100, high) — reflecting bitswap/exchange work.</li>
+<li>Network TX: TUS TX is small and trustworthy — 68 MiB (n=2), 271 MiB (n=8), 644 MiB (n=21). EDFS TX is reported much higher — e.g. 13414 MiB (n=21, RF=3), 248531 MiB (n=100, high), 183851 MiB (n=100, low) — but EDFS <code>tx_MiB</code> is inflated by an exporter-pod duplication and must be treated as an <strong>upper bound</strong> and compared only qualitatively. Even discounted, the qualitative picture (bitswap flooding many peers vs TUS sending point-to-point) is consistent with EDFS moving substantially more bytes than TUS.</li>
+<li>Mean delivery latency at scale: the only EDFS variant with a recoverable mean GA-receipt time is n=21 RF=3 (default), at <code>mean_gs</code> = 613.4 s over n_gs = 130 receipts; every other EDFS row reports <code>mean_gs</code>/<code>n_gs</code> = 0 as an extraction gap. This single point — well above the ~10–24 s <em>first</em>-delivery figures — shows that while bitswap places the first copy quickly, completing the full file set across intermittent contact windows takes substantially longer; it is the one intermediate-scale EDFS latency datum available and should be read as indicative rather than representative.</li>
+</ul>
+<h2>5. Bitswap / intermittent-connectivity limitations</h2>
+<p>UC2 makes EDFS's intermittent-connectivity behaviour visible:</p>
+<ul>
+<li>Partial, RF-dependent delivery at intermediate sizes: at n=8, deliv% = 12 at RF=1, 38 at RF=3 and 38 at RF=5; at n=100, deliv% = 5 at RF=1, 5 at RF=3 and 46 at RF=5. Raising RF widens the pinset and can lift completeness (n=100: 5%→46% from RF=3→RF=5) but does not guarantee it, and can slow first delivery (§1). Delivery completeness is thus coupled to RF and to how many peers happen to hold/fetch the file before contact windows close.</li>
+<li>Flooding cost: the large EDFS TX figures (even as upper bounds) and the high CPU at n=100 indicate bitswap distributing content broadly rather than along a chosen route.</li>
+<li>Non-termination: the high-priority n=8 run <code>TimedOut</code> at 0%, and the low-priority n=100 run <code>TimedOut</code> with deliv% = 16 (16 of 100 files, <code>mean_gs</code> = 8892.2 s — far beyond the other runs), i.e. some low/edge-case runs do not converge within the window.</li>
+</ul>
+<p><img alt="EDFS delivery completeness vs replication factor" src="uc2/conclusion-charts/uc2_rf_effect.png" />
+<em>EDFS delivery success (% of produced files reaching a GA) as a function of replication factor.</em></p>
+<h2>Data caveats</h2>
+<ul>
+<li><strong>EDFS network TX is inflated ~4.46× by a mqtt2prom exporter-pod duplication.</strong> All EDFS <code>tx_MiB</code> values are an upper bound; we compare TX only qualitatively. TUS TX is unaffected and is reported as-is.</li>
+<li><strong>Network RX is unrecoverable</strong> (world-controller ingress reads 0 on receivers); there is no RX metric in this campaign and none is reported.</li>
+<li><strong>Metric-extraction gaps:</strong> many UC2 variants report <code>peak_mem_MiB=0</code>, <code>peak_cpu=0</code> and/or <code>mean_gs</code>/<code>n_gs</code>=0 (e.g. all the EDFS n=8/n=100/n=200 RF rows and several TUS rows). These are Prometheus extraction gaps under large rosters / Prometheus pressure, <strong>not</strong> genuine zero usage; such rows are excluded from resource and mean-latency statistics.</li>
+<li><strong>Comparability:</strong> <code>first_gs</code>/<code>mean_gs</code>/<code>last_gs</code> are simulation seconds from GA-receipt events and <em>are</em> comparable across EDFS and TUS; <code>deliv%</code> and <code>files→GS</code> are likewise comparable.</li>
+<li><strong>TUS at scale:</strong> TUS n=100 and n=200 <code>TimedOut</code> at 0% delivery, but this coincided with heavy-roster infrastructure pressure on the shared cluster. This needs an independent re-run to separate protocol behaviour from infrastructure before drawing a firm conclusion.</li>
+<li><strong>TUS small-roster time limit binding:</strong> TUS n=2 and n=8 also report <code>state=TimedOut</code> despite reaching deliv% = 100, indicating full delivery was achieved only near or at the experiment time limit. They are counted as successful on the delivery KPI, but the time limit was binding and should not be read as a clean, early-completing run.</li>
+<li><strong>Priority unobservable:</strong> for EDFS, priority effects are weak/noisy due to universal self-pin and little contention; no priority KPI is claimed.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>UC2 confirms EDFS's core advantage and its cost. <strong>Fault resilience:</strong> EDFS's replicated cluster and bitswap relay let files survive producer/relay failure and reach a GA without the original producer, achieving full delivery at the extremes of the size range (n=1, n=2, n=200 at deliv% = 100), where the TUS point-to-point path has no relay and collapses to 0% at n=100/n=200. <strong>Latency:</strong> at small sizes both engines are geometry-bound and within ~2% of each other (EDFS 754.2 s vs TUS 742.8 s at n=1); EDFS benefits from more relay candidates at larger n (across RF=3 variants first delivery falls to 23.6 s at n=21; the campaign-minimum EDFS first delivery is 9.6 s at n=8 RF=1). <strong>Cost:</strong> EDFS pays for this with roughly an order of magnitude more memory (~140–300 MiB vs ~12–15 MiB), higher CPU (up to 2730 mCPU), and far higher — though only an upper-bound and qualitatively trustworthy — network TX. <strong>Caveats that bound the verdict:</strong> EDFS delivery at intermediate sizes is partial and RF-dependent (n=100 climbs from 5% at RF=3 to 46% at RF=5) with some low/edge runs not terminating; priority routing is unobservable here; RX is missing; and the TUS large-roster failures must be re-run in isolation. Net: EDFS is the more resilient relay under failure but with a substantially heavier resource and bandwidth footprint, and its intermediate-scale completeness needs to be tuned via RF and validated against an infrastructure-clean TUS baseline.</p>
+</section>
+<section id="uc3" class="concl-section">
+<h2 class="sec-anchor">UC3 — Situation-Aware Routing (EDFS-only)</h2>
+<h1>UC3 — Conclusion</h1>
+<h2>Setup</h2>
+<p>UC3 (Situation-Aware / Priority-Aware Routing) exercises EDFS alone: a single large file is generated on one satellite, and the KPI is the simulation time until that file reaches at least one ground asset (GA). The sweep varies file priority (default / high / low) and constellation size (n = 1, 2, 8, 21, 100, 200) at a fixed replication factor RF = 3. This is an EDFS-only use case by design — there is no TUS baseline, because the objective is to characterise EDFS routing behaviour as the relay topology grows, not to compare protocols. All 18 variants reached the Success state with 100% delivery (1 file → GS in every run).</p>
+<h2>Parameters</h2>
+<ul>
+<li>Engine: EDFS only (no TUS baseline by design)</li>
+<li>Priority: default, high, low</li>
+<li>Constellation size n: 1, 2, 8, 21, 100, 200 satellites</li>
+<li>Replication factor RF: 3 (fixed)</li>
+<li>Files produced per run: 1 large file on a single producer satellite</li>
+</ul>
+<p><strong>Headline KPI: EDFS delivered the file to a GA in 100% of all 18 variants; first-GA latency falls sharply at large constellations — from ~850 s at n ≤ 21 down to 234.0 s (default, n100) and 338.1 s (high, n200) — because more relay candidates reach a ground station sooner.</strong></p>
+<h2>Latency — time to first GA delivery and scaling with constellation size</h2>
+<p>For the small and mid constellations the first-GA latency clusters tightly around 838–883 s regardless of size, which is consistent with the producer itself having to wait for its own line-of-sight contact window:</p>
+<ul>
+<li>default: 854.3 s (n01), 838.5 s (n02), 844.1 s (n08), 843.9 s (n21)</li>
+<li>high: 853.9 s (n01), 862.4 s (n02), 849.3 s (n08), 882.6 s (n21)</li>
+<li>low: 855.1 s (n01), 846.4 s (n02), 864.5 s (n08), 845.6 s (n21)</li>
+</ul>
+<p>The counter-intuitive result appears at scale: larger constellations often deliver <em>faster</em>, not slower, because the file can be relayed by whichever of the many peers contacts a GS first rather than waiting for the producer's own pass. The clearest case is default priority at n100, where first-GA latency drops to <strong>234.0 s</strong> (mean 234.7 s, n_gs = 7) — roughly 3.6× faster than the n ≤ 21 cluster. The high-priority sweep shows the same trend at the largest size: <strong>338.1 s at n200</strong> versus 705.2 s at n100 and ~850–882 s at n ≤ 21. This confirms that EDFS bitswap relay turns constellation density into a latency advantage.</p>
+<p>The trend is not perfectly monotonic across every row (e.g. low-priority n100 is 886.7 s, the slowest in its column, and default n200 is 409.5 s — slower than default n100), which is expected given that the timing depends on the specific orbital geometry sampled per run and on how quickly any single peer enters a contact window.</p>
+<p><img alt="First-GA delivery time versus constellation size, by priority" src="uc3/conclusion-charts/uc3_delivery_by_priority.png" />
+<em>First-GA delivery time (first_gs, s) versus number of satellites, separated by file priority. Note the large drops at n100 (default) and n200 (high), illustrating the more-relays-deliver-sooner effect.</em></p>
+<h2>Fault resilience</h2>
+<p>UC3 injects no satellite or ground-station failures (td is empty for all variants), so this run contributes no direct fault-resilience evidence; fault behaviour is the subject of UC2, UC4 and UC5. What UC3 does establish is the prerequisite for resilient relay: the file is content-addressed and reaches a GA even when the producer is not the node that makes the contact, which is the same mechanism that allows EDFS to survive a producer outage in the failure use cases.</p>
+<h2>Priority-aware routing</h2>
+<p>Across the three priority sweeps the first-GA latencies overlap and do not separate cleanly. In the n ≤ 21 band all three priorities sit within roughly 838–890 s with no consistent ordering (e.g. at n08 high = 849.3 s is faster than default = 844.1 s only marginally and slower than nothing meaningful; at n21 default = 843.9 s is faster than both high = 882.6 s and low = 845.6 s). The large-n rows differ by priority (default n100 = 234.0 s, high n100 = 705.2 s, low n100 = 886.7 s; high n200 = 338.1 s, default n200 = 409.5 s, low n200 = 877.2 s), but this looks like per-run geometry/contact-window variance rather than a reproducible priority effect. <strong>Priority is largely unobservable in these runs:</strong> every node self-pins the content universally and there is little bandwidth contention, so the routing layer has no scarce resource to arbitrate by priority. No priority ordering should be claimed from UC3.</p>
+<h2>Bandwidth / memory overhead</h2>
+<p>EDFS peak memory is stable and modest across the whole sweep, ranging from <strong>213 MiB (low, n08) to 247 MiB (high, n200)</strong>, with most variants near 218–234 MiB. This is the content-addressing / bitswap footprint (kubo + cluster), and it is essentially independent of constellation size — a useful property for capacity planning. Peak CPU varies more widely with activity, from 240 m (low, n01) to 1110 m (default, n100).</p>
+<p>Network TX (tx_MiB) grows with constellation size as expected — from ~1.7–3.6 GiB at small/mid n up to 17 757 MiB (default n100), 19 677 MiB (high n100) and 39 338 MiB (high n200) — reflecting bitswap flooding the block to many fetching peers as the relay set grows. <strong>These absolute TX figures must be treated as an upper bound only</strong> (see Data caveats): the EDFS TX metric is inflated by an exporter duplication artefact, so the magnitudes are not trustworthy and TX should be read qualitatively (it scales up with n, as bitswap flooding predicts) rather than as exact bytes. There is no TUS baseline in this UC, so no protocol bandwidth comparison is possible here; the broader EDFS-vs-TUS memory contrast (EDFS ~180–260 MiB RAM versus TUS ~13–15 MiB) is established in the protocol-comparison use cases, not here.</p>
+<h2>Bitswap / intermittent-connectivity limitations</h2>
+<p>UC3 highlights two structural properties of the bitswap transport. First, delivery latency at small n is gated by orbital contact windows, not by the protocol — the ~840–890 s floor reflects when a node can physically reach a GS. Second, the same flooding that makes large constellations deliver faster is what drives TX up steeply with n; the block is propagated to all fetching peers rather than to a tightly bounded RF-sized set, which is why TX climbs into the tens of GiB at n100/n200 while memory stays flat. RF = 3 sizes the cluster pinset but does not gate propagation. All UC3 variants nonetheless terminated successfully with 100% delivery.</p>
+<h2>Data caveats</h2>
+<ul>
+<li><strong>EDFS TX inflated ~4.46×.</strong> tx_MiB for EDFS is inflated by an mqtt2prom exporter-pod duplication. Treat all EDFS TX numbers in this document (including 17 757, 19 677 and 39 338 MiB) as an UPPER BOUND; compare TX only qualitatively. TUS TX is unaffected, but UC3 has no TUS variants.</li>
+<li><strong>No RX metric.</strong> Network RX is unrecoverable (the world-controller ingress reads 0 on receivers), so no RX figures are reported.</li>
+<li><strong>Latency metrics are comparable and trustworthy.</strong> first_gs / mean_gs / last_gs are simulation seconds derived from GA-receipt events and are sound; they form the basis of the KPI here.</li>
+<li><strong>Partial GA-count rows.</strong> Two rows have an incomplete ground-asset count: default n200 has n_gs = 0 and a blank mean_gs (the first_gs of 409.5 s is still valid), and high n200 / low n100 report n_gs = 5 and n_gs = 1 respectively. These reflect Prometheus GA-event extraction gaps under large rosters, not genuinely fewer deliveries — delivery still registered 100% in every case. Mean-GS statistics from these rows should be discounted accordingly.</li>
+<li><strong>Priority unobservable.</strong> Universal self-pin plus negligible contention means file priority cannot be resolved in these runs; any apparent priority ordering is weak and noisy and is not claimed.</li>
+<li><strong>No TUS baseline by design.</strong> UC3 is an EDFS-only use case; no EDFS-vs-TUS comparison is drawn from it.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>EDFS satisfies the UC3 KPI completely: every one of the 18 variants delivered the large file to at least one ground asset, with 100% delivery and the Success state throughout. The strongest finding is the favourable scaling behaviour — first-GA latency drops from a contact-window-limited ~850 s at small/mid constellations to 234.0 s (default, n100) and 338.1 s (high, n200) at scale, confirming that a denser relay constellation lets bitswap reach a ground station sooner. Memory overhead is stable and constellation-size-independent at ~213–247 MiB. The trade-off is bandwidth: TX rises steeply with n as bitswap floods the block to all fetching peers, though the exact magnitudes are not reportable given the TX inflation artefact. Priority-aware routing could not be demonstrated in this configuration because of universal self-pinning and the absence of contention, so a dedicated contention experiment is needed before any claim about priority ordering can be made. Overall, UC3 establishes EDFS as a robust, density-favouring relay transport for situation-aware delivery, with bandwidth cost and priority arbitration as the open questions.</p>
+</section>
+<section id="uc4" class="concl-section">
+<h2 class="sec-anchor">UC4 — Satellite Failure</h2>
+<h1>UC4 — Conclusion</h1>
+<h2>Setup</h2>
+<p>UC4 (Sat Failure over the pole) tests fault resilience under a producer failure. A single satellite takes a HIGH-priority photo far from any ground station; before it reaches line-of-sight (LOS) with any ground station it suffers a complete failure (a <code>Destroy</code> event) after a configurable time-to-destroy <code>dt</code>. The key question is whether the photo still reaches a ground asset (GA) after the producer is gone: EDFS is expected to relay the file through other satellites' content-addressed replicas, whereas TUS — which has no inter-satellite relay — is expected to fail because the only copy dies with the producer. The sweep was run for both engines across constellation sizes <code>n ∈ {1, 2, 8, 21, 100}</code>, three destroy delays <code>dt ∈ {5m, 15m, 45m}</code>, and (for EDFS) file priorities <code>{high, default, low}</code>.</p>
+<h2>Parameters</h2>
+<ul>
+<li>Engines: EDFS vs TUS</li>
+<li>Number of satellites <code>n</code>: 1, 2, 8, 21, 100</li>
+<li>Time-to-destroy <code>dt</code>: 5m, 15m, 45m</li>
+<li>Priority (EDFS): high, default, low</li>
+<li>Replication factor (EDFS): RF = 3</li>
+<li>KPI: does the HIGH-priority photo reach at least one GA after the producer is destroyed; secondary: time to first GA delivery and resource/bandwidth footprint</li>
+</ul>
+<p><strong>Headline KPI: EDFS survives the producer failure and delivers the photo (100% delivery) in the large majority of viable configurations — wherever at least one relay peer existed (<code>n ≥ 2</code>) and priority was <code>high</code>/<code>default</code>, with a single unexplained non-delivery at <code>phigh-td45m-n02</code> that most likely reflects an export gap — while TUS failed to deliver in 100% of variants (all 15 TUS runs TimedOut, 0% delivery), exactly as the use case predicts for a protocol without inter-satellite relay.</strong></p>
+<h2>Fault resilience — delivery success under producer failure</h2>
+<p>This is the primary axis of UC4. The contrast is categorical:</p>
+<ul>
+<li><strong>TUS: 0 deliveries.</strong> Every TUS variant — across all sizes <code>n01…n100</code> and all destroy delays <code>td5m/td15m/td45m</code> — ended in <code>TimedOut</code> with <code>files→GS = 0</code> and <code>deliv% = 0</code>. The single copy of the file is lost with the producing satellite, and there is no mechanism to recover it. This is the expected and correct behaviour for the TUS baseline.</li>
+<li><strong>EDFS: delivery survives the failure in the large majority of viable runs.</strong> With more than one satellite and priority <code>high</code> or <code>default</code>, EDFS almost always reached <code>files→GS = 1</code> and <code>deliv% = 100</code>: e.g. <code>phigh-td5m-n02</code> (<code>first_gs = 2804.2 s</code>), <code>phigh-td15m-n02</code> (<code>2800.0 s</code>), <code>phigh-td15m-n08</code> (<code>1322.0 s</code>), <code>phigh-td5m-n21</code> (<code>1301.5 s</code>), <code>phigh-td45m-n100</code> (<code>101.1 s</code>), and the <code>default</code>-priority runs <code>pdefault-td15m-n21</code> (<code>1301.8 s</code>) and <code>pdefault-td45m-n08</code> (<code>1326.0 s</code>). The producer being destroyed did not prevent delivery, confirming that another satellite held a replica and relayed it to a GA.</li>
+</ul>
+<p>The one viable but non-delivering EDFS run is treated as an exception, not a counter-example to the relay mechanism:</p>
+<ul>
+<li><strong><code>phigh-td45m-n02</code> (probable export gap).</strong> This row is <code>state = Success</code> yet reports <code>files→GS = 0</code>, <code>deliv% = 0</code> and <code>first_gs = —</code>, even though it is a <code>high</code>-priority run with a relay peer present (<code>n = 2</code>) — a configuration that delivered at both shorter destroy delays (<code>phigh-td5m-n02</code> and <code>phigh-td15m-n02</code> both delivered at ~2.8 ks). The same row also carries all-zero resource metrics (<code>peak_mem_MiB = 0</code>, <code>peak_cpu_m = 0</code>, <code>tx_MiB = 0</code>) with the note "no CPU/memory metrics (metrics-csv absent)", which is the signature of a metric/export anomaly rather than a genuine non-delivery. We therefore exclude this single variant from the "<code>n ≥ 2</code> delivers" claim and read it as a likely extraction gap; it is the only viable (<code>n ≥ 2</code>, non-<code>low</code>) variant that does not show delivery (<code>n-1</code> of <code>n</code> viable variants deliver).</li>
+</ul>
+<p>The other non-delivering EDFS cases are not defects:</p>
+<ul>
+<li><strong><code>n01</code> (single satellite).</strong> <code>phigh-td15m-n01</code> and <code>phigh-td45m-n01</code> both <code>TimedOut</code> with 0 delivery. With only one satellite there is no peer to hold a replica; when the producer dies the file dies with it. This is an inherent limitation of the topology, not of EDFS.</li>
+<li><strong><code>plow</code> (low priority).</strong> All low-priority runs failed to deliver: <code>plow-td45m-n08</code>, <code>plow-td15m-n21</code>, <code>plow-td45m-n21</code> and <code>plow-td5m-n21</code> all <code>TimedOut</code> (0 delivery), and <code>plow-td15m-n08</code> and <code>plow-td5m-n08</code> are still <code>Ongoing</code> with partial export. Low-priority files are not propagated under the conditions of these runs (see the priority caveat below).</li>
+</ul>
+<p><img alt="Delivery success, EDFS by priority vs TUS" src="uc4/conclusion-charts/uc4_delivery_by_priority.png" />
+EDFS delivers (100%) for high/default priority once a relay peer exists (<code>n ≥ 2</code>) in all but one viable run; EDFS-low and all TUS variants do not deliver. The lone exception, <code>phigh-td45m-n02</code>, shows 0 delivery with all-zero metrics and is treated as a probable export gap.</p>
+<h2>Latency — time to first GA delivery and scaling with constellation size</h2>
+<p>For the EDFS runs that delivered, the time-to-first-GA shows a strongly <strong>non-monotonic, counter-intuitive scaling with constellation size</strong>: larger constellations deliver <em>faster</em>, because more relay candidates raise the probability that some replica-holding satellite contacts a GS sooner.</p>
+<ul>
+<li>Smallest constellation, slowest: <code>phigh-td5m-n02</code> delivered at <code>first_gs = 2804.2 s</code> and <code>phigh-td15m-n02</code> at <code>2800.0 s</code> — the single relay peer must wait for its own LOS window.</li>
+<li>Mid sizes cluster around ~1300 s: e.g. <code>phigh-td5m-n21 = 1301.5 s</code>, <code>phigh-td15m-n08 = 1322.0 s</code>, <code>phigh-td45m-n08 = 1293.1 s</code>, <code>pdefault-td15m-n21 = 1301.8 s</code>.</li>
+<li>Largest constellation, fastest: <code>phigh-td15m-n100 = 62.3 s</code>, <code>phigh-td5m-n100 = 59.6 s</code>, <code>phigh-td45m-n100 = 101.1 s</code> — roughly <strong>an order of magnitude faster than <code>n08/n21</code></strong> and ~45× faster than <code>n02</code>, because with 100 satellites a replica-holder is almost always already near a ground station.</li>
+</ul>
+<p>The destroy delay <code>dt</code> had little systematic effect on <code>first_gs</code> within a given size (e.g. at <code>n08</code>: <code>td5m = 1330.2 s</code>, <code>td15m = 1322.0 s</code>, <code>td45m = 1293.1 s</code>), consistent with delivery being gated by orbital LOS geometry of the surviving relays rather than by exactly when the producer died. Because TUS delivered nothing, no latency comparison against TUS is possible — the comparison here is success-vs-failure, not faster-vs-slower.</p>
+<p><img alt="EDFS time to first GA delivery (delivering runs only)" src="uc4/conclusion-charts/uc4_edfs_delivery_time.png" />
+EDFS first-GA latency for delivering runs: ~2.8 ks at <code>n02</code>, ~1.3 ks at <code>n08</code>/<code>n21</code>, and ~60–100 s at <code>n100</code>.</p>
+<h2>Priority-aware routing</h2>
+<p>The data show one clear effect and one strong caveat:</p>
+<ul>
+<li><strong>Low priority does not deliver here.</strong> None of the <code>plow</code> runs delivered (all <code>TimedOut</code> or still <code>Ongoing</code>), whereas the matched <code>phigh</code>/<code>default</code> runs at <code>n08</code>/<code>n21</code> delivered at 100%. Taken at face value this looks like a priority gate.</li>
+<li><strong>But priority is largely unobservable in these runs.</strong> As documented for this campaign, EDFS replicas are universally self-pinned and there was little contention, so any apparent priority ordering is weak and noisy. The non-delivery of <code>plow</code> is better described as "low-priority files were not propagated under these conditions" — a by-design/limitation outcome — than as a measured priority-aware routing result. <strong>We do not claim a quantified priority-ordering effect from UC4.</strong> Note also that two <code>plow</code> runs (<code>plow-td15m-n08</code>, <code>plow-td5m-n08</code>) are <code>Ongoing</code> with only partial export, so their final state is not settled.</li>
+</ul>
+<h2>Bandwidth / memory overhead — EDFS vs TUS</h2>
+<p>EDFS pays a substantial resource premium for content-addressing and bitswap, while TUS has a very light footprint. (Statistics below exclude rows with <code>peak_mem_MiB = 0</code> / <code>peak_cpu_m = 0</code>, which are Prometheus metric-extraction gaps under large rosters / Prometheus pressure, not genuine zero usage — see caveats.)</p>
+<ul>
+<li><strong>Memory.</strong> EDFS peak RAM ranged ~125–190 MiB across runs with valid telemetry: e.g. <code>plow-td5m-n21 = 125 MiB</code>, <code>pdefault-td15m-n21 = 151 MiB</code>, <code>phigh-td5m-n100 = 182 MiB</code>, <code>phigh-td45m-n100 = 190 MiB</code>. TUS, where measured, used only <code>13–15 MiB</code> (<code>tus-td15m-n100 = 15 MiB</code>, <code>tus-td45m-n100 = 14 MiB</code>, <code>tus-td5m-n100 = 13 MiB</code>) — roughly <strong>an order of magnitude lower</strong> than EDFS.</li>
+<li><strong>CPU.</strong> EDFS peak CPU reached up to <code>750 m</code> (<code>phigh-td45m-n100</code>), with <code>570 m</code> at <code>phigh-td5m-n100</code> and <code>390 m</code> at <code>pdefault-td15m-n21</code>; the measured TUS runs sat at ~<code>20 m</code>.</li>
+<li><strong>Network TX.</strong> EDFS <code>tx_MiB</code> is large and variable (e.g. <code>821</code> at <code>pdefault-td15m-n21</code>, <code>2095–2159</code> across the <code>plow-n21</code> runs, <code>3237</code> at <code>phigh-td5m-n100</code>), but these absolute EDFS TX figures are an <strong>upper bound only</strong>, inflated ~4.46× by a mqtt2prom exporter-pod duplication; they may be compared only qualitatively. TUS TX is unaffected and is essentially negligible here (<code>tus-td15m-n100 = 3 MiB</code>; other TUS rows report 0 or are extraction gaps). Qualitatively, EDFS moves far more bytes than TUS to achieve relay delivery — the cost of replicating and flooding content to gain fault tolerance.</li>
+</ul>
+<h2>Bitswap / intermittent-connectivity limitations</h2>
+<p>UC4 exposes the practical limits of the EDFS / bitswap relay model under intermittent space connectivity:</p>
+<ul>
+<li><strong>No peer, no recovery.</strong> At <code>n01</code> there is no replica anywhere; the file cannot be recovered after the producer dies. Relay tolerance requires that a replica already exists on a surviving peer <em>before</em> the failure.</li>
+<li><strong>Latency is geometry-bound.</strong> Even when delivery succeeds it can take a long time at small constellations (~2.8 ks at <code>n02</code>) because a single relay must wait for its own ground-station pass; resilience does not imply timeliness.</li>
+<li><strong>Low-priority / non-termination.</strong> Low-priority runs did not deliver and two remain <code>Ongoing</code> — illustrating that propagation is not guaranteed for de-prioritised content and that some runs do not cleanly terminate.</li>
+<li><strong>Bandwidth cost.</strong> The high EDFS TX (even discounting the ~4.46× exporter inflation) reflects content flooding to multiple peers, the overhead that buys the fault tolerance TUS lacks.</li>
+</ul>
+<h2>Data caveats</h2>
+<ul>
+<li><strong>EDFS network TX is an upper bound.</strong> <code>tx_MiB</code> for EDFS is inflated ~4.46× by a mqtt2prom exporter-pod duplication; absolute EDFS TX values are reported as an upper bound and compared only qualitatively. TUS TX is unaffected.</li>
+<li><strong>No RX metric.</strong> Network receive is unrecoverable (the world-controller ingress reads 0 on receivers); RX is therefore not reported anywhere in this conclusion.</li>
+<li><strong>Extraction gaps (zeros).</strong> Many UC4 rows have <code>peak_mem_MiB = 0</code>, <code>peak_cpu_m = 0</code> and/or <code>mean_gs = 0</code> / <code>n_gs = 0</code> (e.g. several <code>pdefault</code>/<code>phigh</code> <code>n02</code>/<code>n08</code>/<code>n21</code> rows and all of the all-zero TUS rows). These are Prometheus metric-extraction gaps under large rosters / Prometheus pressure, <strong>not</strong> genuine zero usage; such rows are excluded from the resource and mean-latency statistics above. <code>first_gs</code> is still valid on those rows because it derives from GA-receipt events. One such row, <code>phigh-td45m-n02</code>, additionally shows <code>files→GS = 0</code> / <code>deliv% = 0</code> despite being a viable (<code>n ≥ 2</code>, <code>high</code>) configuration that delivered at shorter destroy delays; it is treated as a probable export gap and excluded from the "<code>n ≥ 2</code> delivers" claim.</li>
+<li><strong>GA-receipt clocks are comparable.</strong> <code>first_gs</code> / <code>mean_gs</code> / <code>last_gs</code> are simulation seconds derived from GA-receipt events and are directly comparable across EDFS and TUS.</li>
+<li><strong>Priority unobservable.</strong> Priority (high/default/low) is largely unobservable for EDFS in these runs (universal self-pin + little contention); no quantified priority-ordering claim is made.</li>
+<li><strong>By-design non-delivery.</strong> EDFS <code>n01</code> (no relay peer) and <code>plow</code> (low priority not propagated) do not deliver by design/limitation, not because of a defect.</li>
+<li><strong>Ongoing runs.</strong> <code>plow-td15m-n08</code> and <code>plow-td5m-n08</code> are still <code>Ongoing</code> (partial export); their final outcome is not settled.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>UC4 cleanly demonstrates the resilience advantage that motivates EDFS for space use. Under a complete producer failure before any ground contact, <strong>TUS lost the file in 100% of cases (all 15 variants TimedOut, 0% delivery)</strong>, while <strong>EDFS recovered and delivered the HIGH/default-priority photo at 100% in the large majority of configurations that had a surviving relay peer (<code>n ≥ 2</code>) — all but one of the viable variants (<code>n-1</code> of <code>n</code>)</strong>, with first-GA delivery as fast as ~60 s at <code>n100</code> thanks to the larger pool of relay candidates. The single exception, <code>phigh-td45m-n02</code>, reports 0 delivery alongside all-zero resource metrics and is treated as a probable export gap rather than a real relay failure, since the same <code>phigh-n02</code> configuration delivered at both shorter destroy delays. The advantage is real but not free: EDFS uses roughly an order of magnitude more memory than TUS (~125–190 MiB vs ~13–15 MiB) and far higher CPU and network traffic, it cannot recover anything when no peer holds a replica (<code>n01</code>), and low-priority content was not propagated in these runs. The headline verdict — EDFS relay survives producer failure where TUS cannot — is well supported by the data; the latency, priority and bandwidth observations should be read in light of the extraction gaps (including the <code>phigh-td45m-n02</code> anomaly), the TX inflation, the priority-unobservability caveat, and the two unfinished <code>plow</code> runs noted above.</p>
+</section>
+<section id="uc5" class="concl-section">
+<h2 class="sec-anchor">UC5 — General Failure (EDFS-only)</h2>
+<h1>UC5 General Failure — Conclusion</h1>
+<h2>Setup</h2>
+<p>UC5 stresses a satellite constellation in which a finite, countable set of photos is produced while large-scale faults (every hardware fault except the unrecoverable Destroy) are injected against both satellites and ground assets. The key performance indicator is the time until <em>every</em> produced photo has reached at least one ground asset (GA), i.e. full-set delivery under sustained, randomised failure. This use case is EDFS-only by design: it probes the distributed-storage engine's ability to keep replicating and relaying content while nodes drop out and recover, a regime in which a point-to-point upload protocol such as TUS has no comparable behaviour. Accordingly there is <strong>no TUS baseline — EDFS-only UC by design</strong>; the conclusions below characterise EDFS in absolute terms and against its own parameter sweep (constellation size n and replication factor RF), not against a second protocol.</p>
+<h2>Parameters</h2>
+<ul>
+<li>Constellation size n: 1, 2, 8, 21 satellites</li>
+<li>Replication factor RF: 1, 3, 5</li>
+<li>File priority: default (normal) only in these runs</li>
+<li>Fault regime: large-scale random satellite and ground-asset failures, excluding Destroy</li>
+<li>Engine: EDFS only</li>
+</ul>
+<p><strong>Headline KPI: every UC5 variant reached the Success state and delivered at least one photo to a GA under sustained failure injection, with first-GA latency ranging from 14.3 s (n21, RF=5) to 569.6 s (n01, RF=1); however, full-set delivery (deliv%) was incomplete in most multi-satellite variants — only n01 and n08 (RF=1) reached 100% files→GS — confirming that EDFS keeps delivering through failures but that the per-photo completeness of the set is gated by RF and by transient connectivity rather than guaranteed.</strong></p>
+<h2>Latency — time to first GA delivery and scaling with constellation size</h2>
+<p>First-GA latency (<code>first_gs</code>, simulation seconds) shows the same counter-intuitive size dependence observed across the other use cases: larger constellations tend to deliver <em>faster</em>, because more satellites mean more relay candidates and a shorter wait until some node enters line-of-sight with a ground asset.</p>
+<ul>
+<li>n01, RF=1: <code>first_gs</code> = 569.6 s (single satellite must itself reach a GA — slowest)</li>
+<li>n02, RF=1: <code>first_gs</code> = 507.6 s</li>
+<li>n08, RF=1: <code>first_gs</code> = 336.9 s</li>
+<li>n21, RF=1: <code>first_gs</code> = 15.7 s; n21, RF=5: <code>first_gs</code> = 14.3 s (fastest first contact)</li>
+</ul>
+<p>The progression from 569.6 s at n01 down to ~15 s at n21 (RF=1) is a clean illustration of relay-candidate density shortening time-to-first-contact by more than an order of magnitude. Note that <code>first_gs</code> measures only the first photo's arrival; for n21, RF=1 the mean GA-receipt time <code>mean_gs</code> is just 64.4 s but only 15% of the set was delivered (see below), so a fast first delivery does not imply a fast <em>complete</em>-set delivery. Where full-set delivery did progress, <code>mean_gs</code> sat in the 475–503 s range (n08 RF=3/RF=5: 499.9 s / 503.1 s; n21 RF=3/RF=5: 475.8 s / 481.2 s).</p>
+<h2>Fault resilience — delivery success under satellite/ground failure</h2>
+<p>This is the central axis for UC5. Under large-scale (non-Destroy) failure injection, EDFS never failed outright: all eight variants reached <code>Success</code> and every variant delivered at least one photo to a GA. The replication/relay mechanism therefore survives concurrent satellite and ground-asset failures — content that a failing producer had already shared into the swarm continued to propagate.</p>
+<p>What failures <em>did</em> degrade was set <em>completeness</em> (<code>deliv%</code> / files→GS):</p>
+<ul>
+<li>n01, RF=1: 100% (1/1) — trivially complete with a single producer</li>
+<li>n08, RF=1: 100% (5/5) — full set delivered</li>
+<li>n02, RF=1: 80%; n08, RF=3: 80%; n08, RF=5: 80%; n21, RF=3: 80% (4/5 of the counted set for n21, RF=3; for n02 and the two n08 variants the table reports a deliv% of 80% against a single delivered file, so the underlying numerator/denominator is not exposed here)</li>
+<li>n21, RF=5: 50% (4/8)</li>
+<li>n21, RF=1: 15% (2/14) — the weakest completeness, despite the fastest first delivery</li>
+</ul>
+<p>So resilience is qualified: EDFS reliably gets <em>something</em> to the ground under heavy failure, and with RF≥3 typically gets the large majority of the set down, but at the largest constellation with RF=1 (n21) the set was only 15% complete within the run. The pattern that raising RF on n21 lifts completeness from 15% (RF=1) toward 80% (RF=3) — at the cost of falling back to 50% at RF=5 — indicates that additional replicas help survive failures up to a point, but more replicas are not monotonically better here and the result is noisy at this sample size.</p>
+<h2>Priority-aware routing</h2>
+<p>All UC5 runs used the default (normal) priority; there is no priority sweep to analyse. More fundamentally, file priority is largely <strong>unobservable for EDFS in these runs</strong>: universal self-pinning and the low level of contention in the simulated network mean that any priority-driven ordering is weak and noisy. No priority claim is made for UC5.</p>
+<h2>Bandwidth / memory overhead</h2>
+<p>There is no TUS baseline to compare against. In absolute terms EDFS's resource footprint is consistent with the other use cases: a content-addressing/bitswap engine that is far heavier than a thin upload client would be.</p>
+<ul>
+<li>Peak memory (<code>peak_mem_MiB</code>): 159–236 MiB across the variants with valid extraction (n02: 159, n08 RF=5: 163, n08 RF=3: 166, n21 RF=5: 187, n01: 192, n21 RF=1: 196, n21 RF=3: 236). The highest footprint (236 MiB) coincides with the most-replicated mid-size case (n21, RF=3).</li>
+<li>Peak CPU (<code>peak_cpu_m</code>): 250–510 milli-cores, peaking at 510 m for n21, RF=3 — the variant with the highest observed CPU draw; n21, RF=5 also delivered 4 files at a higher replication factor but at a lower peak CPU (390 m).</li>
+<li>EDFS network TX (<code>tx_MiB</code>): grows strongly with both n and RF — from ~2000–2500 MiB (n01, RF=1: 2361; n02, RF=1: 2042; n08, RF=3: 2123; n08, RF=5: 2492) up to 9430 MiB (n21, RF=3) and 7032 MiB (n21, RF=5). Note that n08, RF=1 is excluded from this low-TX range because its <code>tx_MiB</code> reads 0 (a Prometheus extraction gap, not zero traffic), so the n08 figures above are for the RF=3 and RF=5 variants only. These TX figures are <strong>inflated by roughly 4.46×</strong> by a known mqtt2prom exporter-pod duplication and must be treated as an <strong>upper bound</strong>; they are useful only qualitatively (TX clearly rises with constellation size and replication) and absolute values should not be quoted as the real on-wire cost.</li>
+</ul>
+<p>The cost picture is therefore: EDFS pays a substantial, RF-amplified bandwidth and a few-hundred-MiB memory price to obtain the fault-tolerant relay behaviour that this use case relies on.</p>
+<h2>Bitswap / intermittent-connectivity limitations</h2>
+<p>The completeness results expose the limitation of bitswap-style propagation under intermittent connectivity. Because delivery depends on a fetching peer making contact while the content is reachable, full-set completion is not guaranteed within a bounded run: n21 RF=1 delivered only 2 of 14 counted files (15%) even though its first delivery was among the fastest. RF helps but inconsistently (n21: 15% → 80% → 50% as RF goes 1 → 3 → 5), reflecting both the RF-dependent size of the pin-set and the noise inherent in random failure injection at this scale. The qualitative TX growth (up to 9430 MiB at n21 RF=3) is consistent with flooding-style propagation, where the engine pushes content to many peers rather than along a single optimised path.</p>
+<h2>Data caveats</h2>
+<ul>
+<li><strong>EDFS-only, no second protocol.</strong> UC5 has no TUS baseline by design; all comparisons here are internal (across n and RF), not cross-protocol.</li>
+<li><strong>TX is an upper bound.</strong> <code>tx_MiB</code> for EDFS is inflated ~4.46× by a mqtt2prom exporter-pod duplication. Use it only qualitatively; do not cite absolute TX as real on-wire traffic. (RX is unrecoverable — world-controller ingress reads 0 on receivers — so no RX metric is reported at all.)</li>
+<li><strong>One metric-extraction gap.</strong> Variant n08, RF=1 has <code>mean_gs</code> = —, <code>n_gs</code> = 0, <code>peak_mem_MiB</code> = 0 and <code>peak_cpu_m</code> = 0; these are Prometheus extraction gaps (not genuine zero usage), so that variant is excluded from the resource and <code>mean_gs</code> statistics above (its <code>first_gs</code> = 336.9 s and 100% completeness remain valid as they derive from GA-receipt events).</li>
+<li><strong>Priority unobservable.</strong> EDFS priority effects are not observable here (universal self-pin, little contention); no priority ordering is claimed.</li>
+<li><strong>Small sample, random faults.</strong> With at most three RF settings per size and randomised failure injection, the completeness figures (especially the non-monotonic n21 15%/80%/50% across RF) are noisy and should be read as trends, not precise rates. An independent re-run with more repetitions would tighten these.</li>
+</ul>
+<p><img alt="UC5 delivery success and time vs RF" src="uc5/conclusion-charts/uc5_rf.png" />
+UC5 — delivery completeness and GA-delivery time as a function of replication factor (EDFS only).</p>
+<h2>Conclusion</h2>
+<p>Under sustained large-scale failure, EDFS demonstrates robust <em>availability</em>: every UC5 variant reached Success and delivered at least one photo to the ground, and first-GA latency improved dramatically with constellation size (569.6 s at n01 → ~15 s at n21, RF=1), confirming that a denser relay population shortens time-to-first-contact. Its weakness is <em>completeness</em> under failure and intermittent connectivity: only n01 and n08 (RF=1) achieved 100% of the photo set, while the largest roster at RF=1 (n21) reached only 15%, and raising RF improved but did not reliably maximise completeness (n21: 15% → 80% → 50% across RF 1/3/5). EDFS pays for this resilience with a heavy footprint — ~159–236 MiB peak RAM, up to 510 m peak CPU, and RF-amplified TX that is qualitatively large (nominally up to 9430 MiB at n21 RF=3, but an upper bound owing to the exporter duplication). The verdict for UC5: EDFS is well-suited to <em>getting content to the ground despite failures</em> and is the appropriate engine for this fault-heavy regime, but guaranteeing full-set delivery within a bounded time requires sufficient replication and an independent, higher-repetition re-run to firm up the RF-vs-completeness relationship.</p>
+</section>
+<section id="relwork" class="concl-section">
+<h2 class="sec-anchor">Related Work (external literature)</h2>
+<h1>Related Work — External Literature (CFDP / DTN / IPFS-Bitswap)</h1>
+<blockquote>
+<p>Compiled from an automated multi-source web literature search and cross-checked (adversarial verification, majority vote). Treat as a starting bibliography for the deliverable — verify each citation against the primary source before formal inclusion.</p>
+</blockquote>
+<h2>Abstract</h2>
+<p>For relaying imagery from LEO/ISL meshes to ground stations under intermittent connectivity, the standards-track and space-proven baselines — CCSDS CFDP (with its normative Store-and-Forward Overlay) and DTN/Bundle Protocol v7 (a store-carry-forward overlay explicitly designed for intermittent links where sender and receiver are never concurrently present) — are purpose-built for exactly this regime, with CFDP offering NAK-driven guaranteed reliability and DTN offering hop-by-hop custody transfer plus a well-defined priority model (BPv6 3-level class-of-service extended by ECOS's 0-255 ordinal with a normative forwarding-order MUST). DTN/CGR has real deep-space flight validation (DINET: 292 images, ~14.5 MB, zero loss/corruption). By contrast, an IPFS-based EDFS built on vanilla kubo/ipfs-cluster inherits Bitswap's flooding-style retrieval (broadcast WANT-HAVE to all connected peers, DHT fallback) and documented duplicate-block overhead that grows linearly with the number of serving peers — a structural mismatch with constrained satellite RAM/CPU/bandwidth and with priority-aware delivery, although content-addressing/chunked DAG transfer and incremental cross-pass reassembly (as in the experimental ipfs-shipyard/space effort) do align with the store-and-forward premise. Net: CFDP/DTN are the mature, low-overhead, priority-capable, disruption-tolerant baselines, while EDFS/IPFS-Bitswap's advantages (content-addressing, multi-source fetch) come at a real and well-documented bandwidth-overhead cost and with weak/unobservable priority support in its vanilla form — strong justification for an empirical EDFS-vs-standard comparison.</p>
+<h2>Key findings</h2>
+<p><strong>1. [HIGH]</strong> Store-carry-forward is the defining architectural premise for delivering files over intermittent LEO/ISL-to-ground links: relays must store data and forward it only when a contact opportunity (pass/contact window) arises, because continuous end-to-end paths often never exist simultaneously.</p>
+<blockquote>
+<p>Multiple unanimous (3-0) primary sources converge: Burleigh/JPL GSAW-2003 states continuous end-to-end transmission through relays may be impossible due to time-disjoint connectivity, so relays must store-and-forward (claim 0). UniBO CGR paper defines DTN by the Store-Carry-Forward paradigm where each node can store information for a long time before forwarding (claim 3). RFC 9171 calls BPv7 a 'store-carry-forward overlay network' designed for intermittent connectivity including cases where sender and receiver are not concurrently present (claims 10, 11), with a retention-constraint mechanism preventing bundle discard until delivered/expired (claim 12). NASA GSFC FSW-2018 states BP uses store-and-forward for multi-hop end-to-end delivery and takes advantage of short, disjoint high-bandwidth contact windows rather than requiring TCP-style continuous connections (claim 13).</p>
+</blockquote>
+<p>Sources: <a href="https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf">[1]</a>, <a href="https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf">[2]</a>, <a href="https://datatracker.ietf.org/doc/rfc9171/">[3]</a>, <a href="https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf">[4]</a></p>
+<p><strong>2. [HIGH]</strong> Reliable transmission over intermittent deep-space/disrupted links can take arbitrarily long (hours-to-days), so end-to-end retransmission is unsuitable; reliability should be hop-by-hop via custody transfer with ARQ at each relay, which lets a relay take ownership of a bundle and signal the originator it may delete its copy.</p>
+<blockquote>
+<p>Burleigh/JPL GSAW-2003 (3-0): reliable transmission of any single byte can take arbitrarily long because lost transmissions/NAKs must be retried and connectivity can be lost between transmission and reception, delaying retransmission by hours/days (claim 1); end-to-end retransmission would reserve buffer at the originator for the whole transaction (days/weeks), so retransmission should be point-to-point ('custody transfer') with ARQ at every relay (claim 2). NASA GSFC FSW-2018 (2-1): a bundle relay can take custody and tell the sender it may delete its copy, fitting near-Earth missions where downlink bandwidth exceeds the ground station's terrestrial bandwidth (claim 14). CAVEAT: custody transfer was a BPv6 feature; it was removed from core RFC 9171/BPv7 (the BP itself 'does not ensure delivery of a bundle') and is being re-standardized for BPv7 (CCSDS experimental, ~2025). The 2018 source reflects BPv6-era custody.</p>
+</blockquote>
+<p>Sources: <a href="https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf">[1]</a>, <a href="https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf">[2]</a></p>
+<p><strong>3. [HIGH]</strong> CFDP is a mature, standards-track delay/disruption-tolerant file-transfer baseline: it has a normative Store-and-Forward Overlay (hop-by-hop relay across waypoints never in direct contact, analogous to ISL-mesh relay), selectable reliability via NAK-driven acknowledged mode guaranteeing complete file delivery (unacknowledged mode does not), and is explicitly applicable to continuous/intermittent/asymmetrical-time-disjoint/simplex contact with suspend/resume across outages.</p>
+<blockquote>
+<p>All three CFDP claims unanimous (3-0) against the authoritative CCSDS Blue Book. SFO is normative (CCSDS 727.0-B-5 Annex B with SFOS/SFOX/SFOR procedure tables): files are received, stored, and forwarded hop-by-hop by intermediate waypoint users until reaching an agent that can directly reach the destination (claim 7). Acknowledged mode uses receiver NAKs to detect/retransmit undelivered segments 'guaranteeing complete file delivery'; unacknowledged mode does not report failures and complete reception is not guaranteed (claim 8). The Recommendation is applicable to missions with continuous duplex, intermittent duplex, asymmetrical time-disjoint, and simplex contact, with Remote Suspend/Resume operations across outages (claim 9). NUANCE for related-work: SFO forwards whole files only on full receipt and cannot multipath/reroute, unlike DTN BP/LTP (per Flentge ESA study and CFDP-over-DTN tunneling work) — CFDP is a delay-tolerant baseline, not equal to DTN in rerouting flexibility.</p>
+</blockquote>
+<p>Sources: <a href="https://ccsds.org/Pubs/727x0b5e1.pdf">[1]</a>, <a href="https://ccsds.org/Pubs/720x1g4.pdf">[2]</a></p>
+<p><strong>4. [HIGH]</strong> DTN/Bundle Protocol is the canonical, flight-validated space store-carry-forward standard: BPv7 (RFC 9171) is designed for intermittent connectivity, large/variable delays, and high bit error rates and to exploit scheduled contact windows; DTN/CGR has been validated in real deep-space operations (DINET transferred 292 images / ~14.5 MB with zero loss or corruption).</p>
+<blockquote>
+<p>RFC 9171 (3-0) states stressed environments include intermittent connectivity, large/variable delays, and high bit error rates, and BPv7 forms a store-carry-forward overlay coping with sender/receiver not concurrently present (claims 10, 11, 13). DINET flight validation (3-0): the CGR paper and NASA's NTRS DINET Flight Validation Report independently confirm ~292 (rounded ~300) images / ~14.5 MB transferred over a 27-day 2008 test through an 11-node BP+LTP network with the Deep Impact/EPOXI spacecraft as a DTN router, with no data lost or corrupted (claim 4). Source quality is top-tier (IETF Standards Track RFC + peer-reviewed paper + official NASA report). NUANCE: DINET validates reliable multi-hop DTN over intermittent deep-space links, not literally LEO-to-ground downlink; CGR's deterministic-routing-from-known-topology framing was a REFUTED claim (1-2), so do not over-state CGR as fully deterministic vs opportunistic.</p>
+</blockquote>
+<p>Sources: <a href="https://datatracker.ietf.org/doc/rfc9171/">[1]</a>, <a href="https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf">[2]</a>, <a href="https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf">[3]</a></p>
+<p><strong>5. [HIGH]</strong> DTN provides an explicit, normative priority/forwarding-order model that CFDP and (vanilla) IPFS lack: BPv6 base class-of-service defines three levels (bulk=0, normal=1, expedited=2), and ECOS adds an 8-bit ordinal (0-255) for fine-grained priority within the expedited class, with a normative MUST that a higher-ordinal expedited bundle be forwarded before any lower-priority bundle to the same next hop.</p>
+<blockquote>
+<p>Both ECOS claims unanimous (3-0) against the primary IRTF draft (implemented in NASA ION). RFC 5050 (BPv6) defines the 2-bit priority field bulk/normal/expedited (0/1/2); ECOS adds the 8-bit ordinal byte 0-255 for fine-grained prioritization within the expedited class (claim 5). The agent MUST forward a higher-ordinal expedited bundle before any lower-priority bundle to the same next-hop node — a RFC-2119 normative forwarding-order rule (claim 6). IMPORTANT SCOPE: this is BPv6/RFC 5050 base CoS + ECOS (a draft/experimental DTNRG spec); BPv7/RFC 9171 dropped the base priority field. The MUST governs ORDER among forwarded bundles, not a delivery guarantee (delivery is still contact-window-bound). A separate claim that generic BP supports priority/QoS flow management was REFUTED (0-3), so priority in DTN is properly attributed to BPv6+ECOS, not BPv7-core.</p>
+</blockquote>
+<p>Sources: <a href="https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-04">[1]</a></p>
+<p><strong>6. [HIGH]</strong> An IPFS-based EDFS on vanilla kubo/ipfs-cluster uses Bitswap's flooding-style retrieval that produces large, well-documented duplicate-block bandwidth overhead — a structural mismatch with constrained satellite RAM/CPU/bandwidth: Bitswap broadcasts a WANT-HAVE wantlist to ALL connected peers (DHT fallback when none hold the block), every peer that received the wantlist sends every wanted block, and measured duplicate data grew linearly with the number of serving peers (e.g., 3 nodes each received the file ~20 times in one maintainer test).</p>
+<blockquote>
+<p>Protocol Labs / de la Rocha 2021 (3-0): Bitswap sessions start by broadcasting a WANT-HAVE wantlist to all of the node's connected peers, falling back to a typically slower content-routing subsystem (DHT) when none hold the block (claim 19). kubo #261 (3-0 on mechanism): everyone who received the want-list sent every block on it, causing duplicates from multiple uncoordinated providers (claim 18); the same issue (2-1) reports a maintainer test where 3 nodes pinning a widely-available file each received ~20 copies (claim 17). kubo #4588 (2-1): duplicate data rate increased linearly with the number of serving nodes (~(N-1)x file size) (claim 16). CAVEATS: these measurements are vanilla/pre-Sessions Bitswap (2014/2018); modern kubo mitigates (not eliminates) duplicates via Sessions, WANT-HAVE/WANT-BLOCK split, and adaptive split-factor. The specific numeric '2 nodes=100%, 3 nodes=200%' phrasing was REFUTED (0-3) as over-precise, and broadcast is ONE of several duplicate causes (also a CANCEL race), so do not assert it as the sole cause. The project's EDFS path is confirmed vanilla kubo/ipfs-cluster, keeping this relevant.</p>
+</blockquote>
+<p>Sources: <a href="https://research.protocol.ai/publications/accelerating-content-routing-with-bitswap-a-multi-path-file-transfer-protocol-in-ipfs-and-filecoin/delarocha2021.pdf">[1]</a>, <a href="https://github.com/ipfs/kubo/issues/261">[2]</a>, <a href="https://github.com/ipfs/kubo/issues/4588">[3]</a></p>
+<p><strong>7. [MEDIUM]</strong> Content-addressing with chunked DAG transfer and incremental cross-pass reassembly is itself compatible with the store-and-forward space regime, as demonstrated by the experimental ipfs-shipyard/space effort, which holds the payload in IPFS storage, transmits it in CID-addressed blocks across multiple limited contact windows until the DAG is complete, and supports space-to-space relay to a satellite out of ground contact.</p>
+<blockquote>
+<p>ipfs-shipyard/space README (3-0): the satellite has communications with each ground station for X minutes each hour/pass; each run transmits a payload across passes until it can be reassembled and verified; the file is chunked into blocks each with a CID, looping TransmitBlock(CID) while blocks remain missing; space-to-space relay passes data to a satellite that cannot contact a ground station (claim 15). CONFIDENCE is medium (single primary source; an experimental 'shipyard' project, not a proven production deployment). IMPORTANT: a related stronger claim — that this effort deliberately does NOT use Bitswap over satellite links (implying vanilla Bitswap is unsuitable) — was REFUTED (0-3); so this finding supports that content-addressing aligns with store-and-forward, but does NOT establish that the canonical IPFS transfer engine (Bitswap) is itself space-ready.</p>
+</blockquote>
+<p>Sources: <a href="https://github.com/ipfs-shipyard/space">[1]</a></p>
+<h2>Caveats from the literature</h2>
+<ul>
+<li>T</li>
+<li>I</li>
+<li>M</li>
+<li>E</li>
+<li>-</li>
+<li>S</li>
+<li>E</li>
+<li>N</li>
+<li>S</li>
+<li>I</li>
+<li>T</li>
+<li>I</li>
+<li>V</li>
+<li>I</li>
+<li>T</li>
+<li>Y</li>
+<li></li>
+<li>/</li>
+<li></li>
+<li>V</li>
+<li>E</li>
+<li>R</li>
+<li>S</li>
+<li>I</li>
+<li>O</li>
+<li>N</li>
+<li>I</li>
+<li>N</li>
+<li>G</li>
+<li>:</li>
+<li></li>
+<li>(</li>
+<li>a</li>
+<li>)</li>
+<li></li>
+<li>T</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>B</li>
+<li>i</li>
+<li>t</li>
+<li>s</li>
+<li>w</li>
+<li>a</li>
+<li>p</li>
+<li></li>
+<li>d</li>
+<li>u</li>
+<li>p</li>
+<li>l</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>t</li>
+<li>e</li>
+<li>-</li>
+<li>o</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>h</li>
+<li>e</li>
+<li>a</li>
+<li>d</li>
+<li></li>
+<li>m</li>
+<li>e</li>
+<li>a</li>
+<li>s</li>
+<li>u</li>
+<li>r</li>
+<li>e</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>s</li>
+<li></li>
+<li>(</li>
+<li>k</li>
+<li>u</li>
+<li>b</li>
+<li>o</li>
+<li></li>
+<li>
+<h1></h1>
+</li>
+<li>2</li>
+<li>6</li>
+<li>1</li>
+<li></li>
+<li>=</li>
+<li></li>
+<li>2</li>
+<li>0</li>
+<li>1</li>
+<li>4</li>
+<li>,</li>
+<li></li>
+<li>
+<h1></h1>
+</li>
+<li>4</li>
+<li>5</li>
+<li>8</li>
+<li>8</li>
+<li></li>
+<li>=</li>
+<li></li>
+<li>2</li>
+<li>0</li>
+<li>1</li>
+<li>8</li>
+<li>)</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>e</li>
+<li>d</li>
+<li>a</li>
+<li>t</li>
+<li>e</li>
+<li></li>
+<li>S</li>
+<li>e</li>
+<li>s</li>
+<li>s</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>s</li>
+<li>,</li>
+<li></li>
+<li>W</li>
+<li>A</li>
+<li>N</li>
+<li>T</li>
+<li>-</li>
+<li>H</li>
+<li>A</li>
+<li>V</li>
+<li>E</li>
+<li>/</li>
+<li>W</li>
+<li>A</li>
+<li>N</li>
+<li>T</li>
+<li>-</li>
+<li>B</li>
+<li>L</li>
+<li>O</li>
+<li>C</li>
+<li>K</li>
+<li></li>
+<li>s</li>
+<li>p</li>
+<li>l</li>
+<li>i</li>
+<li>t</li>
+<li>,</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>a</li>
+<li>d</li>
+<li>a</li>
+<li>p</li>
+<li>t</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li></li>
+<li>s</li>
+<li>p</li>
+<li>l</li>
+<li>i</li>
+<li>t</li>
+<li>-</li>
+<li>f</li>
+<li>a</li>
+<li>c</li>
+<li>t</li>
+<li>o</li>
+<li>r</li>
+<li></li>
+<li>m</li>
+<li>i</li>
+<li>t</li>
+<li>i</li>
+<li>g</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>s</li>
+<li>;</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>~</li>
+<li>2</li>
+<li>0</li>
+<li>x</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>l</li>
+<li>i</li>
+<li>n</li>
+<li>e</li>
+<li>a</li>
+<li>r</li>
+<li>-</li>
+<li>g</li>
+<li>r</li>
+<li>o</li>
+<li>w</li>
+<li>t</li>
+<li>h</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>g</li>
+<li>u</li>
+<li>r</li>
+<li>e</li>
+<li>s</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>s</li>
+<li>c</li>
+<li>r</li>
+<li>i</li>
+<li>b</li>
+<li>e</li>
+<li></li>
+<li>h</li>
+<li>i</li>
+<li>s</li>
+<li>t</li>
+<li>o</li>
+<li>r</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>l</li>
+<li></li>
+<li>v</li>
+<li>a</li>
+<li>n</li>
+<li>i</li>
+<li>l</li>
+<li>l</li>
+<li>a</li>
+<li></li>
+<li>B</li>
+<li>i</li>
+<li>t</li>
+<li>s</li>
+<li>w</li>
+<li>a</li>
+<li>p</li>
+<li>,</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>t</li>
+<li></li>
+<li>c</li>
+<li>u</li>
+<li>r</li>
+<li>r</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li></li>
+<li>u</li>
+<li>n</li>
+<li>c</li>
+<li>a</li>
+<li>p</li>
+<li>p</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>b</li>
+<li>e</li>
+<li>h</li>
+<li>a</li>
+<li>v</li>
+<li>i</li>
+<li>o</li>
+<li>u</li>
+<li>r</li>
+<li>.</li>
+<li></li>
+<li>T</li>
+<li>h</li>
+<li>e</li>
+<li>y</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>m</li>
+<li>a</li>
+<li>i</li>
+<li>n</li>
+<li></li>
+<li>d</li>
+<li>i</li>
+<li>r</li>
+<li>e</li>
+<li>c</li>
+<li>t</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>l</li>
+<li>e</li>
+<li>v</li>
+<li>a</li>
+<li>n</li>
+<li>t</li>
+<li></li>
+<li>o</li>
+<li>n</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>b</li>
+<li>e</li>
+<li>c</li>
+<li>a</li>
+<li>u</li>
+<li>s</li>
+<li>e</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>j</li>
+<li>e</li>
+<li>c</li>
+<li>t</li>
+<li>'</li>
+<li>s</li>
+<li></li>
+<li>E</li>
+<li>D</li>
+<li>F</li>
+<li>S</li>
+<li></li>
+<li>u</li>
+<li>s</li>
+<li>e</li>
+<li>s</li>
+<li></li>
+<li>v</li>
+<li>a</li>
+<li>n</li>
+<li>i</li>
+<li>l</li>
+<li>l</li>
+<li>a</li>
+<li></li>
+<li>k</li>
+<li>u</li>
+<li>b</li>
+<li>o</li>
+<li>/</li>
+<li>i</li>
+<li>p</li>
+<li>f</li>
+<li>s</li>
+<li>-</li>
+<li>c</li>
+<li>l</li>
+<li>u</li>
+<li>s</li>
+<li>t</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>(</li>
+<li>p</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>j</li>
+<li>e</li>
+<li>c</li>
+<li>t</li>
+<li></li>
+<li>m</li>
+<li>e</li>
+<li>m</li>
+<li>o</li>
+<li>r</li>
+<li>y</li>
+<li>:</li>
+<li></li>
+<li>'</li>
+<li>E</li>
+<li>D</li>
+<li>F</li>
+<li>S</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>d</li>
+<li>e</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>v</li>
+<li>a</li>
+<li>n</li>
+<li>i</li>
+<li>l</li>
+<li>l</li>
+<li>a</li>
+<li></li>
+<li>k</li>
+<li>u</li>
+<li>b</li>
+<li>o</li>
+<li>'</li>
+<li>)</li>
+<li>.</li>
+<li></li>
+<li>(</li>
+<li>b</li>
+<li>)</li>
+<li></li>
+<li>D</li>
+<li>T</li>
+<li>N</li>
+<li></li>
+<li>c</li>
+<li>u</li>
+<li>s</li>
+<li>t</li>
+<li>o</li>
+<li>d</li>
+<li>y</li>
+<li></li>
+<li>t</li>
+<li>r</li>
+<li>a</li>
+<li>n</li>
+<li>s</li>
+<li>f</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>a</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>6</li>
+<li></li>
+<li>f</li>
+<li>e</li>
+<li>a</li>
+<li>t</li>
+<li>u</li>
+<li>r</li>
+<li>e</li>
+<li></li>
+<li>R</li>
+<li>E</li>
+<li>M</li>
+<li>O</li>
+<li>V</li>
+<li>E</li>
+<li>D</li>
+<li></li>
+<li>f</li>
+<li>r</li>
+<li>o</li>
+<li>m</li>
+<li></li>
+<li>c</li>
+<li>o</li>
+<li>r</li>
+<li>e</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>7</li>
+<li>/</li>
+<li>R</li>
+<li>F</li>
+<li>C</li>
+<li></li>
+<li>9</li>
+<li>1</li>
+<li>7</li>
+<li>1</li>
+<li></li>
+<li>(</li>
+<li>'</li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>B</li>
+<li>u</li>
+<li>n</li>
+<li>d</li>
+<li>l</li>
+<li>e</li>
+<li></li>
+<li>P</li>
+<li>r</li>
+<li>o</li>
+<li>t</li>
+<li>o</li>
+<li>c</li>
+<li>o</li>
+<li>l</li>
+<li></li>
+<li>i</li>
+<li>t</li>
+<li>s</li>
+<li>e</li>
+<li>l</li>
+<li>f</li>
+<li></li>
+<li>d</li>
+<li>o</li>
+<li>e</li>
+<li>s</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>t</li>
+<li></li>
+<li>e</li>
+<li>n</li>
+<li>s</li>
+<li>u</li>
+<li>r</li>
+<li>e</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>l</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>y</li>
+<li></li>
+<li>o</li>
+<li>f</li>
+<li></li>
+<li>a</li>
+<li></li>
+<li>b</li>
+<li>u</li>
+<li>n</li>
+<li>d</li>
+<li>l</li>
+<li>e</li>
+<li>'</li>
+<li>)</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>b</li>
+<li>e</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>-</li>
+<li>s</li>
+<li>t</li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li>a</li>
+<li>r</li>
+<li>d</li>
+<li>i</li>
+<li>z</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>f</li>
+<li>o</li>
+<li>r</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>7</li>
+<li></li>
+<li>a</li>
+<li>s</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li></li>
+<li>e</li>
+<li>x</li>
+<li>p</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>a</li>
+<li>l</li>
+<li></li>
+<li>C</li>
+<li>C</li>
+<li>S</li>
+<li>D</li>
+<li>S</li>
+<li></li>
+<li>s</li>
+<li>p</li>
+<li>e</li>
+<li>c</li>
+<li></li>
+<li>(</li>
+<li>~</li>
+<li>2</li>
+<li>0</li>
+<li>2</li>
+<li>5</li>
+<li>)</li>
+<li>;</li>
+<li></li>
+<li>c</li>
+<li>l</li>
+<li>a</li>
+<li>i</li>
+<li>m</li>
+<li></li>
+<li>1</li>
+<li>4</li>
+<li>'</li>
+<li>s</li>
+<li></li>
+<li>s</li>
+<li>o</li>
+<li>u</li>
+<li>r</li>
+<li>c</li>
+<li>e</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>2</li>
+<li>0</li>
+<li>1</li>
+<li>8</li>
+<li>/</li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>6</li>
+<li>-</li>
+<li>e</li>
+<li>r</li>
+<li>a</li>
+<li>.</li>
+<li></li>
+<li>(</li>
+<li>c</li>
+<li>)</li>
+<li></li>
+<li>D</li>
+<li>T</li>
+<li>N</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>i</li>
+<li>o</li>
+<li>r</li>
+<li>i</li>
+<li>t</li>
+<li>y</li>
+<li></li>
+<li>(</li>
+<li>c</li>
+<li>l</li>
+<li>a</li>
+<li>i</li>
+<li>m</li>
+<li>s</li>
+<li></li>
+<li>5</li>
+<li>,</li>
+<li>6</li>
+<li>)</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>6</li>
+<li>/</li>
+<li>R</li>
+<li>F</li>
+<li>C</li>
+<li></li>
+<li>5</li>
+<li>0</li>
+<li>5</li>
+<li>0</li>
+<li></li>
+<li>b</li>
+<li>a</li>
+<li>s</li>
+<li>e</li>
+<li></li>
+<li>C</li>
+<li>o</li>
+<li>S</li>
+<li></li>
+<li>+</li>
+<li></li>
+<li>E</li>
+<li>C</li>
+<li>O</li>
+<li>S</li>
+<li></li>
+<li>(</li>
+<li>a</li>
+<li>n</li>
+<li></li>
+<li>I</li>
+<li>R</li>
+<li>T</li>
+<li>F</li>
+<li></li>
+<li>d</li>
+<li>r</li>
+<li>a</li>
+<li>f</li>
+<li>t</li>
+<li>/</li>
+<li>e</li>
+<li>x</li>
+<li>p</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>a</li>
+<li>l</li>
+<li></li>
+<li>s</li>
+<li>p</li>
+<li>e</li>
+<li>c</li>
+<li></li>
+<li>i</li>
+<li>m</li>
+<li>p</li>
+<li>l</li>
+<li>e</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>i</li>
+<li>n</li>
+<li></li>
+<li>N</li>
+<li>A</li>
+<li>S</li>
+<li>A</li>
+<li></li>
+<li>I</li>
+<li>O</li>
+<li>N</li>
+<li>)</li>
+<li>,</li>
+<li></li>
+<li>N</li>
+<li>O</li>
+<li>T</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>7</li>
+<li>-</li>
+<li>c</li>
+<li>o</li>
+<li>r</li>
+<li>e</li>
+<li>,</li>
+<li></li>
+<li>w</li>
+<li>h</li>
+<li>i</li>
+<li>c</li>
+<li>h</li>
+<li></li>
+<li>d</li>
+<li>r</li>
+<li>o</li>
+<li>p</li>
+<li>p</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>b</li>
+<li>a</li>
+<li>s</li>
+<li>e</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>i</li>
+<li>o</li>
+<li>r</li>
+<li>i</li>
+<li>t</li>
+<li>y</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>e</li>
+<li>l</li>
+<li>d</li>
+<li>.</li>
+<li></li>
+<li>S</li>
+<li>O</li>
+<li>U</li>
+<li>R</li>
+<li>C</li>
+<li>E</li>
+<li></li>
+<li>S</li>
+<li>T</li>
+<li>R</li>
+<li>E</li>
+<li>N</li>
+<li>G</li>
+<li>T</li>
+<li>H</li>
+<li>:</li>
+<li></li>
+<li>m</li>
+<li>o</li>
+<li>s</li>
+<li>t</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>n</li>
+<li>d</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li>s</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>s</li>
+<li>t</li>
+<li></li>
+<li>o</li>
+<li>n</li>
+<li></li>
+<li>t</li>
+<li>o</li>
+<li>p</li>
+<li>-</li>
+<li>t</li>
+<li>i</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>i</li>
+<li>m</li>
+<li>a</li>
+<li>r</li>
+<li>y</li>
+<li></li>
+<li>s</li>
+<li>o</li>
+<li>u</li>
+<li>r</li>
+<li>c</li>
+<li>e</li>
+<li>s</li>
+<li></li>
+<li>(</li>
+<li>I</li>
+<li>E</li>
+<li>T</li>
+<li>F</li>
+<li></li>
+<li>R</li>
+<li>F</li>
+<li>C</li>
+<li>s</li>
+<li>,</li>
+<li></li>
+<li>C</li>
+<li>C</li>
+<li>S</li>
+<li>D</li>
+<li>S</li>
+<li></li>
+<li>B</li>
+<li>l</li>
+<li>u</li>
+<li>e</li>
+<li></li>
+<li>B</li>
+<li>o</li>
+<li>o</li>
+<li>k</li>
+<li>s</li>
+<li>,</li>
+<li></li>
+<li>N</li>
+<li>A</li>
+<li>S</li>
+<li>A</li>
+<li></li>
+<li>N</li>
+<li>T</li>
+<li>R</li>
+<li>S</li>
+<li>/</li>
+<li>J</li>
+<li>P</li>
+<li>L</li>
+<li>,</li>
+<li></li>
+<li>P</li>
+<li>r</li>
+<li>o</li>
+<li>t</li>
+<li>o</li>
+<li>c</li>
+<li>o</li>
+<li>l</li>
+<li></li>
+<li>L</li>
+<li>a</li>
+<li>b</li>
+<li>s</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>s</li>
+<li>e</li>
+<li>a</li>
+<li>r</li>
+<li>c</li>
+<li>h</li>
+<li>)</li>
+<li>.</li>
+<li></li>
+<li>W</li>
+<li>e</li>
+<li>a</li>
+<li>k</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>p</li>
+<li>o</li>
+<li>i</li>
+<li>n</li>
+<li>t</li>
+<li>s</li>
+<li>:</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>i</li>
+<li>p</li>
+<li>f</li>
+<li>s</li>
+<li>-</li>
+<li>s</li>
+<li>h</li>
+<li>i</li>
+<li>p</li>
+<li>y</li>
+<li>a</li>
+<li>r</li>
+<li>d</li>
+<li>/</li>
+<li>s</li>
+<li>p</li>
+<li>a</li>
+<li>c</li>
+<li>e</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>n</li>
+<li>d</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>s</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li>l</li>
+<li>e</li>
+<li>-</li>
+<li>s</li>
+<li>o</li>
+<li>u</li>
+<li>r</li>
+<li>c</li>
+<li>e</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>f</li>
+<li>r</li>
+<li>o</li>
+<li>m</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li></li>
+<li>e</li>
+<li>x</li>
+<li>p</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>a</li>
+<li>l</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>j</li>
+<li>e</li>
+<li>c</li>
+<li>t</li>
+<li>;</li>
+<li></li>
+<li>c</li>
+<li>l</li>
+<li>a</li>
+<li>i</li>
+<li>m</li>
+<li>s</li>
+<li></li>
+<li>1</li>
+<li>4</li>
+<li>,</li>
+<li></li>
+<li>1</li>
+<li>6</li>
+<li>,</li>
+<li></li>
+<li>1</li>
+<li>7</li>
+<li></li>
+<li>c</li>
+<li>a</li>
+<li>r</li>
+<li>r</li>
+<li>i</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>o</li>
+<li>n</li>
+<li>e</li>
+<li></li>
+<li>d</li>
+<li>i</li>
+<li>s</li>
+<li>s</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li></li>
+<li>v</li>
+<li>o</li>
+<li>t</li>
+<li>e</li>
+<li></li>
+<li>(</li>
+<li>2</li>
+<li>-</li>
+<li>1</li>
+<li>)</li>
+<li>.</li>
+<li></li>
+<li>R</li>
+<li>E</li>
+<li>F</li>
+<li>U</li>
+<li>T</li>
+<li>E</li>
+<li>D</li>
+<li></li>
+<li>c</li>
+<li>l</li>
+<li>a</li>
+<li>i</li>
+<li>m</li>
+<li>s</li>
+<li></li>
+<li>(</li>
+<li>e</li>
+<li>x</li>
+<li>c</li>
+<li>l</li>
+<li>u</li>
+<li>d</li>
+<li>e</li>
+<li>d</li>
+<li>)</li>
+<li>:</li>
+<li></li>
+<li>C</li>
+<li>G</li>
+<li>R</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>f</li>
+<li>u</li>
+<li>l</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>t</li>
+<li>e</li>
+<li>r</li>
+<li>m</li>
+<li>i</li>
+<li>n</li>
+<li>i</li>
+<li>s</li>
+<li>t</li>
+<li>i</li>
+<li>c</li>
+<li></li>
+<li>v</li>
+<li>s</li>
+<li></li>
+<li>o</li>
+<li>p</li>
+<li>p</li>
+<li>o</li>
+<li>r</li>
+<li>t</li>
+<li>u</li>
+<li>n</li>
+<li>i</li>
+<li>s</li>
+<li>t</li>
+<li>i</li>
+<li>c</li>
+<li></li>
+<li>(</li>
+<li>o</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>-</li>
+<li>s</li>
+<li>t</li>
+<li>a</li>
+<li>t</li>
+<li>e</li>
+<li>d</li>
+<li>)</li>
+<li>;</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li></li>
+<li>g</li>
+<li>u</li>
+<li>a</li>
+<li>r</li>
+<li>a</li>
+<li>n</li>
+<li>t</li>
+<li>e</li>
+<li>e</li>
+<li>s</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>l</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>y</li>
+<li></li>
+<li>v</li>
+<li>i</li>
+<li>a</li>
+<li></li>
+<li>a</li>
+<li>g</li>
+<li>g</li>
+<li>r</li>
+<li>e</li>
+<li>s</li>
+<li>s</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li>-</li>
+<li>s</li>
+<li>e</li>
+<li>n</li>
+<li>d</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>A</li>
+<li>C</li>
+<li>S</li>
+<li>-</li>
+<li>o</li>
+<li>n</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>t</li>
+<li>r</li>
+<li>a</li>
+<li>n</li>
+<li>s</li>
+<li>m</li>
+<li>i</li>
+<li>s</li>
+<li>s</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li></li>
+<li>w</li>
+<li>i</li>
+<li>t</li>
+<li>h</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li></li>
+<li>N</li>
+<li>A</li>
+<li>K</li>
+<li>s</li>
+<li>;</li>
+<li></li>
+<li>g</li>
+<li>e</li>
+<li>n</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>c</li>
+<li></li>
+<li>B</li>
+<li>P</li>
+<li>/</li>
+<li>B</li>
+<li>P</li>
+<li>v</li>
+<li>7</li>
+<li></li>
+<li>s</li>
+<li>u</li>
+<li>p</li>
+<li>p</li>
+<li>o</li>
+<li>r</li>
+<li>t</li>
+<li>s</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>i</li>
+<li>o</li>
+<li>r</li>
+<li>i</li>
+<li>t</li>
+<li>y</li>
+<li></li>
+<li>Q</li>
+<li>o</li>
+<li>S</li>
+<li></li>
+<li>f</li>
+<li>l</li>
+<li>o</li>
+<li>w</li>
+<li></li>
+<li>m</li>
+<li>a</li>
+<li>n</li>
+<li>a</li>
+<li>g</li>
+<li>e</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li>;</li>
+<li></li>
+<li>i</li>
+<li>p</li>
+<li>f</li>
+<li>s</li>
+<li>-</li>
+<li>s</li>
+<li>h</li>
+<li>i</li>
+<li>p</li>
+<li>y</li>
+<li>a</li>
+<li>r</li>
+<li>d</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>l</li>
+<li>i</li>
+<li>b</li>
+<li>e</li>
+<li>r</li>
+<li>a</li>
+<li>t</li>
+<li>e</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>a</li>
+<li>b</li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li>o</li>
+<li>n</li>
+<li>s</li>
+<li></li>
+<li>B</li>
+<li>i</li>
+<li>t</li>
+<li>s</li>
+<li>w</li>
+<li>a</li>
+<li>p</li>
+<li></li>
+<li>a</li>
+<li>s</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>o</li>
+<li>f</li>
+<li></li>
+<li>v</li>
+<li>a</li>
+<li>n</li>
+<li>i</li>
+<li>l</li>
+<li>l</li>
+<li>a</li>
+<li></li>
+<li>I</li>
+<li>P</li>
+<li>F</li>
+<li>S</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>s</li>
+<li>p</li>
+<li>a</li>
+<li>c</li>
+<li>e</li>
+<li>-</li>
+<li>u</li>
+<li>n</li>
+<li>s</li>
+<li>u</li>
+<li>i</li>
+<li>t</li>
+<li>a</li>
+<li>b</li>
+<li>l</li>
+<li>e</li>
+<li>;</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>e</li>
+<li>c</li>
+<li>i</li>
+<li>s</li>
+<li>e</li>
+<li></li>
+<li>'</li>
+<li>2</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>d</li>
+<li>e</li>
+<li>s</li>
+<li>=</li>
+<li>1</li>
+<li>0</li>
+<li>0</li>
+<li>%</li>
+<li></li>
+<li>/</li>
+<li></li>
+<li>3</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>d</li>
+<li>e</li>
+<li>s</li>
+<li>=</li>
+<li>2</li>
+<li>0</li>
+<li>0</li>
+<li>%</li>
+<li>'</li>
+<li></li>
+<li>d</li>
+<li>u</li>
+<li>p</li>
+<li>l</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>t</li>
+<li>e</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>g</li>
+<li>u</li>
+<li>r</li>
+<li>e</li>
+<li>.</li>
+<li></li>
+<li>S</li>
+<li>C</li>
+<li>O</li>
+<li>P</li>
+<li>E</li>
+<li></li>
+<li>G</li>
+<li>A</li>
+<li>P</li>
+<li>:</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>f</li>
+<li>i</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>c</li>
+<li>o</li>
+<li>r</li>
+<li>p</li>
+<li>u</li>
+<li>s</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>s</li>
+<li>t</li>
+<li>r</li>
+<li>o</li>
+<li>n</li>
+<li>g</li>
+<li></li>
+<li>o</li>
+<li>n</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>t</li>
+<li>o</li>
+<li>c</li>
+<li>o</li>
+<li>l</li>
+<li></li>
+<li>d</li>
+<li>e</li>
+<li>s</li>
+<li>i</li>
+<li>g</li>
+<li>n</li>
+<li>/</li>
+<li>s</li>
+<li>t</li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li>a</li>
+<li>r</li>
+<li>d</li>
+<li>s</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>B</li>
+<li>i</li>
+<li>t</li>
+<li>s</li>
+<li>w</li>
+<li>a</li>
+<li>p</li>
+<li></li>
+<li>o</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>h</li>
+<li>e</li>
+<li>a</li>
+<li>d</li>
+<li></li>
+<li>b</li>
+<li>u</li>
+<li>t</li>
+<li></li>
+<li>c</li>
+<li>o</li>
+<li>n</li>
+<li>t</li>
+<li>a</li>
+<li>i</li>
+<li>n</li>
+<li>s</li>
+<li></li>
+<li>N</li>
+<li>O</li>
+<li></li>
+<li>h</li>
+<li>e</li>
+<li>a</li>
+<li>d</li>
+<li>-</li>
+<li>t</li>
+<li>o</li>
+<li>-</li>
+<li>h</li>
+<li>e</li>
+<li>a</li>
+<li>d</li>
+<li></li>
+<li>q</li>
+<li>u</li>
+<li>a</li>
+<li>n</li>
+<li>t</li>
+<li>i</li>
+<li>t</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li></li>
+<li>t</li>
+<li>i</li>
+<li>m</li>
+<li>e</li>
+<li>-</li>
+<li>t</li>
+<li>o</li>
+<li>-</li>
+<li>f</li>
+<li>i</li>
+<li>r</li>
+<li>s</li>
+<li>t</li>
+<li>-</li>
+<li>d</li>
+<li>e</li>
+<li>l</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>y</li>
+<li>,</li>
+<li></li>
+<li>R</li>
+<li>A</li>
+<li>M</li>
+<li>/</li>
+<li>C</li>
+<li>P</li>
+<li>U</li>
+<li>,</li>
+<li></li>
+<li>o</li>
+<li>r</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>p</li>
+<li>l</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>-</li>
+<li>f</li>
+<li>a</li>
+<li>c</li>
+<li>t</li>
+<li>o</li>
+<li>r</li>
+<li></li>
+<li>b</li>
+<li>e</li>
+<li>n</li>
+<li>c</li>
+<li>h</li>
+<li>m</li>
+<li>a</li>
+<li>r</li>
+<li>k</li>
+<li>s</li>
+<li></li>
+<li>o</li>
+<li>f</li>
+<li></li>
+<li>E</li>
+<li>D</li>
+<li>F</li>
+<li>S</li>
+<li>/</li>
+<li>I</li>
+<li>P</li>
+<li>F</li>
+<li>S</li>
+<li></li>
+<li>v</li>
+<li>s</li>
+<li></li>
+<li>C</li>
+<li>F</li>
+<li>D</li>
+<li>P</li>
+<li>/</li>
+<li>D</li>
+<li>T</li>
+<li>N</li>
+<li></li>
+<li>u</li>
+<li>n</li>
+<li>d</li>
+<li>e</li>
+<li>r</li>
+<li></li>
+<li>L</li>
+<li>E</li>
+<li>O</li>
+<li>/</li>
+<li>I</li>
+<li>S</li>
+<li>L</li>
+<li></li>
+<li>c</li>
+<li>o</li>
+<li>n</li>
+<li>d</li>
+<li>i</li>
+<li>t</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>s</li>
+<li></li>
+<li>—</li>
+<li></li>
+<li>e</li>
+<li>x</li>
+<li>a</li>
+<li>c</li>
+<li>t</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>g</li>
+<li>a</li>
+<li>p</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>p</li>
+<li>l</li>
+<li>a</li>
+<li>n</li>
+<li>n</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>E</li>
+<li>S</li>
+<li>A</li>
+<li></li>
+<li>e</li>
+<li>x</li>
+<li>p</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>m</li>
+<li>e</li>
+<li>n</li>
+<li>t</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>m</li>
+<li>e</li>
+<li>a</li>
+<li>n</li>
+<li>t</li>
+<li></li>
+<li>t</li>
+<li>o</li>
+<li></li>
+<li>f</li>
+<li>i</li>
+<li>l</li>
+<li>l</li>
+<li>,</li>
+<li></li>
+<li>w</li>
+<li>h</li>
+<li>i</li>
+<li>c</li>
+<li>h</li>
+<li></li>
+<li>s</li>
+<li>t</li>
+<li>r</li>
+<li>e</li>
+<li>n</li>
+<li>g</li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li>n</li>
+<li>s</li>
+<li></li>
+<li>t</li>
+<li>h</li>
+<li>e</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>v</li>
+<li>e</li>
+<li>l</li>
+<li>t</li>
+<li>y</li>
+<li></li>
+<li>j</li>
+<li>u</li>
+<li>s</li>
+<li>t</li>
+<li>i</li>
+<li>f</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>.</li>
+<li></li>
+<li>T</li>
+<li>U</li>
+<li>S</li>
+<li>:</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li></li>
+<li>T</li>
+<li>U</li>
+<li>S</li>
+<li>-</li>
+<li>s</li>
+<li>p</li>
+<li>e</li>
+<li>c</li>
+<li>i</li>
+<li>f</li>
+<li>i</li>
+<li>c</li>
+<li></li>
+<li>s</li>
+<li>o</li>
+<li>u</li>
+<li>r</li>
+<li>c</li>
+<li>e</li>
+<li></li>
+<li>s</li>
+<li>u</li>
+<li>r</li>
+<li>v</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>v</li>
+<li>e</li>
+<li>r</li>
+<li>i</li>
+<li>f</li>
+<li>i</li>
+<li>c</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>o</li>
+<li>n</li>
+<li>;</li>
+<li></li>
+<li>T</li>
+<li>U</li>
+<li>S</li>
+<li>-</li>
+<li>s</li>
+<li>t</li>
+<li>y</li>
+<li>l</li>
+<li>e</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>s</li>
+<li>u</li>
+<li>m</li>
+<li>a</li>
+<li>b</li>
+<li>l</li>
+<li>e</li>
+<li></li>
+<li>H</li>
+<li>T</li>
+<li>T</li>
+<li>P</li>
+<li></li>
+<li>u</li>
+<li>p</li>
+<li>l</li>
+<li>o</li>
+<li>a</li>
+<li>d</li>
+<li></li>
+<li>i</li>
+<li>s</li>
+<li></li>
+<li>a</li>
+<li></li>
+<li>s</li>
+<li>i</li>
+<li>n</li>
+<li>g</li>
+<li>l</li>
+<li>e</li>
+<li>-</li>
+<li>h</li>
+<li>o</li>
+<li>p</li>
+<li></li>
+<li>p</li>
+<li>o</li>
+<li>i</li>
+<li>n</li>
+<li>t</li>
+<li>-</li>
+<li>t</li>
+<li>o</li>
+<li>-</li>
+<li>p</li>
+<li>o</li>
+<li>i</li>
+<li>n</li>
+<li>t</li>
+<li></li>
+<li>p</li>
+<li>r</li>
+<li>o</li>
+<li>t</li>
+<li>o</li>
+<li>c</li>
+<li>o</li>
+<li>l</li>
+<li></li>
+<li>(</li>
+<li>n</li>
+<li>o</li>
+<li></li>
+<li>n</li>
+<li>a</li>
+<li>t</li>
+<li>i</li>
+<li>v</li>
+<li>e</li>
+<li></li>
+<li>r</li>
+<li>e</li>
+<li>l</li>
+<li>a</li>
+<li>y</li>
+<li>/</li>
+<li>s</li>
+<li>t</li>
+<li>o</li>
+<li>r</li>
+<li>e</li>
+<li>-</li>
+<li>c</li>
+<li>a</li>
+<li>r</li>
+<li>r</li>
+<li>y</li>
+<li>-</li>
+<li>f</li>
+<li>o</li>
+<li>r</li>
+<li>w</li>
+<li>a</li>
+<li>r</li>
+<li>d</li>
+<li>)</li>
+<li></li>
+<li>a</li>
+<li>n</li>
+<li>d</li>
+<li></li>
+<li>w</li>
+<li>a</li>
+<li>s</li>
+<li></li>
+<li>n</li>
+<li>o</li>
+<li>t</li>
+<li></li>
+<li>d</li>
+<li>i</li>
+<li>r</li>
+<li>e</li>
+<li>c</li>
+<li>t</li>
+<li>l</li>
+<li>y</li>
+<li></li>
+<li>e</li>
+<li>v</li>
+<li>i</li>
+<li>d</li>
+<li>e</li>
+<li>n</li>
+<li>c</li>
+<li>e</li>
+<li>d</li>
+<li></li>
+<li>h</li>
+<li>e</li>
+<li>r</li>
+<li>e</li>
+<li>.</li>
+</ul>
+<h2>Open questions</h2>
+<ul>
+<li>What is the actual measured residual Bitswap duplicate-block overhead in MODERN kubo (with Sessions, WANT-HAVE/WANT-BLOCK split, adaptive split-factor) over an ISL mesh, versus the historical 2014/2018 vanilla figures — i.e., how much of the documented overhead survives the mitigations the EDFS deployment may or may not benefit from?</li>
+<li>Is there any published head-to-head quantitative comparison (time-to-first-delivery, RAM/CPU, network RX/TX, success under failure) of IPFS/Bitswap vs CFDP and vs DTN/BPv7 under LEO/ISL intermittent-contact conditions, or is the planned ESA EDFS-vs-standard experiment genuinely filling an empirical gap?</li>
+<li>Can file priority be made observable and honoured in an IPFS/EDFS path at all (given universal self-pinning and Bitswap flooding that ignore priority), and how would such a mechanism compare functionally to DTN ECOS's normative forwarding-order MUST and CFDP's lack of in-protocol priority?</li>
+<li>How does the BPv7 custody-transfer replacement currently being standardized (CCSDS experimental, ~2025) change the resilience comparison for the single-copy-failure case (a satellite holding the only copy failing before ground contact) relative to content-addressing + replication-factor in EDFS?</li>
+</ul>
+<h2>All sources</h2>
+<ol>
+<li><a href="https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf">https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf</a></li>
+<li><a href="https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf">https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-04">https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-04</a></li>
+<li><a href="https://ccsds.org/Pubs/727x0b5e1.pdf">https://ccsds.org/Pubs/727x0b5e1.pdf</a></li>
+<li><a href="https://datatracker.ietf.org/doc/rfc9171/">https://datatracker.ietf.org/doc/rfc9171/</a></li>
+<li><a href="https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf">https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf</a></li>
+<li><a href="https://github.com/ipfs-shipyard/space">https://github.com/ipfs-shipyard/space</a></li>
+<li><a href="https://arxiv.org/pdf/2012.08979">https://arxiv.org/pdf/2012.08979</a></li>
+<li><a href="https://github.com/ipfs/kubo/issues/4588">https://github.com/ipfs/kubo/issues/4588</a></li>
+<li><a href="https://github.com/ipfs/kubo/issues/261">https://github.com/ipfs/kubo/issues/261</a></li>
+<li><a href="https://research.protocol.ai/publications/accelerating-content-routing-with-bitswap-a-multi-path-file-transfer-protocol-in-ipfs-and-filecoin/delarocha2021.pdf">https://research.protocol.ai/publications/accelerating-content-routing-with-bitswap-a-multi-path-file-transfer-protocol-in-ipfs-and-filecoin/delarocha2021.pdf</a></li>
+<li><a href="https://github.com/protocol/ResNetLab/blob/master/OPEN_PROBLEMS/ENHANCED_BITSWAP_GRAPHSYNC.md">https://github.com/protocol/ResNetLab/blob/master/OPEN_PROBLEMS/ENHANCED_BITSWAP_GRAPHSYNC.md</a></li>
+<li><a href="https://github.com/ipfs/kubo/issues/6599">https://github.com/ipfs/kubo/issues/6599</a></li>
+<li><a href="https://adlrocha.substack.com/p/adlrocha-beyond-bitswap-i">https://adlrocha.substack.com/p/adlrocha-beyond-bitswap-i</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-03">https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-03</a></li>
+<li><a href="https://docs.ipfs.tech/concepts/bitswap/">https://docs.ipfs.tech/concepts/bitswap/</a></li>
+<li><a href="https://arxiv.org/pdf/1803.00315">https://arxiv.org/pdf/1803.00315</a></li>
+<li><a href="https://ntrs.nasa.gov/api/citations/20230001324/downloads/Paper%20-%20NASA%20Delay%20Tolerant%20Networks%20Operational%20Eveolving%20and%20ready%20for%20expansion%20-%20FINAL-Final.pdf">https://ntrs.nasa.gov/api/citations/20230001324/downloads/Paper%20-%20NASA%20Delay%20Tolerant%20Networks%20Operational%20Eveolving%20and%20ready%20for%20expansion%20-%20FINAL-Final.pdf</a></li>
+<li><a href="https://fil.org/blog/filecoin-foundation-successfully-deploys-interplanetary-file-system-ipfs-in-space">https://fil.org/blog/filecoin-foundation-successfully-deploys-interplanetary-file-system-ipfs-in-space</a></li>
+<li><a href="https://libre.space/2023/04/12/ipfs-tiny/">https://libre.space/2023/04/12/ipfs-tiny/</a></li>
+<li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1570870523002275">https://www.sciencedirect.com/science/article/abs/pii/S1570870523002275</a></li>
+</ol>
+</section>
+<hr>
+<p class="concl-lead">YASS / EDFS &mdash; ESA &Phi;-lab. Per-UC detail: see each <code>results/&lt;uc&gt;/conclusion.md</code> and the per-variant reports.</p>
+</div>
+</body>
+</html>

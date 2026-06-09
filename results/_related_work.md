@@ -1,0 +1,2172 @@
+# Related Work — External Literature (CFDP / DTN / IPFS-Bitswap)
+
+> Compiled from an automated multi-source web literature search and cross-checked (adversarial verification, majority vote). Treat as a starting bibliography for the deliverable — verify each citation against the primary source before formal inclusion.
+
+## Abstract
+
+For relaying imagery from LEO/ISL meshes to ground stations under intermittent connectivity, the standards-track and space-proven baselines — CCSDS CFDP (with its normative Store-and-Forward Overlay) and DTN/Bundle Protocol v7 (a store-carry-forward overlay explicitly designed for intermittent links where sender and receiver are never concurrently present) — are purpose-built for exactly this regime, with CFDP offering NAK-driven guaranteed reliability and DTN offering hop-by-hop custody transfer plus a well-defined priority model (BPv6 3-level class-of-service extended by ECOS's 0-255 ordinal with a normative forwarding-order MUST). DTN/CGR has real deep-space flight validation (DINET: 292 images, ~14.5 MB, zero loss/corruption). By contrast, an IPFS-based EDFS built on vanilla kubo/ipfs-cluster inherits Bitswap's flooding-style retrieval (broadcast WANT-HAVE to all connected peers, DHT fallback) and documented duplicate-block overhead that grows linearly with the number of serving peers — a structural mismatch with constrained satellite RAM/CPU/bandwidth and with priority-aware delivery, although content-addressing/chunked DAG transfer and incremental cross-pass reassembly (as in the experimental ipfs-shipyard/space effort) do align with the store-and-forward premise. Net: CFDP/DTN are the mature, low-overhead, priority-capable, disruption-tolerant baselines, while EDFS/IPFS-Bitswap's advantages (content-addressing, multi-source fetch) come at a real and well-documented bandwidth-overhead cost and with weak/unobservable priority support in its vanilla form — strong justification for an empirical EDFS-vs-standard comparison.
+
+## Key findings
+
+**1. [HIGH]** Store-carry-forward is the defining architectural premise for delivering files over intermittent LEO/ISL-to-ground links: relays must store data and forward it only when a contact opportunity (pass/contact window) arises, because continuous end-to-end paths often never exist simultaneously.
+
+> Multiple unanimous (3-0) primary sources converge: Burleigh/JPL GSAW-2003 states continuous end-to-end transmission through relays may be impossible due to time-disjoint connectivity, so relays must store-and-forward (claim 0). UniBO CGR paper defines DTN by the Store-Carry-Forward paradigm where each node can store information for a long time before forwarding (claim 3). RFC 9171 calls BPv7 a 'store-carry-forward overlay network' designed for intermittent connectivity including cases where sender and receiver are not concurrently present (claims 10, 11), with a retention-constraint mechanism preventing bundle discard until delivered/expired (claim 12). NASA GSFC FSW-2018 states BP uses store-and-forward for multi-hop end-to-end delivery and takes advantage of short, disjoint high-bandwidth contact windows rather than requiring TCP-style continuous connections (claim 13).
+
+Sources: [[1]](https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf), [[2]](https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf), [[3]](https://datatracker.ietf.org/doc/rfc9171/), [[4]](https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf)
+
+**2. [HIGH]** Reliable transmission over intermittent deep-space/disrupted links can take arbitrarily long (hours-to-days), so end-to-end retransmission is unsuitable; reliability should be hop-by-hop via custody transfer with ARQ at each relay, which lets a relay take ownership of a bundle and signal the originator it may delete its copy.
+
+> Burleigh/JPL GSAW-2003 (3-0): reliable transmission of any single byte can take arbitrarily long because lost transmissions/NAKs must be retried and connectivity can be lost between transmission and reception, delaying retransmission by hours/days (claim 1); end-to-end retransmission would reserve buffer at the originator for the whole transaction (days/weeks), so retransmission should be point-to-point ('custody transfer') with ARQ at every relay (claim 2). NASA GSFC FSW-2018 (2-1): a bundle relay can take custody and tell the sender it may delete its copy, fitting near-Earth missions where downlink bandwidth exceeds the ground station's terrestrial bandwidth (claim 14). CAVEAT: custody transfer was a BPv6 feature; it was removed from core RFC 9171/BPv7 (the BP itself 'does not ensure delivery of a bundle') and is being re-standardized for BPv7 (CCSDS experimental, ~2025). The 2018 source reflects BPv6-era custody.
+
+Sources: [[1]](https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf), [[2]](https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf)
+
+**3. [HIGH]** CFDP is a mature, standards-track delay/disruption-tolerant file-transfer baseline: it has a normative Store-and-Forward Overlay (hop-by-hop relay across waypoints never in direct contact, analogous to ISL-mesh relay), selectable reliability via NAK-driven acknowledged mode guaranteeing complete file delivery (unacknowledged mode does not), and is explicitly applicable to continuous/intermittent/asymmetrical-time-disjoint/simplex contact with suspend/resume across outages.
+
+> All three CFDP claims unanimous (3-0) against the authoritative CCSDS Blue Book. SFO is normative (CCSDS 727.0-B-5 Annex B with SFOS/SFOX/SFOR procedure tables): files are received, stored, and forwarded hop-by-hop by intermediate waypoint users until reaching an agent that can directly reach the destination (claim 7). Acknowledged mode uses receiver NAKs to detect/retransmit undelivered segments 'guaranteeing complete file delivery'; unacknowledged mode does not report failures and complete reception is not guaranteed (claim 8). The Recommendation is applicable to missions with continuous duplex, intermittent duplex, asymmetrical time-disjoint, and simplex contact, with Remote Suspend/Resume operations across outages (claim 9). NUANCE for related-work: SFO forwards whole files only on full receipt and cannot multipath/reroute, unlike DTN BP/LTP (per Flentge ESA study and CFDP-over-DTN tunneling work) — CFDP is a delay-tolerant baseline, not equal to DTN in rerouting flexibility.
+
+Sources: [[1]](https://ccsds.org/Pubs/727x0b5e1.pdf), [[2]](https://ccsds.org/Pubs/720x1g4.pdf)
+
+**4. [HIGH]** DTN/Bundle Protocol is the canonical, flight-validated space store-carry-forward standard: BPv7 (RFC 9171) is designed for intermittent connectivity, large/variable delays, and high bit error rates and to exploit scheduled contact windows; DTN/CGR has been validated in real deep-space operations (DINET transferred 292 images / ~14.5 MB with zero loss or corruption).
+
+> RFC 9171 (3-0) states stressed environments include intermittent connectivity, large/variable delays, and high bit error rates, and BPv7 forms a store-carry-forward overlay coping with sender/receiver not concurrently present (claims 10, 11, 13). DINET flight validation (3-0): the CGR paper and NASA's NTRS DINET Flight Validation Report independently confirm ~292 (rounded ~300) images / ~14.5 MB transferred over a 27-day 2008 test through an 11-node BP+LTP network with the Deep Impact/EPOXI spacecraft as a DTN router, with no data lost or corrupted (claim 4). Source quality is top-tier (IETF Standards Track RFC + peer-reviewed paper + official NASA report). NUANCE: DINET validates reliable multi-hop DTN over intermittent deep-space links, not literally LEO-to-ground downlink; CGR's deterministic-routing-from-known-topology framing was a REFUTED claim (1-2), so do not over-state CGR as fully deterministic vs opportunistic.
+
+Sources: [[1]](https://datatracker.ietf.org/doc/rfc9171/), [[2]](https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf), [[3]](https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf)
+
+**5. [HIGH]** DTN provides an explicit, normative priority/forwarding-order model that CFDP and (vanilla) IPFS lack: BPv6 base class-of-service defines three levels (bulk=0, normal=1, expedited=2), and ECOS adds an 8-bit ordinal (0-255) for fine-grained priority within the expedited class, with a normative MUST that a higher-ordinal expedited bundle be forwarded before any lower-priority bundle to the same next hop.
+
+> Both ECOS claims unanimous (3-0) against the primary IRTF draft (implemented in NASA ION). RFC 5050 (BPv6) defines the 2-bit priority field bulk/normal/expedited (0/1/2); ECOS adds the 8-bit ordinal byte 0-255 for fine-grained prioritization within the expedited class (claim 5). The agent MUST forward a higher-ordinal expedited bundle before any lower-priority bundle to the same next-hop node — a RFC-2119 normative forwarding-order rule (claim 6). IMPORTANT SCOPE: this is BPv6/RFC 5050 base CoS + ECOS (a draft/experimental DTNRG spec); BPv7/RFC 9171 dropped the base priority field. The MUST governs ORDER among forwarded bundles, not a delivery guarantee (delivery is still contact-window-bound). A separate claim that generic BP supports priority/QoS flow management was REFUTED (0-3), so priority in DTN is properly attributed to BPv6+ECOS, not BPv7-core.
+
+Sources: [[1]](https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-04)
+
+**6. [HIGH]** An IPFS-based EDFS on vanilla kubo/ipfs-cluster uses Bitswap's flooding-style retrieval that produces large, well-documented duplicate-block bandwidth overhead — a structural mismatch with constrained satellite RAM/CPU/bandwidth: Bitswap broadcasts a WANT-HAVE wantlist to ALL connected peers (DHT fallback when none hold the block), every peer that received the wantlist sends every wanted block, and measured duplicate data grew linearly with the number of serving peers (e.g., 3 nodes each received the file ~20 times in one maintainer test).
+
+> Protocol Labs / de la Rocha 2021 (3-0): Bitswap sessions start by broadcasting a WANT-HAVE wantlist to all of the node's connected peers, falling back to a typically slower content-routing subsystem (DHT) when none hold the block (claim 19). kubo #261 (3-0 on mechanism): everyone who received the want-list sent every block on it, causing duplicates from multiple uncoordinated providers (claim 18); the same issue (2-1) reports a maintainer test where 3 nodes pinning a widely-available file each received ~20 copies (claim 17). kubo #4588 (2-1): duplicate data rate increased linearly with the number of serving nodes (~(N-1)x file size) (claim 16). CAVEATS: these measurements are vanilla/pre-Sessions Bitswap (2014/2018); modern kubo mitigates (not eliminates) duplicates via Sessions, WANT-HAVE/WANT-BLOCK split, and adaptive split-factor. The specific numeric '2 nodes=100%, 3 nodes=200%' phrasing was REFUTED (0-3) as over-precise, and broadcast is ONE of several duplicate causes (also a CANCEL race), so do not assert it as the sole cause. The project's EDFS path is confirmed vanilla kubo/ipfs-cluster, keeping this relevant.
+
+Sources: [[1]](https://research.protocol.ai/publications/accelerating-content-routing-with-bitswap-a-multi-path-file-transfer-protocol-in-ipfs-and-filecoin/delarocha2021.pdf), [[2]](https://github.com/ipfs/kubo/issues/261), [[3]](https://github.com/ipfs/kubo/issues/4588)
+
+**7. [MEDIUM]** Content-addressing with chunked DAG transfer and incremental cross-pass reassembly is itself compatible with the store-and-forward space regime, as demonstrated by the experimental ipfs-shipyard/space effort, which holds the payload in IPFS storage, transmits it in CID-addressed blocks across multiple limited contact windows until the DAG is complete, and supports space-to-space relay to a satellite out of ground contact.
+
+> ipfs-shipyard/space README (3-0): the satellite has communications with each ground station for X minutes each hour/pass; each run transmits a payload across passes until it can be reassembled and verified; the file is chunked into blocks each with a CID, looping TransmitBlock(CID) while blocks remain missing; space-to-space relay passes data to a satellite that cannot contact a ground station (claim 15). CONFIDENCE is medium (single primary source; an experimental 'shipyard' project, not a proven production deployment). IMPORTANT: a related stronger claim — that this effort deliberately does NOT use Bitswap over satellite links (implying vanilla Bitswap is unsuitable) — was REFUTED (0-3); so this finding supports that content-addressing aligns with store-and-forward, but does NOT establish that the canonical IPFS transfer engine (Bitswap) is itself space-ready.
+
+Sources: [[1]](https://github.com/ipfs-shipyard/space)
+
+## Caveats from the literature
+
+- T
+- I
+- M
+- E
+- -
+- S
+- E
+- N
+- S
+- I
+- T
+- I
+- V
+- I
+- T
+- Y
+-  
+- /
+-  
+- V
+- E
+- R
+- S
+- I
+- O
+- N
+- I
+- N
+- G
+- :
+-  
+- (
+- a
+- )
+-  
+- T
+- h
+- e
+-  
+- B
+- i
+- t
+- s
+- w
+- a
+- p
+-  
+- d
+- u
+- p
+- l
+- i
+- c
+- a
+- t
+- e
+- -
+- o
+- v
+- e
+- r
+- h
+- e
+- a
+- d
+-  
+- m
+- e
+- a
+- s
+- u
+- r
+- e
+- m
+- e
+- n
+- t
+- s
+-  
+- (
+- k
+- u
+- b
+- o
+-  
+- #
+- 2
+- 6
+- 1
+-  
+- =
+-  
+- 2
+- 0
+- 1
+- 4
+- ,
+-  
+- #
+- 4
+- 5
+- 8
+- 8
+-  
+- =
+-  
+- 2
+- 0
+- 1
+- 8
+- )
+-  
+- p
+- r
+- e
+- d
+- a
+- t
+- e
+-  
+- S
+- e
+- s
+- s
+- i
+- o
+- n
+- s
+- ,
+-  
+- W
+- A
+- N
+- T
+- -
+- H
+- A
+- V
+- E
+- /
+- W
+- A
+- N
+- T
+- -
+- B
+- L
+- O
+- C
+- K
+-  
+- s
+- p
+- l
+- i
+- t
+- ,
+-  
+- a
+- n
+- d
+-  
+- a
+- d
+- a
+- p
+- t
+- i
+- v
+- e
+-  
+- s
+- p
+- l
+- i
+- t
+- -
+- f
+- a
+- c
+- t
+- o
+- r
+-  
+- m
+- i
+- t
+- i
+- g
+- a
+- t
+- i
+- o
+- n
+- s
+- ;
+-  
+- t
+- h
+- e
+-  
+- ~
+- 2
+- 0
+- x
+-  
+- a
+- n
+- d
+-  
+- l
+- i
+- n
+- e
+- a
+- r
+- -
+- g
+- r
+- o
+- w
+- t
+- h
+-  
+- f
+- i
+- g
+- u
+- r
+- e
+- s
+-  
+- d
+- e
+- s
+- c
+- r
+- i
+- b
+- e
+-  
+- h
+- i
+- s
+- t
+- o
+- r
+- i
+- c
+- a
+- l
+-  
+- v
+- a
+- n
+- i
+- l
+- l
+- a
+-  
+- B
+- i
+- t
+- s
+- w
+- a
+- p
+- ,
+-  
+- n
+- o
+- t
+-  
+- c
+- u
+- r
+- r
+- e
+- n
+- t
+-  
+- u
+- n
+- c
+- a
+- p
+- p
+- e
+- d
+-  
+- b
+- e
+- h
+- a
+- v
+- i
+- o
+- u
+- r
+- .
+-  
+- T
+- h
+- e
+- y
+-  
+- r
+- e
+- m
+- a
+- i
+- n
+-  
+- d
+- i
+- r
+- e
+- c
+- t
+- l
+- y
+-  
+- r
+- e
+- l
+- e
+- v
+- a
+- n
+- t
+-  
+- o
+- n
+- l
+- y
+-  
+- b
+- e
+- c
+- a
+- u
+- s
+- e
+-  
+- t
+- h
+- e
+-  
+- p
+- r
+- o
+- j
+- e
+- c
+- t
+- '
+- s
+-  
+- E
+- D
+- F
+- S
+-  
+- u
+- s
+- e
+- s
+-  
+- v
+- a
+- n
+- i
+- l
+- l
+- a
+-  
+- k
+- u
+- b
+- o
+- /
+- i
+- p
+- f
+- s
+- -
+- c
+- l
+- u
+- s
+- t
+- e
+- r
+-  
+- (
+- p
+- e
+- r
+-  
+- p
+- r
+- o
+- j
+- e
+- c
+- t
+-  
+- m
+- e
+- m
+- o
+- r
+- y
+- :
+-  
+- '
+- E
+- D
+- F
+- S
+-  
+- n
+- o
+- d
+- e
+-  
+- i
+- s
+-  
+- v
+- a
+- n
+- i
+- l
+- l
+- a
+-  
+- k
+- u
+- b
+- o
+- '
+- )
+- .
+-  
+- (
+- b
+- )
+-  
+- D
+- T
+- N
+-  
+- c
+- u
+- s
+- t
+- o
+- d
+- y
+-  
+- t
+- r
+- a
+- n
+- s
+- f
+- e
+- r
+-  
+- i
+- s
+-  
+- a
+-  
+- B
+- P
+- v
+- 6
+-  
+- f
+- e
+- a
+- t
+- u
+- r
+- e
+-  
+- R
+- E
+- M
+- O
+- V
+- E
+- D
+-  
+- f
+- r
+- o
+- m
+-  
+- c
+- o
+- r
+- e
+-  
+- B
+- P
+- v
+- 7
+- /
+- R
+- F
+- C
+-  
+- 9
+- 1
+- 7
+- 1
+-  
+- (
+- '
+- t
+- h
+- e
+-  
+- B
+- u
+- n
+- d
+- l
+- e
+-  
+- P
+- r
+- o
+- t
+- o
+- c
+- o
+- l
+-  
+- i
+- t
+- s
+- e
+- l
+- f
+-  
+- d
+- o
+- e
+- s
+-  
+- n
+- o
+- t
+-  
+- e
+- n
+- s
+- u
+- r
+- e
+-  
+- d
+- e
+- l
+- i
+- v
+- e
+- r
+- y
+-  
+- o
+- f
+-  
+- a
+-  
+- b
+- u
+- n
+- d
+- l
+- e
+- '
+- )
+-  
+- a
+- n
+- d
+-  
+- i
+- s
+-  
+- b
+- e
+- i
+- n
+- g
+-  
+- r
+- e
+- -
+- s
+- t
+- a
+- n
+- d
+- a
+- r
+- d
+- i
+- z
+- e
+- d
+-  
+- f
+- o
+- r
+-  
+- B
+- P
+- v
+- 7
+-  
+- a
+- s
+-  
+- a
+- n
+-  
+- e
+- x
+- p
+- e
+- r
+- i
+- m
+- e
+- n
+- t
+- a
+- l
+-  
+- C
+- C
+- S
+- D
+- S
+-  
+- s
+- p
+- e
+- c
+-  
+- (
+- ~
+- 2
+- 0
+- 2
+- 5
+- )
+- ;
+-  
+- c
+- l
+- a
+- i
+- m
+-  
+- 1
+- 4
+- '
+- s
+-  
+- s
+- o
+- u
+- r
+- c
+- e
+-  
+- i
+- s
+-  
+- 2
+- 0
+- 1
+- 8
+- /
+- B
+- P
+- v
+- 6
+- -
+- e
+- r
+- a
+- .
+-  
+- (
+- c
+- )
+-  
+- D
+- T
+- N
+-  
+- p
+- r
+- i
+- o
+- r
+- i
+- t
+- y
+-  
+- (
+- c
+- l
+- a
+- i
+- m
+- s
+-  
+- 5
+- ,
+- 6
+- )
+-  
+- i
+- s
+-  
+- B
+- P
+- v
+- 6
+- /
+- R
+- F
+- C
+-  
+- 5
+- 0
+- 5
+- 0
+-  
+- b
+- a
+- s
+- e
+-  
+- C
+- o
+- S
+-  
+- +
+-  
+- E
+- C
+- O
+- S
+-  
+- (
+- a
+- n
+-  
+- I
+- R
+- T
+- F
+-  
+- d
+- r
+- a
+- f
+- t
+- /
+- e
+- x
+- p
+- e
+- r
+- i
+- m
+- e
+- n
+- t
+- a
+- l
+-  
+- s
+- p
+- e
+- c
+-  
+- i
+- m
+- p
+- l
+- e
+- m
+- e
+- n
+- t
+- e
+- d
+-  
+- i
+- n
+-  
+- N
+- A
+- S
+- A
+-  
+- I
+- O
+- N
+- )
+- ,
+-  
+- N
+- O
+- T
+-  
+- B
+- P
+- v
+- 7
+- -
+- c
+- o
+- r
+- e
+- ,
+-  
+- w
+- h
+- i
+- c
+- h
+-  
+- d
+- r
+- o
+- p
+- p
+- e
+- d
+-  
+- t
+- h
+- e
+-  
+- b
+- a
+- s
+- e
+-  
+- p
+- r
+- i
+- o
+- r
+- i
+- t
+- y
+-  
+- f
+- i
+- e
+- l
+- d
+- .
+-  
+- S
+- O
+- U
+- R
+- C
+- E
+-  
+- S
+- T
+- R
+- E
+- N
+- G
+- T
+- H
+- :
+-  
+- m
+- o
+- s
+- t
+-  
+- f
+- i
+- n
+- d
+- i
+- n
+- g
+- s
+-  
+- r
+- e
+- s
+- t
+-  
+- o
+- n
+-  
+- t
+- o
+- p
+- -
+- t
+- i
+- e
+- r
+-  
+- p
+- r
+- i
+- m
+- a
+- r
+- y
+-  
+- s
+- o
+- u
+- r
+- c
+- e
+- s
+-  
+- (
+- I
+- E
+- T
+- F
+-  
+- R
+- F
+- C
+- s
+- ,
+-  
+- C
+- C
+- S
+- D
+- S
+-  
+- B
+- l
+- u
+- e
+-  
+- B
+- o
+- o
+- k
+- s
+- ,
+-  
+- N
+- A
+- S
+- A
+-  
+- N
+- T
+- R
+- S
+- /
+- J
+- P
+- L
+- ,
+-  
+- P
+- r
+- o
+- t
+- o
+- c
+- o
+- l
+-  
+- L
+- a
+- b
+- s
+-  
+- r
+- e
+- s
+- e
+- a
+- r
+- c
+- h
+- )
+- .
+-  
+- W
+- e
+- a
+- k
+- e
+- r
+-  
+- p
+- o
+- i
+- n
+- t
+- s
+- :
+-  
+- t
+- h
+- e
+-  
+- i
+- p
+- f
+- s
+- -
+- s
+- h
+- i
+- p
+- y
+- a
+- r
+- d
+- /
+- s
+- p
+- a
+- c
+- e
+-  
+- f
+- i
+- n
+- d
+- i
+- n
+- g
+-  
+- i
+- s
+-  
+- s
+- i
+- n
+- g
+- l
+- e
+- -
+- s
+- o
+- u
+- r
+- c
+- e
+-  
+- a
+- n
+- d
+-  
+- f
+- r
+- o
+- m
+-  
+- a
+- n
+-  
+- e
+- x
+- p
+- e
+- r
+- i
+- m
+- e
+- n
+- t
+- a
+- l
+-  
+- p
+- r
+- o
+- j
+- e
+- c
+- t
+- ;
+-  
+- c
+- l
+- a
+- i
+- m
+- s
+-  
+- 1
+- 4
+- ,
+-  
+- 1
+- 6
+- ,
+-  
+- 1
+- 7
+-  
+- c
+- a
+- r
+- r
+- i
+- e
+- d
+-  
+- o
+- n
+- e
+-  
+- d
+- i
+- s
+- s
+- e
+- n
+- t
+- i
+- n
+- g
+-  
+- v
+- o
+- t
+- e
+-  
+- (
+- 2
+- -
+- 1
+- )
+- .
+-  
+- R
+- E
+- F
+- U
+- T
+- E
+- D
+-  
+- c
+- l
+- a
+- i
+- m
+- s
+-  
+- (
+- e
+- x
+- c
+- l
+- u
+- d
+- e
+- d
+- )
+- :
+-  
+- C
+- G
+- R
+-  
+- i
+- s
+-  
+- f
+- u
+- l
+- l
+- y
+-  
+- d
+- e
+- t
+- e
+- r
+- m
+- i
+- n
+- i
+- s
+- t
+- i
+- c
+-  
+- v
+- s
+-  
+- o
+- p
+- p
+- o
+- r
+- t
+- u
+- n
+- i
+- s
+- t
+- i
+- c
+-  
+- (
+- o
+- v
+- e
+- r
+- -
+- s
+- t
+- a
+- t
+- e
+- d
+- )
+- ;
+-  
+- B
+- P
+-  
+- g
+- u
+- a
+- r
+- a
+- n
+- t
+- e
+- e
+- s
+-  
+- d
+- e
+- l
+- i
+- v
+- e
+- r
+- y
+-  
+- v
+- i
+- a
+-  
+- a
+- g
+- g
+- r
+- e
+- s
+- s
+- i
+- v
+- e
+- -
+- s
+- e
+- n
+- d
+- e
+- r
+-  
+- A
+- C
+- S
+- -
+- o
+- n
+- l
+- y
+-  
+- r
+- e
+- t
+- r
+- a
+- n
+- s
+- m
+- i
+- s
+- s
+- i
+- o
+- n
+-  
+- w
+- i
+- t
+- h
+-  
+- n
+- o
+-  
+- N
+- A
+- K
+- s
+- ;
+-  
+- g
+- e
+- n
+- e
+- r
+- i
+- c
+-  
+- B
+- P
+- /
+- B
+- P
+- v
+- 7
+-  
+- s
+- u
+- p
+- p
+- o
+- r
+- t
+- s
+-  
+- p
+- r
+- i
+- o
+- r
+- i
+- t
+- y
+-  
+- Q
+- o
+- S
+-  
+- f
+- l
+- o
+- w
+-  
+- m
+- a
+- n
+- a
+- g
+- e
+- m
+- e
+- n
+- t
+- ;
+-  
+- i
+- p
+- f
+- s
+- -
+- s
+- h
+- i
+- p
+- y
+- a
+- r
+- d
+-  
+- d
+- e
+- l
+- i
+- b
+- e
+- r
+- a
+- t
+- e
+- l
+- y
+-  
+- a
+- b
+- a
+- n
+- d
+- o
+- n
+- s
+-  
+- B
+- i
+- t
+- s
+- w
+- a
+- p
+-  
+- a
+- s
+-  
+- p
+- r
+- o
+- o
+- f
+-  
+- v
+- a
+- n
+- i
+- l
+- l
+- a
+-  
+- I
+- P
+- F
+- S
+-  
+- i
+- s
+-  
+- s
+- p
+- a
+- c
+- e
+- -
+- u
+- n
+- s
+- u
+- i
+- t
+- a
+- b
+- l
+- e
+- ;
+-  
+- t
+- h
+- e
+-  
+- p
+- r
+- e
+- c
+- i
+- s
+- e
+-  
+- '
+- 2
+-  
+- n
+- o
+- d
+- e
+- s
+- =
+- 1
+- 0
+- 0
+- %
+-  
+- /
+-  
+- 3
+-  
+- n
+- o
+- d
+- e
+- s
+- =
+- 2
+- 0
+- 0
+- %
+- '
+-  
+- d
+- u
+- p
+- l
+- i
+- c
+- a
+- t
+- e
+-  
+- f
+- i
+- g
+- u
+- r
+- e
+- .
+-  
+- S
+- C
+- O
+- P
+- E
+-  
+- G
+- A
+- P
+- :
+-  
+- t
+- h
+- e
+-  
+- v
+- e
+- r
+- i
+- f
+- i
+- e
+- d
+-  
+- c
+- o
+- r
+- p
+- u
+- s
+-  
+- i
+- s
+-  
+- s
+- t
+- r
+- o
+- n
+- g
+-  
+- o
+- n
+-  
+- p
+- r
+- o
+- t
+- o
+- c
+- o
+- l
+-  
+- d
+- e
+- s
+- i
+- g
+- n
+- /
+- s
+- t
+- a
+- n
+- d
+- a
+- r
+- d
+- s
+-  
+- a
+- n
+- d
+-  
+- B
+- i
+- t
+- s
+- w
+- a
+- p
+-  
+- o
+- v
+- e
+- r
+- h
+- e
+- a
+- d
+-  
+- b
+- u
+- t
+-  
+- c
+- o
+- n
+- t
+- a
+- i
+- n
+- s
+-  
+- N
+- O
+-  
+- h
+- e
+- a
+- d
+- -
+- t
+- o
+- -
+- h
+- e
+- a
+- d
+-  
+- q
+- u
+- a
+- n
+- t
+- i
+- t
+- a
+- t
+- i
+- v
+- e
+-  
+- t
+- i
+- m
+- e
+- -
+- t
+- o
+- -
+- f
+- i
+- r
+- s
+- t
+- -
+- d
+- e
+- l
+- i
+- v
+- e
+- r
+- y
+- ,
+-  
+- R
+- A
+- M
+- /
+- C
+- P
+- U
+- ,
+-  
+- o
+- r
+-  
+- r
+- e
+- p
+- l
+- i
+- c
+- a
+- t
+- i
+- o
+- n
+- -
+- f
+- a
+- c
+- t
+- o
+- r
+-  
+- b
+- e
+- n
+- c
+- h
+- m
+- a
+- r
+- k
+- s
+-  
+- o
+- f
+-  
+- E
+- D
+- F
+- S
+- /
+- I
+- P
+- F
+- S
+-  
+- v
+- s
+-  
+- C
+- F
+- D
+- P
+- /
+- D
+- T
+- N
+-  
+- u
+- n
+- d
+- e
+- r
+-  
+- L
+- E
+- O
+- /
+- I
+- S
+- L
+-  
+- c
+- o
+- n
+- d
+- i
+- t
+- i
+- o
+- n
+- s
+-  
+- —
+-  
+- e
+- x
+- a
+- c
+- t
+- l
+- y
+-  
+- t
+- h
+- e
+-  
+- g
+- a
+- p
+-  
+- t
+- h
+- e
+-  
+- p
+- l
+- a
+- n
+- n
+- e
+- d
+-  
+- E
+- S
+- A
+-  
+- e
+- x
+- p
+- e
+- r
+- i
+- m
+- e
+- n
+- t
+-  
+- i
+- s
+-  
+- m
+- e
+- a
+- n
+- t
+-  
+- t
+- o
+-  
+- f
+- i
+- l
+- l
+- ,
+-  
+- w
+- h
+- i
+- c
+- h
+-  
+- s
+- t
+- r
+- e
+- n
+- g
+- t
+- h
+- e
+- n
+- s
+-  
+- t
+- h
+- e
+-  
+- n
+- o
+- v
+- e
+- l
+- t
+- y
+-  
+- j
+- u
+- s
+- t
+- i
+- f
+- i
+- c
+- a
+- t
+- i
+- o
+- n
+- .
+-  
+- T
+- U
+- S
+- :
+-  
+- n
+- o
+-  
+- T
+- U
+- S
+- -
+- s
+- p
+- e
+- c
+- i
+- f
+- i
+- c
+-  
+- s
+- o
+- u
+- r
+- c
+- e
+-  
+- s
+- u
+- r
+- v
+- i
+- v
+- e
+- d
+-  
+- v
+- e
+- r
+- i
+- f
+- i
+- c
+- a
+- t
+- i
+- o
+- n
+- ;
+-  
+- T
+- U
+- S
+- -
+- s
+- t
+- y
+- l
+- e
+-  
+- r
+- e
+- s
+- u
+- m
+- a
+- b
+- l
+- e
+-  
+- H
+- T
+- T
+- P
+-  
+- u
+- p
+- l
+- o
+- a
+- d
+-  
+- i
+- s
+-  
+- a
+-  
+- s
+- i
+- n
+- g
+- l
+- e
+- -
+- h
+- o
+- p
+-  
+- p
+- o
+- i
+- n
+- t
+- -
+- t
+- o
+- -
+- p
+- o
+- i
+- n
+- t
+-  
+- p
+- r
+- o
+- t
+- o
+- c
+- o
+- l
+-  
+- (
+- n
+- o
+-  
+- n
+- a
+- t
+- i
+- v
+- e
+-  
+- r
+- e
+- l
+- a
+- y
+- /
+- s
+- t
+- o
+- r
+- e
+- -
+- c
+- a
+- r
+- r
+- y
+- -
+- f
+- o
+- r
+- w
+- a
+- r
+- d
+- )
+-  
+- a
+- n
+- d
+-  
+- w
+- a
+- s
+-  
+- n
+- o
+- t
+-  
+- d
+- i
+- r
+- e
+- c
+- t
+- l
+- y
+-  
+- e
+- v
+- i
+- d
+- e
+- n
+- c
+- e
+- d
+-  
+- h
+- e
+- r
+- e
+- .
+
+## Open questions
+
+- What is the actual measured residual Bitswap duplicate-block overhead in MODERN kubo (with Sessions, WANT-HAVE/WANT-BLOCK split, adaptive split-factor) over an ISL mesh, versus the historical 2014/2018 vanilla figures — i.e., how much of the documented overhead survives the mitigations the EDFS deployment may or may not benefit from?
+- Is there any published head-to-head quantitative comparison (time-to-first-delivery, RAM/CPU, network RX/TX, success under failure) of IPFS/Bitswap vs CFDP and vs DTN/BPv7 under LEO/ISL intermittent-contact conditions, or is the planned ESA EDFS-vs-standard experiment genuinely filling an empirical gap?
+- Can file priority be made observable and honoured in an IPFS/EDFS path at all (given universal self-pinning and Bitswap flooding that ignore priority), and how would such a mechanism compare functionally to DTN ECOS's normative forwarding-order MUST and CFDP's lack of in-protocol priority?
+- How does the BPv7 custody-transfer replacement currently being standardized (CCSDS experimental, ~2025) change the resilience comparison for the single-copy-failure case (a satellite holding the only copy failing before ground contact) relative to content-addressing + replication-factor in EDFS?
+
+## All sources
+
+1. <https://gsaw.org/wp-content/uploads/2020/06/2003s03burleigh.pdf>
+2. <https://cris.unibo.it/retrieve/e1dcb339-17a6-7715-e053-1705fe0a6cc9/contact_graph_routing_am.pdf>
+3. <https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-04>
+4. <https://ccsds.org/Pubs/727x0b5e1.pdf>
+5. <https://datatracker.ietf.org/doc/rfc9171/>
+6. <https://ntrs.nasa.gov/api/citations/20190001385/downloads/20190001385.pdf>
+7. <https://github.com/ipfs-shipyard/space>
+8. <https://arxiv.org/pdf/2012.08979>
+9. <https://github.com/ipfs/kubo/issues/4588>
+10. <https://github.com/ipfs/kubo/issues/261>
+11. <https://research.protocol.ai/publications/accelerating-content-routing-with-bitswap-a-multi-path-file-transfer-protocol-in-ipfs-and-filecoin/delarocha2021.pdf>
+12. <https://github.com/protocol/ResNetLab/blob/master/OPEN_PROBLEMS/ENHANCED_BITSWAP_GRAPHSYNC.md>
+13. <https://github.com/ipfs/kubo/issues/6599>
+14. <https://adlrocha.substack.com/p/adlrocha-beyond-bitswap-i>
+15. <https://datatracker.ietf.org/doc/html/draft-irtf-dtnrg-ecos-03>
+16. <https://docs.ipfs.tech/concepts/bitswap/>
+17. <https://arxiv.org/pdf/1803.00315>
+18. <https://ntrs.nasa.gov/api/citations/20230001324/downloads/Paper%20-%20NASA%20Delay%20Tolerant%20Networks%20Operational%20Eveolving%20and%20ready%20for%20expansion%20-%20FINAL-Final.pdf>
+19. <https://fil.org/blog/filecoin-foundation-successfully-deploys-interplanetary-file-system-ipfs-in-space>
+20. <https://libre.space/2023/04/12/ipfs-tiny/>
+21. <https://www.sciencedirect.com/science/article/abs/pii/S1570870523002275>

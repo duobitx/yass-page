@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YASS experiment results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="index.html">YASS results</a>
+  
+</div>
+
+<div class="hero">
+  <span class="section-label">EDFS vs TUS · UC1–UC5</span>
+  <h1 class="hero-title">YASS Experiment <span>Results</span></h1>
+  <p class="hero-subtitle">Comparing EDFS (the IPFS-based decentralized file system) with the
+  current communication standard (TUS) across use cases UC1–UC5, simulated on the YASS
+  satellite / ground-station simulator.</p>
+</div>
+
+<span class="section-label">Use Cases</span>
+
+<div class="uc-card">
+  <h2><a href="uc1/index.html">UC1 — Rapid Disaster Response</a></h2>
+  <p class="muted">23 variant(s) · engines: edfs, tus</p>
+  <p>A single Earth-Observation satellite captures one high-value image at a known</p>
+</div>
+
+<div class="uc-card">
+  <h2><a href="uc2/index.html">UC2 — Continuous LOS Relay</a></h2>
+  <p class="muted">20 variant(s) · engines: edfs, tus</p>
+  <p>Every satellite produces exactly one file at the start of the run. While the</p>
+</div>
+
+<div class="uc-card">
+  <h2><a href="uc3/index.html">UC3 — Priority-Aware Routing (EDFS only)</a></h2>
+  <p class="muted">18 variant(s) · engines: edfs</p>
+  <p>One satellite produces one large file. We re-run the same scenario for each</p>
+</div>
+
+<div class="uc-card">
+  <h2><a href="uc4/index.html">UC4 — Sat Failure</a></h2>
+  <p class="muted">40 variant(s) · engines: edfs, tus</p>
+  <p>A single satellite captures one high-priority image while flying over a</p>
+</div>
+
+<div class="uc-card">
+  <h2><a href="uc5/index.html">UC5 — General Failure (EDFS only)</a></h2>
+  <p class="muted">8 variant(s) · engines: edfs</p>
+  <p>Twenty per cent of the constellation produces a small, finite batch of</p>
+</div>
+
+
+<section class="results-summary" style="margin-top:36px;padding-top:20px;border-top:1px solid rgba(255,255,255,.10)">
+<span class="section-label">Results Summary</span>
+<h2 style="margin:.2rem 0 .6rem">EDFS vs TUS — what the experiments show</h2>
+<p>Across UC1–UC5 the YASS simulator compared <strong>EDFS</strong> (an IPFS / bitswap-based
+decentralized store) against <strong>TUS</strong> (resumable point-to-point upload, modelling the
+current operational downlink). EDFS buys resilience and favourable scaling — it relays content through
+surviving peers, survives producer failure, and delivers <em>faster</em> as the constellation grows —
+at roughly an order-of-magnitude higher resource cost. TUS is competitive only in the small,
+fault-free, direct-downlink regime, where it is far lighter.</p>
+
+<div class="uc-card">
+  <h3 style="margin-top:0">Headline findings</h3>
+  <ul>
+    <li><strong>Resilience (UC4):</strong> when the producing satellite is destroyed before any ground
+    contact, EDFS relays the photo around the dead node and delivers it (100% wherever a relay peer
+    exists, n&nbsp;≥&nbsp;2, high/default priority), while <strong>TUS delivers 0 of 15</strong> variants.</li>
+    
+    <li><strong>Latency (UC1):</strong> at small constellations both engines land the file in ~800&nbsp;s;
+    EDFS pulls ahead only at scale.</li>
+
+    <li><strong>Cost:</strong> EDFS peak RAM ~180–260&nbsp;MiB vs TUS ~13–15&nbsp;MiB (≈13–15×), with
+    much higher CPU and network transmit.</li>
+
+    <li><strong>Priority &amp; EDFS-only UCs:</strong> priority ordering is weak/unobservable in these
+    runs; UC3 and UC5 (EDFS-only, no TUS baseline) delivered in every variant, with per-photo
+    completeness in UC5 gated by replication factor.</li>
+  </ul>
+</div>
+
+<p class="muted">Caveats bounding the above: EDFS network-TX is an upper bound (~4.46× exporter
+inflation); receive-side RX is unrecoverable; several large-roster runs have Prometheus
+metric-extraction gaps; and the TUS-at-scale failures partly coincide with shared-cluster pressure
+(warrant an independent re-run).</p>
+
+<p>Full per-UC analysis, comparison charts and the external related-work annex:
+<a href="conclusion.html">EDFS vs TUS — Conclusions</a> (and each
+<code>results/&lt;uc&gt;/conclusion.md</code>).</p>
+</section>
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

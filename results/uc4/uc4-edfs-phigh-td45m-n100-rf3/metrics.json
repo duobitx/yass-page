@@ -1,0 +1,32 @@
+{
+  "run_id": "uc4-edfs-phigh-td45m-n100-rf3",
+  "engine": "edfs",
+  "file_size": "32M",
+  "sat_count": 100,
+  "priority": "high",
+  "rf": 3,
+  "t_destroy": "45m",
+  "state": "Success",
+  "exec_date": "2026-06-09T01:28:11Z",
+  "duration_s": 110.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:00:50Z",
+  "first_gs": 101.143903494,
+  "last_gs": 101.143903494,
+  "mean_gs": 101.143903494,
+  "n_gs": 1,
+  "gs_reached": 1,
+  "files_to_gs": 1,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "producer"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 39,
+  "produced": 1.0,
+  "notes": "\u2014",
+  "tx_mib": 2284.596520423889,
+  "peak_cpu": 750.0,
+  "peak_mem_mib": 189.50390625
+}

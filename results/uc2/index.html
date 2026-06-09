@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC2 — Continuous LOS Relay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC2 — Continuous LOS Relay
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC2 — Continuous LOS Relay</h1>
+
+<div class="doc"><h2>Abstract</h2>
+<p>Every satellite produces exactly one file at the start of the run. While the
+constellation is operating, we inject a <strong>continuous, randomised stream of
+hardware faults</strong> (network failures, bandwidth reductions, disk full / disk
+failure) on satellites and ground stations alike. The experiment measures
+how long it takes for <strong>every</strong> produced file to reach at least one ground
+station, and which fraction never makes it inside the time budget. Compares
+EDFS against TUS.</p>
+<h2>Success Condition</h2>
+<p>The run ends <strong>successfully once a single ground station holds at least 95% of
+the produced files.</strong> Every satellite produces exactly one file, so the file
+count <code>x</code> equals <code>sat_count</code>; the generator sets the ground-station receive-only
+agent to a fixed <code>SUCCESS_AFTER_FILES = floor(0.95·x) − 1</code> (clamped to ≥ 1) with
+<code>SUCCESS_BROADCAST=true</code>. The first GS to reach that many distinct files
+publishes <code>experiment/end-request{SUCCESS}</code>, which the experiment-executor
+confirms against the authoritative <code>crud-events</code> stream and records as <code>Success</code>.</p>
+<p>If <code>max_duration</code> (6h) fires first, the run ends <code>TimedOut</code> and the fraction of
+files that did arrive is the delivery-success rate — that partial-delivery
+outcome is itself a data point (see Main goal).</p>
+<blockquote>
+<p>The <code>− 1</code> margin pulls the effective threshold below 95% at small <code>sat_count</code>
+(6/8 at <code>n08</code>, 1/2 at <code>n02</code>) and converges to ~95% as the file count grows
+(94/100, 189/200).</p>
+</blockquote>
+<h2>Detailed description</h2>
+<p>At <code>t=0</code> every satellite agent writes one file of fixed size and exits — so
+the number of distinct files in flight is <code>sat_count</code>. The seven ESTRACK
+ground stations run a multi-receiver agent that keeps logging RECEIVED
+events for every distinct file it sees and stays alive until the experiment
+ends.</p>
+<p>A per-fsNode hardware-event schedule is generated up front and stamped into
+each <code>Behaviour.hardwareEvents</code> so the run is fully reproducible (the
+operator's CRD validation already ensures <code>Destroy</code> is rejected for
+recurring schedules; we use only the non-terminal fault types). Default
+fault intensity: on every fsNode, on every fault type, one occurrence
+every <code>5m</code> (intervalJitterPercent: 50) lasting <code>30s-60s</code>
+(durationJitterPercent: 50). This produces "roughly 10-15% of fsNodes in
+some kind of fault state at any given moment" — degraded but not crippled.</p>
+<p>Fault menu (no <code>Destroy</code> here; that's UC4's domain):</p>
+<ul>
+<li><code>NetworkBandwidthReduced</code> with <code>capBitsPerSec: 100 kbps</code></li>
+<li><code>NetworkFailure</code> (full link drop)</li>
+<li><code>DiskFull</code></li>
+<li><code>DiskFailure</code></li>
+</ul>
+<p>The run ends when (a) all files are received by at least one GS, or (b) the
+<code>maxDuration</code> (default <code>6h</code>) timer fires — whichever comes first. The
+latter case is itself a data point.</p>
+<h2>Main goal</h2>
+<p>Quantify <strong>delivery completeness and time-to-all-delivered under realistic
+operational faults</strong>. The hypothesis is:</p>
+<ul>
+<li>EDFS achieves ≥ 95% delivery success rate even under the fault stream,
+  because the DHT replicates each file across multiple peers and any of
+  those replicas can be the one that meets a GS.</li>
+<li>TUS degrades faster: a fault on the producer's link during its only
+  contact window with a GS loses that file for the whole run.</li>
+</ul>
+<p>KPI: <strong>delivery success rate ≥ 95% for EDFS</strong> at every sat_count; TUS is
+expected to fall below.</p>
+<h2>Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine</code></td>
+<td><code>tus</code>, <code>edfs</code></td>
+<td>Both engines are tested under the same fault schedule.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td><code>low</code>, <code>default</code>, <code>high</code></td>
+<td>Set via the producer agent's <code>FILE_PRIORITY</code>.</td>
+</tr>
+<tr>
+<td><code>sat_count</code></td>
+<td>1, 2, 8, 21, 100, 200</td>
+<td>Same Walker-like sweep as UC1.</td>
+</tr>
+<tr>
+<td><code>RF</code></td>
+<td>1, 3, 5 — <strong>EDFS only</strong></td>
+<td>Probes "is more replication actually helpful here?"</td>
+</tr>
+<tr>
+<td><code>gs_count</code></td>
+<td>fixed at 7 (ESTRACK)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>file_size</code></td>
+<td><code>32M</code></td>
+<td>One regime per UC2 run; we sweep RF/sat_count rather than file size to keep the deliverable set focused.</td>
+</tr>
+<tr>
+<td><code>fault_intensity</code></td>
+<td>mean interval <code>5m</code>, jitter <code>50%</code>, duration <code>30-60s</code></td>
+<td>Encoded directly in each behaviour's <code>hardwareEvents.schedule</code>; the run-id includes a <code>seed</code> for reproducibility.</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td><code>6h</code></td>
+<td>Tight enough that "still in flight at the deadline" actually counts against the success rate.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TUS parameter coverage.</strong> TUS has no notion of file priority or
+replication factor — <code>priority</code> and <code>RF</code> are ignored by the engine.
+For TUS we therefore only sweep <code>(sat_count)</code> (with <code>fault_intensity</code>
+held to the same per-run schedule), pin <code>priority=default</code> and omit
+<code>RF</code>. Each TUS run is compared against the full <code>(priority, RF)</code>
+matrix of EDFS runs at the same <code>sat_count</code> and the same fault seed.</p>
+<h2>Assumptions</h2>
+<ul>
+<li><strong>The inter-ground-station network is broadband and disturbance-free.</strong> Every
+  pair of ground stations is treated as permanently linked, independent of
+  orbital line-of-sight: the link is fixed at 10 Gbit/s with zero packet loss,
+  and only its propagation delay scales with the great-circle distance between
+  the two stations. Satellite links, by contrast, exist only while the two nodes
+  are in line-of-sight and their bandwidth degrades with distance. The only event
+  that can disturb a ground-station-to-ground-station link is a hardware failure
+  injected as a <code>HardwareEvent</code> (e.g. <code>NetworkFailure</code> or
+  <code>NetworkBandwidthReduced</code>) on one of the two stations.</li>
+</ul>
+<h2>Additional metrics</h2>
+<p>Beyond <code>yass_file_delivery_seconds</code> histogram (filtered to "any-GS
+delivery"):</p>
+<ul>
+<li>Delivery success rate:
+  <code>count(distinct files received by ≥1 GS) / sat_count</code>.</li>
+<li>"Critical replication time" — wall-clock at which the
+  <code>delivery_success_rate</code> reaches each of <code>{50%, 90%, 95%, 100%}</code>.</li>
+<li>Per-fsNode and aggregate:</li>
+<li><code>yass_container_cpu_millicores</code>, <code>yass_container_memory_bytes</code></li>
+<li><code>yass_network_tx_bytes_total</code>, <code>yass_network_rx_bytes_total</code></li>
+<li>Fault overlay (for cross-correlation, not a KPI):
+  <code>yass_hardware_event_active{type}</code> from the timeline dashboard so we can
+  see which files happen to be in flight during which fault windows.</li>
+<li>Total network cost: <code>sum(yass_network_tx_bytes_total)</code> aggregated over
+  the whole constellation for the run. Plain bytes shipped — engine-
+  agnostic, no made-up coefficients. Useful for comparing the relative
+  cost of EDFS replication vs. TUS bounce-and-forward under the same
+  fault stream.</li>
+</ul></div>
+
+<h2>Variants (20)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>priority</th><th>RF</th><th>sat</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>state</th></tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n01-rf3/index.html">uc2-edfs-pdefault-n01-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>754</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n02-rf3/index.html">uc2-edfs-pdefault-n02-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>2</td><td>2</td><td>2</td><td>yes</td><td>775</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n08-rf1/index.html">uc2-edfs-pdefault-n08-rf1</a></td>
+  <td>edfs</td><td>default</td><td>1</td><td>8</td><td>3</td><td>1</td><td>no</td><td>10</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n08-rf3/index.html">uc2-edfs-pdefault-n08-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>8</td><td>4</td><td>3</td><td>no</td><td>801</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n08-rf5/index.html">uc2-edfs-pdefault-n08-rf5</a></td>
+  <td>edfs</td><td>default</td><td>5</td><td>8</td><td>5</td><td>3</td><td>no</td><td>835</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-phigh-n08-rf3/index.html">uc2-edfs-phigh-n08-rf3</a></td>
+  <td>edfs</td><td>high</td><td>3</td><td>8</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-plow-n08-rf3/index.html">uc2-edfs-plow-n08-rf3</a></td>
+  <td>edfs</td><td>low</td><td>3</td><td>8</td><td>4</td><td>1</td><td>no</td><td>10</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n21-rf3/index.html">uc2-edfs-pdefault-n21-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>21</td><td>21</td><td>20</td><td>no</td><td>833</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n100-rf1/index.html">uc2-edfs-pdefault-n100-rf1</a></td>
+  <td>edfs</td><td>default</td><td>1</td><td>100</td><td>100</td><td>5</td><td>no</td><td>283</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n100-rf3/index.html">uc2-edfs-pdefault-n100-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>100</td><td>100</td><td>5</td><td>no</td><td>548</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n100-rf5/index.html">uc2-edfs-pdefault-n100-rf5</a></td>
+  <td>edfs</td><td>default</td><td>5</td><td>100</td><td>46</td><td>46</td><td>yes</td><td>1836</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-phigh-n100-rf3/index.html">uc2-edfs-phigh-n100-rf3</a></td>
+  <td>edfs</td><td>high</td><td>3</td><td>100</td><td>30</td><td>100</td><td>yes</td><td>2290</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-plow-n100-rf3/index.html">uc2-edfs-plow-n100-rf3</a></td>
+  <td>edfs</td><td>low</td><td>3</td><td>100</td><td>100</td><td>16</td><td>no</td><td>21076</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-edfs-pdefault-n200-rf3/index.html">uc2-edfs-pdefault-n200-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>200</td><td>200</td><td>200</td><td>yes</td><td>4424</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n01/index.html">uc2-tus-n01</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>743</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n02/index.html">uc2-tus-n02</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>2</td><td>2</td><td>2</td><td>yes</td><td>2817</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n08/index.html">uc2-tus-n08</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>8</td><td>8</td><td>8</td><td>yes</td><td>4122</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n21/index.html">uc2-tus-n21</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>21</td><td>19</td><td>19</td><td>yes</td><td>4961</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n100/index.html">uc2-tus-n100</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>100</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc2-tus-n200/index.html">uc2-tus-n200</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>200</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

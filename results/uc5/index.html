@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC5 — General Failure (EDFS only)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC5 — General Failure (EDFS only)
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC5 — General Failure (EDFS only)</h1>
+
+<div class="doc"><h2>Abstract</h2>
+<p>Twenty per cent of the constellation produces a small, finite batch of
+images each. The whole constellation — both the producing satellites and
+every ground station — is hit by a continuous stream of <strong>non-terminal</strong>
+hardware faults (no <code>Destroy</code>). We measure how long it takes for every
+produced image to reach <strong>at least one</strong> ground station, and check whether
+EDFS is eventually able to deliver them all in spite of the fault stream.
+EDFS only; TUS is out of scope here.</p>
+<p>UC5 sits between UC2 (every sat produces one file, faults active) and UC4
+(one terminal failure on one producer). It's the long-duration stress test
+of EDFS's eventual consistency under sustained but non-catastrophic
+degradation.</p>
+<h2>Success Condition</h2>
+<p>The run ends successfully once a single ground station holds every image
+produced in the run.</p>
+<h2>Detailed description</h2>
+<p>Out of the <code>sat_count</code> satellites in the constellation, exactly <strong>20%</strong>
+are designated <strong>producers</strong>. Each producer's agent writes <code>N=5</code> images
+spaced by <code>IMAGE_INTERVAL</code> (default <code>2m</code>), then exits. The total number
+of distinct files in flight per run is therefore <code>floor(0.2 * sat_count)
+* 5</code> — finite and countable, as required.</p>
+<p>While the run is in progress, the operator stamps a per-fsNode random
+fault schedule on every fsNode (producers, relays and ground stations
+alike). Allowed fault types: <code>NetworkBandwidthReduced</code>, <code>NetworkFailure</code>,
+<code>DiskFull</code>, <code>DiskFailure</code>. <strong><code>Destroy</code> is explicitly excluded</strong> — the
+whole point of UC5 is to study eventual delivery under transient
+degradation; a destroyed producer of a file with <code>RF=1</code> (no copies yet)
+would be UC4's loss-mode and would muddy the metric.</p>
+<p>The seven ESTRACK ground stations receive on all files (their agent does
+not exit on first RECEIVED — it keeps logging until the run ends).</p>
+<p>The run ends when (a) every file has been received by at least one GS, or
+(b) <code>maxDuration</code> fires. Both outcomes are reportable.</p>
+<h2>Main goal</h2>
+<p>Show that <strong>EDFS eventually delivers every file under sustained
+non-catastrophic faults</strong>, and quantify "how long is eventual?":</p>
+<ul>
+<li><code>delivery_success_rate = (distinct files delivered to ≥1 GS) /
+  files_produced</code>, with <code>files_produced = floor(0.2·sat_count)·5</code>.
+  Target ≥ 95% (at <code>RF ≥ 3</code>).</li>
+<li>Time-to-all-delivered when the run terminates by (a).</li>
+<li>The trade-off between <code>RF</code> and total energy / network spent: higher
+  <code>RF</code> should improve <code>delivery_success_rate</code> at the cost of more
+  cross-talk on inter-satellite links.</li>
+</ul>
+<p>KPI:</p>
+<ul>
+<li><code>delivery_success_rate ≥ 95%</code> at <code>RF ≥ 3</code> for every tested
+  <code>sat_count</code>.</li>
+<li>Time-to-all-delivered grows sub-linearly with the number of files in
+  flight.</li>
+</ul>
+<h2>Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine</code></td>
+<td><code>edfs</code> only</td>
+<td>TUS would simply lose files under faults; out of scope.</td>
+</tr>
+<tr>
+<td><code>sat_count</code></td>
+<td>1, 2, 8, 21</td>
+<td>Capped at 21 so every run fits a small (single-node-class) test cluster; the large-constellation points (100 / 200) are out of scope for this sized-down sweep. <code>sat_count=1</code> degenerates to "one producer, no relays" — a sanity-only data point.</td>
+</tr>
+<tr>
+<td><code>producer_fraction</code></td>
+<td>fixed at 20%</td>
+<td><code>producers = max(1, floor(0.2 * sat_count))</code>. For <code>sat_count=1</code>/<code>2</code> the floor gives 1; for <code>sat_count=8</code> it's 1 (floor(1.6)=1); for <code>sat_count=21</code> it's 4.</td>
+</tr>
+<tr>
+<td><code>files_per_producer</code></td>
+<td>5</td>
+<td>Bounded, so we can compute completion rate cleanly.</td>
+</tr>
+<tr>
+<td><code>image_interval</code></td>
+<td><code>2m</code></td>
+<td>Spreads file births in time so the network has work to do throughout the run.</td>
+</tr>
+<tr>
+<td><code>file_size</code></td>
+<td><code>32M</code></td>
+<td>Small enough that several files can be in flight simultaneously without strangling the bandwidth model.</td>
+</tr>
+<tr>
+<td><code>RF</code></td>
+<td>1, 3, 5</td>
+<td>The headline EDFS knob.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td><code>default</code></td>
+<td>Priority handling is UC3's question, not UC5's.</td>
+</tr>
+<tr>
+<td><code>gs_count</code></td>
+<td>fixed at 7 (ESTRACK)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fault_intensity</code></td>
+<td>mean interval <code>5m</code>, jitter <code>50%</code>, duration <code>30-60s</code></td>
+<td>Same recipe as UC2, encoded directly in each behaviour's <code>hardwareEvents.schedule</code> with a per-run <code>seed</code>.</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td><code>8h</code></td>
+<td>Long-duration stress test by design.</td>
+</tr>
+</tbody>
+</table>
+<h2>Assumptions</h2>
+<ul>
+<li><strong>The inter-ground-station network is broadband and disturbance-free.</strong> Every
+  pair of ground stations is treated as permanently linked, independent of
+  orbital line-of-sight: the link is fixed at 10 Gbit/s with zero packet loss,
+  and only its propagation delay scales with the great-circle distance between
+  the two stations. Satellite links, by contrast, exist only while the two nodes
+  are in line-of-sight and their bandwidth degrades with distance. The only event
+  that can disturb a ground-station-to-ground-station link is a hardware failure
+  injected as a <code>HardwareEvent</code> (e.g. <code>NetworkFailure</code> or
+  <code>NetworkBandwidthReduced</code>) on one of the two stations.</li>
+</ul>
+<h2>Additional metrics</h2>
+<p>Beyond <code>yass_file_delivery_seconds</code>:</p>
+<ul>
+<li><code>delivery_success_rate</code> — <code>count(distinct file names delivered to ≥1
+  estrack GS) / total_files_produced</code>, with the <strong>deterministic</strong>
+  <code>total_files_produced = floor(0.2·sat_count)·5</code>. Source:
+  <code>events-csv/file_delivered.csv</code> (numerator = distinct <code>name</code> where <code>target</code>
+  starts with <code>estrack</code>). Do <strong>not</strong> use
+  <code>yass_file_received_total{is_target_gs="true"}</code> — that label does not exist
+  on the metric and it counts receive <em>events</em>, over-counting repeated GS
+  receipts (&gt; 1.0).</li>
+<li>"Eventual completion" plot: cumulative <code>delivery_success_rate</code> as a
+  function of wall-clock time. We expect a smooth monotonic climb that
+  asymptotes at or close to 1.0 for <code>RF ≥ 3</code>.</li>
+<li><code>yass_edfs_replica_completeness</code> heatmap per CID — over a long
+  stress-test run we expect "full replicas" to grow steadily as DHT
+  pickups absorb each file.</li>
+<li>Per-fsNode resource cost over the long run:
+  <code>yass_container_cpu_millicores</code>, <code>yass_container_memory_bytes</code>,
+  <code>yass_network_tx_bytes_total</code>.</li>
+<li>Total network cost: <code>sum(yass_network_tx_bytes_total)</code> aggregated over
+  the whole constellation. Headline trade-off metric for the <code>RF</code> sweep —
+  the byte volume should grow roughly linearly with <code>RF</code> while the
+  completion time should drop.</li>
+<li>Fault-overlay correlation: <code>yass_hardware_event_active</code> as a state
+  timeline so we can visually correlate fault windows with stalled
+  per-file progress.</li>
+</ul></div>
+
+<h2>Variants (8)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>sat</th><th>RF</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>state</th></tr>
+
+<tr>
+  <td><a href="uc5-edfs-n01-rf1/index.html">uc5-edfs-n01-rf1</a></td>
+  <td>edfs</td><td>1</td><td>1</td><td>5</td><td>1</td><td>no</td><td>570</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n02-rf1/index.html">uc5-edfs-n02-rf1</a></td>
+  <td>edfs</td><td>2</td><td>1</td><td>4</td><td>1</td><td>no</td><td>508</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n08-rf1/index.html">uc5-edfs-n08-rf1</a></td>
+  <td>edfs</td><td>8</td><td>1</td><td>5</td><td>5</td><td>yes</td><td>784</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n08-rf3/index.html">uc5-edfs-n08-rf3</a></td>
+  <td>edfs</td><td>8</td><td>3</td><td>4</td><td>1</td><td>no</td><td>360</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n08-rf5/index.html">uc5-edfs-n08-rf5</a></td>
+  <td>edfs</td><td>8</td><td>5</td><td>4</td><td>1</td><td>no</td><td>365</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n21-rf1/index.html">uc5-edfs-n21-rf1</a></td>
+  <td>edfs</td><td>21</td><td>1</td><td>17</td><td>2</td><td>no</td><td>113</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n21-rf3/index.html">uc5-edfs-n21-rf3</a></td>
+  <td>edfs</td><td>21</td><td>3</td><td>16</td><td>4</td><td>no</td><td>518</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc5-edfs-n21-rf5/index.html">uc5-edfs-n21-rf5</a></td>
+  <td>edfs</td><td>21</td><td>5</td><td>17</td><td>4</td><td>no</td><td>703</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

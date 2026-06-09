@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uc4-tus-td15m-n21</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../../index.html">YASS results</a>
+   / <a href="../index.html">uc4</a> / uc4-tus-td15m-n21
+</div>
+
+<h1><code>uc4-tus-td15m-n21</code>
+  <span class="badge">tus</span>
+  <span class="badge bad">TimedOut</span>
+</h1>
+
+
+<h2>Parameters</h2>
+<table class="kpi">
+<tr><th>parameter</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>engine</th><td>tus</td><td>—</td><td>Storage/transport engine under test (edfs or tus)</td></tr>
+
+<tr><th>file_size</th><td>32M</td><td>—</td><td>Size of the produced photo file</td></tr>
+
+<tr><th>priority</th><td>-</td><td>—</td><td>File priority class (low/default/high; EDFS PAR)</td></tr>
+
+<tr><th>sat_count</th><td>21</td><td>sats</td><td>Number of satellites in the constellation</td></tr>
+
+<tr><th>t_destroy</th><td>15m</td><td>—</td><td>UC4: time from photo capture (≈t0) to the producer&#39;s Destroy event — the dt KPI axis</td></tr>
+
+</table>
+
+
+<h2>KPIs</h2>
+<table class="kpi">
+<tr><th>KPI</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>state</th><td>TimedOut</td><td>—</td><td>Terminal experiment state (Success/TimedOut/Failure)</td></tr>
+
+<tr><th>exec_date</th><td>2026-06-08 20:48 UTC</td><td>UTC</td><td>Wall-clock date/time the experiment was launched (CR creationTimestamp)</td></tr>
+
+<tr><th>duration</th><td>24m 56s</td><td>—</td><td>Experiment duration on the simulation clock (simulationStartTime → experimentTime)</td></tr>
+
+<tr><th>sim_start</th><td>2026-05-16 23:59 UTC</td><td>UTC</td><td>Simulation clock at experiment start (simulationStartTime)</td></tr>
+
+<tr><th>sim_end</th><td>2026-05-17 00:23 UTC</td><td>UTC</td><td>Simulation clock when the experiment finished (experimentTime)</td></tr>
+
+<tr><th>delivered</th><td>no</td><td>—</td><td>Whether the photo reached any ground station (UC4 success criterion)</td></tr>
+
+<tr><th>first_GS_delivery_s</th><td>n/a</td><td>s</td><td>Time from sim start until the first produced file reached any ground station</td></tr>
+
+<tr><th>produced</th><td>1</td><td>files</td><td>Files produced by the producer agent(s)</td></tr>
+
+<tr><th>GS_reached</th><td>0</td><td>count</td><td>Ground stations that received the file (from received_total — independent of the delivery-time metric)</td></tr>
+
+<tr><th>distinct_receivers</th><td>0</td><td>count</td><td>Distinct nodes that received a file (GS + relays)</td></tr>
+
+<tr><th>TX_MiB</th><td>0</td><td>MiB</td><td>Total network bytes transmitted, all nodes</td></tr>
+
+<tr><th>peak_cpu_m</th><td>0</td><td>millicores</td><td>Peak CPU across all containers</td></tr>
+
+<tr><th>peak_mem_MiB</th><td>0</td><td>MiB</td><td>Peak memory across all containers</td></tr>
+
+<tr><th>notes</th><td>no CPU/memory metrics (metrics-csv absent); 1 of 1 file(s) undelivered</td><td>—</td><td>Data-quality flags for this run (missing metrics, undelivered files)</td></tr>
+
+</table>
+
+<h2>Charts (interactive)</h2>
+<p class="cap">Node colours are consistent across every chart and the graph:
+  <span style="color:#f58518">■ ground station</span> ·
+  <span style="color:#4c78a8">■ relay satellite</span> ·
+  <span style="color:#54a24b">■ producer</span>.</p>
+<div class="charts">
+  <div class="chart"><h3>Per-target delivery time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cDeliv"></canvas></div>
+    <div class="cap">Seconds from file creation until each target node held the complete file. Bars coloured by node kind; the delivery KPI is the earliest ground-station bar.</div></div>
+  <div class="chart"><h3>Network TX over time (MiB)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cNetTs"></canvas></div>
+    <div class="cap">Cumulative TX summed across all nodes, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>CPU and memory over time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cResTs"></canvas></div>
+    <div class="cap">Aggregate CPU (millicores, left axis) and memory (MiB, right axis) across all containers, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>Network TX by node (top 20)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cNet"></canvas></div>
+    <div class="cap">Total bytes transmitted per node over the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak CPU per node (top 20)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cCpuNode"></canvas></div>
+    <div class="cap">Peak CPU (millicores) reached by each fsNode during the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak memory per node (top 20)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cMemNode"></canvas></div>
+    <div class="cap">Peak memory (MiB) reached by each fsNode during the run, coloured by node kind.</div></div>
+</div>
+
+
+
+
+
+
+
+<h2>Files</h2>
+<ul class="files">
+  <li><a href="resources/index.html">Kubernetes resources</a> — manifests to reproduce this run (hardwaredefinitions, layout, experimentdefinition, experiment)</li>
+  <li><a href="metrics.json">metrics.json</a> — KPIs as JSON</li>
+  <li><a href="raw-parquet.tar">raw-parquet.tar</a> — raw metrics &amp; events as typed, zstd-compressed Parquet (one file per series; read with pandas/polars/DuckDB)</li>
+</ul>
+
+<script>
+const D = {"delivery": {}, "producers": [], "pal": {"gs": "#f58518", "sat": "#4c78a8", "prod": "#54a24b", "tx": "#72b7b2", "rx": "#e45756", "cpu": "#b279a2", "mem": "#eeca3b", "vol": "#9d755d"}, "net": {"nodes": [], "tx": [], "kind": []}, "net_ts": {"t": [], "tx": []}, "res_ts": {"t": [], "cpu": [], "mem": []}, "cpu_by_node": {"nodes": [], "vals": [], "kind": []}, "mem_by_node": {"nodes": [], "vals": [], "kind": []}};
+const grid = 'rgba(168,184,208,.14)', txt = '#cdd7ea', P = D.pal;
+Chart.defaults.color = txt; Chart.defaults.borderColor = grid;
+const kc = k => (P && P[k]) || '#888';   // node-kind colour (gs / sat / prod) — same everywhere
+const nodeBars = (id, labels, vals, kinds, label, horiz) => {
+  if(!labels || !labels.length) return;
+  // value axis is x when bars are horizontal, y otherwise — title it with the
+  // unit-bearing label (e.g. "TX MiB", "peak CPU (millicores)") so every bar
+  // chart shows its unit even though the legend is hidden.
+  const valAxis = horiz ? 'x' : 'y';
+  new Chart(id,{type:'bar',data:{labels:labels,datasets:[{label:label,data:vals,
+      backgroundColor:(kinds||labels.map(()=>'sat')).map(kc)}]},
+    options:{indexAxis:horiz?'y':'x',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{[valAxis]:{title:{display:true,text:label}}}}});
+};
+const dk = Object.keys(D.delivery);
+// Per-target delivery — one bar per target, coloured by node kind (gs/sat/prod)
+new Chart(cDeliv,{type:'bar',data:{labels:dk,datasets:[{label:'delivery (s)',
+    data:dk.map(k=>D.delivery[k].s),backgroundColor:dk.map(k=>kc(D.delivery[k].kind))}]},
+  options:{indexAxis:'x',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{title:{display:true,text:'seconds'}} }}});
+// U1 — cumulative TX over time
+if(D.net_ts&&D.net_ts.t&&D.net_ts.t.length)new Chart(cNetTs,{type:'line',data:{labels:D.net_ts.t,
+  datasets:[{label:'TX MiB',data:D.net_ts.tx,borderColor:P.tx,pointRadius:0,tension:.2}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'s from start'}},y:{title:{display:true,text:'MiB (cumulative)'}}}}});
+// U2 — CPU (left axis) + memory (right axis) over time
+if(D.res_ts&&D.res_ts.t&&D.res_ts.t.length)new Chart(cResTs,{type:'line',data:{labels:D.res_ts.t,
+  datasets:[{label:'CPU millicores',data:D.res_ts.cpu,borderColor:P.cpu,pointRadius:0,tension:.2,yAxisID:'y'},
+            {label:'memory MiB',data:D.res_ts.mem,borderColor:P.mem,pointRadius:0,tension:.2,yAxisID:'y1'}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{
+    x:{title:{display:true,text:'s from start'}},
+    y:{position:'left',title:{display:true,text:'CPU (millicores)'}},
+    y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'memory (MiB)'}}}}});
+// U3 — TX by node, kind-coloured
+const netHoriz = 'x' === 'y';
+nodeBars('cNet', D.net.nodes, D.net.tx, D.net.kind, 'TX MiB', netHoriz);
+// U4 / U5 — peak CPU + memory per node, kind-coloured
+if(D.cpu_by_node)nodeBars('cCpuNode', D.cpu_by_node.nodes, D.cpu_by_node.vals, D.cpu_by_node.kind, 'peak CPU (millicores)', D.cpu_by_node.nodes.length>8);
+if(D.mem_by_node)nodeBars('cMemNode', D.mem_by_node.nodes, D.mem_by_node.vals, D.mem_by_node.kind, 'peak memory (MiB)', D.mem_by_node.nodes.length>8);
+</script>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

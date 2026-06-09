@@ -1,0 +1,2007 @@
+apiVersion: int.esa.yass/v1
+kind: ExperimentDefinition
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"ExperimentDefinition","metadata":{"annotations":{},"name":"uc2-edfs-pdefault-n100-rf3"},"spec":{"behaviours":[{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"270","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0027","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74759},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"277","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0018","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33493},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"284","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0013","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33488},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"291","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0008","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":80249},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"298","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0006","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":80243},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"305","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0026","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74760},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"312","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0017","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33492},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"319","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0010","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33485},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"326","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0007","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":80242},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"273","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0028","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74746},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"280","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0020","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74754},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"287","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0012","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33487},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"294","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0011","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33486},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"301","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0029","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74745},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"308","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0021","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74753},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"315","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0031","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27999},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"322","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0023","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74755},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"329","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0037","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27993},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"276","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0024","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74758},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"283","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0038","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":28006},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"290","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0025","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":74757},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"297","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0042","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69393},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"304","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0032","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27996},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"311","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0045","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69390},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"318","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0033","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27997},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"325","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0051","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22640},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"272","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0035","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27995},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"279","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0055","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22636},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"286","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0036","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":27992},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"293","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0061","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64003},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"300","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0039","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":28007},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"307","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0064","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64000},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"314","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0040","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69395},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"321","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0066","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64002},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"328","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0043","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69392},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"275","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0067","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64001},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"282","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0044","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69391},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"289","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0069","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64011},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"296","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0047","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69388},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"303","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0080","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58517},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"310","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0048","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69387},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"317","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0081","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58516},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"324","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0049","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":69386},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"271","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0083","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58514},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"278","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0052","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22641},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"285","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0085","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58520},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"292","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0053","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22642},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"299","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0090","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11761},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"306","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0054","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22635},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"313","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0092","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11763},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"320","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0056","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22637},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"327","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0093","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11764},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"274","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0057","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22638},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"281","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0095","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11766},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"288","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0058","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22631},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"295","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0096","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11767},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"302","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0059","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":22632},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"309","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0098","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":11753},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"316","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0062","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64006},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"323","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0065","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":63999},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"270","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9000","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17597},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"277","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9001","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17598},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"284","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9002","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17599},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"291","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9003","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17600},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"298","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9004","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17601},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"305","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9005","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17602},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"312","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9006","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17603},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"319","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9007","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17604},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"326","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9008","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17605},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"273","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9009","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":17606},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"280","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9010","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64353},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"287","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9011","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64352},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"294","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9012","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64351},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"301","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9013","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64350},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"308","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9014","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64357},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"315","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9015","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64356},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"322","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9016","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64355},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"329","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9017","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64354},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"276","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9018","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64361},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"283","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9019","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":64360},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"290","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9020","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12110},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"297","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9021","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12111},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"304","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9022","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12108},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"311","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9023","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12109},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"318","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9024","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12106},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"325","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9025","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12107},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"272","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9026","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12104},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"279","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9027","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12105},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"286","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9028","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12118},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"293","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9029","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":12119},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"300","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9030","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58994},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"307","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9031","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58993},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"314","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9032","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58996},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"321","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9033","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58995},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"328","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9034","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58998},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"275","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9035","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58997},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"282","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9036","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":59000},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"289","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9037","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58999},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"296","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9038","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58986},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"303","FILE_PRIORITY":"default","FILE_SIZE":"32M","MAX_PHOTOS":"1"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-9039","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":58985},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-new-norcia","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":91249},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-kiruna","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":28546},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-redu","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":32704},"startOffset":"1m","type":"DiskFull"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-cebreros","hardwareEvents":[{"name":"fault-diskfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":60517},"startOffset":"1m","type":"DiskFailure"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-santa-maria","hardwareEvents":[{"name":"fault-networkbandwidthreduced","params":{"networkBandwidth":{"capBitsPerSec":100000}},"schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":24035},"startOffset":"1m","type":"NetworkBandwidthReduced"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-kourou","hardwareEvents":[{"name":"fault-networkfailure","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":33860},"startOffset":"1m","type":"NetworkFailure"}]},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"94","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only:f91350a0"},"fsNode":"estrack-malargue","hardwareEvents":[{"name":"fault-diskfull","schedule":{"durationJitterPercent":50,"durationMean":"30s","intervalJitterPercent":50,"intervalMean":"5m","seed":90824},"startOffset":"1m","type":"DiskFull"}]}],"maxDuration":"6h"}}
+  creationTimestamp: "2026-06-04T13:40:49Z"
+  generation: 3
+  name: uc2-edfs-pdefault-n100-rf3
+  resourceVersion: "41287454"
+  uid: 3def40df-2ec5-49c4-8339-008f52dd47b4
+spec:
+  behaviours:
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "270"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0027
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74759
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "277"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0018
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33493
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "284"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0013
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33488
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "291"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0008
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 80249
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "298"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0006
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 80243
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "305"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0026
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74760
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "312"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0017
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33492
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "319"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0010
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33485
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "326"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0007
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 80242
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "273"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0028
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74746
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "280"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0020
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74754
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "287"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0012
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33487
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "294"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0011
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33486
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "301"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0029
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74745
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "308"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0021
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74753
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "315"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0031
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27999
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "322"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0023
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74755
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "329"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0037
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27993
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "276"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0024
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74758
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "283"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0038
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 28006
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "290"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0025
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 74757
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "297"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0042
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69393
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "304"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0032
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27996
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "311"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0045
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69390
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "318"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0033
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27997
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "325"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0051
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22640
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "272"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0035
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27995
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "279"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0055
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22636
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "286"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0036
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 27992
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "293"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0061
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64003
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "300"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0039
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 28007
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "307"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0064
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64000
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "314"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0040
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69395
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "321"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0066
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64002
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "328"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0043
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69392
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "275"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0067
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64001
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "282"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0044
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69391
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "289"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0069
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64011
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "296"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0047
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69388
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "303"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0080
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58517
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "310"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0048
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69387
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "317"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0081
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58516
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "324"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0049
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 69386
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "271"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0083
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58514
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "278"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0052
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22641
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "285"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0085
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58520
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "292"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0053
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22642
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "299"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0090
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11761
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "306"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0054
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22635
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "313"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0092
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11763
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "320"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0056
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22637
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "327"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0093
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11764
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "274"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0057
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22638
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "281"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0095
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11766
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "288"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0058
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22631
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "295"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0096
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11767
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "302"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0059
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 22632
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "309"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0098
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 11753
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "316"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0062
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64006
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "323"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0065
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 63999
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "270"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9000
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17597
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "277"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9001
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17598
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "284"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9002
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17599
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "291"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9003
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17600
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "298"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9004
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17601
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "305"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9005
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17602
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "312"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9006
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17603
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "319"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9007
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17604
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "326"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9008
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17605
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "273"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9009
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 17606
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "280"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9010
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64353
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "287"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9011
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64352
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "294"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9012
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64351
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "301"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9013
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64350
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "308"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9014
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64357
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "315"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9015
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64356
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "322"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9016
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64355
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "329"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9017
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64354
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "276"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9018
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64361
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "283"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9019
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 64360
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "290"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9020
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12110
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "297"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9021
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12111
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "304"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9022
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12108
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "311"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9023
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12109
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "318"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9024
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12106
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "325"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9025
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12107
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "272"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9026
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12104
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "279"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9027
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12105
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "286"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9028
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12118
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "293"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9029
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 12119
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "300"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9030
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58994
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "307"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9031
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58993
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "314"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9032
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58996
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "321"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9033
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58995
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "328"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9034
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58998
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "275"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9035
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58997
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "282"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9036
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 59000
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "289"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9037
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58999
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "296"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9038
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58986
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "303"
+        FILE_PRIORITY: default
+        FILE_SIZE: 32M
+        MAX_PHOTOS: "1"
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-9039
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 58985
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-new-norcia
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 91249
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-kiruna
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 28546
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-redu
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 32704
+      startOffset: 1m
+      type: DiskFull
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-cebreros
+    hardwareEvents:
+    - name: fault-diskfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 60517
+      startOffset: 1m
+      type: DiskFailure
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-santa-maria
+    hardwareEvents:
+    - name: fault-networkbandwidthreduced
+      params:
+        networkBandwidth:
+          capBitsPerSec: 100000
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 24035
+      startOffset: 1m
+      type: NetworkBandwidthReduced
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-kourou
+    hardwareEvents:
+    - name: fault-networkfailure
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 33860
+      startOffset: 1m
+      type: NetworkFailure
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "94"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only:f91350a0
+    fsNode: estrack-malargue
+    hardwareEvents:
+    - name: fault-diskfull
+      schedule:
+        durationJitterPercent: 50
+        durationMean: 30s
+        intervalJitterPercent: 50
+        intervalMean: 5m
+        seed: 90824
+      startOffset: 1m
+      type: DiskFull
+  maxDuration: 6h

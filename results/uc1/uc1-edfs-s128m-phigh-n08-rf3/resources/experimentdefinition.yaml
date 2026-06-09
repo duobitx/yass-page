@@ -1,0 +1,86 @@
+apiVersion: int.esa.yass/v1
+kind: ExperimentDefinition
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"ExperimentDefinition","metadata":{"annotations":{},"name":"uc1-edfs-s128m-phigh-n08-rf3"},"spec":{"behaviours":[{"agent":{"envsMap":{"CHECK_INTERVAL_SECONDS":"5","FILE_PRIORITY":"high","FILE_SIZE":"128M","MAX_PHOTOS":"1","PHOTO_TARGETS":"uc1:0:0:1000000"},"image":"ghcr.io/duobitx/yass-agent-periodic"},"fsNode":"oneweb-0027"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-cebreros"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-kiruna"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-kourou"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-malargue"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-new-norcia"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-redu"},{"agent":{"envsMap":{"SUCCESS_AFTER_FILES":"1","SUCCESS_BROADCAST":"true"},"image":"ghcr.io/duobitx/yass-agent-receive-only"},"fsNode":"estrack-santa-maria"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0006"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0008"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0010"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0013"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0017"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0018"},{"agent":{"image":"ghcr.io/duobitx/yass-agent-noop"},"fsNode":"oneweb-0026"}],"maxDuration":"10h"}}
+  creationTimestamp: "2026-06-05T17:52:44Z"
+  generation: 2
+  name: uc1-edfs-s128m-phigh-n08-rf3
+  resourceVersion: "2868586"
+  uid: 224e6723-ca43-4eff-ae6a-9cf81de5a21f
+spec:
+  behaviours:
+  - agent:
+      envsMap:
+        CHECK_INTERVAL_SECONDS: "5"
+        FILE_PRIORITY: high
+        FILE_SIZE: 128M
+        MAX_PHOTOS: "1"
+        PHOTO_TARGETS: uc1:0:0:1000000
+      image: ghcr.io/duobitx/yass-agent-periodic
+    fsNode: oneweb-0027
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-cebreros
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-kiruna
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-kourou
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-malargue
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-new-norcia
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-redu
+  - agent:
+      envsMap:
+        SUCCESS_AFTER_FILES: "1"
+        SUCCESS_BROADCAST: "true"
+      image: ghcr.io/duobitx/yass-agent-receive-only
+    fsNode: estrack-santa-maria
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0006
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0008
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0010
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0013
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0017
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0018
+  - agent:
+      image: ghcr.io/duobitx/yass-agent-noop
+    fsNode: oneweb-0026
+  maxDuration: 10h

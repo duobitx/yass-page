@@ -1,0 +1,71 @@
+apiVersion: int.esa.yass/v1
+kind: Layout
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Layout","metadata":{"annotations":{"yass.experiments/sat-selection":"round-robin across RAAN buckets for orbital-plane diversity","yass.experiments/source-tles":"../../_common_/oneweb-roster.yaml"},"name":"uc3-n01"},"spec":[{"fsNode":"oneweb-0027","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 45432U 20020J   26145.60982732  .00000090  00000+0  20276-3 0  9995","2 45432  87.9160  10.3429 0001557  93.3230 266.8079 13.16052597303382"]}},{"earthPosition":{"heightOverSeaLevel":0,"lat":-31.048,"lng":116.192},"fsNode":"estrack-new-norcia","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":67.857,"lng":20.964},"fsNode":"estrack-kiruna","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":50.003,"lng":5.146},"fsNode":"estrack-redu","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":40.453,"lng":-4.368},"fsNode":"estrack-cebreros","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":36.997,"lng":-25.136},"fsNode":"estrack-santa-maria","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":5.251,"lng":-52.805},"fsNode":"estrack-kourou","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":-35.776,"lng":-69.398},"fsNode":"estrack-malargue","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"}]}
+    yass.experiments/sat-selection: round-robin across RAAN buckets for orbital-plane
+      diversity
+    yass.experiments/source-tles: ../../_common_/oneweb-roster.yaml
+  creationTimestamp: "2026-06-03T10:46:59Z"
+  generation: 1
+  name: uc3-n01
+  resourceVersion: "13609410"
+  uid: 54793e5f-0904-4aa7-9d7e-30bde2da557f
+spec:
+- fsNode: oneweb-0027
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 45432U 20020J   26145.60982732  .00000090  00000+0  20276-3 0  9995
+    - 2 45432  87.9160  10.3429 0001557  93.3230 266.8079 13.16052597303382
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: -31.048
+    lng: 116.192
+  fsNode: estrack-new-norcia
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 67.857
+    lng: 20.964
+  fsNode: estrack-kiruna
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 50.003
+    lng: 5.146
+  fsNode: estrack-redu
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 40.453
+    lng: -4.368
+  fsNode: estrack-cebreros
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 36.997
+    lng: -25.136
+  fsNode: estrack-santa-maria
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 5.251
+    lng: -52.805
+  fsNode: estrack-kourou
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: -35.776
+    lng: -69.398
+  fsNode: estrack-malargue
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation

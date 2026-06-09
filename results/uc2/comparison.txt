@@ -1,0 +1,9 @@
+UC2 — automatic comparison (EDFS vs TUS)
+
+n1 32M: EDFS 754s vs TUS 743s → 1.0× slower
+n2 32M: EDFS 775s vs TUS 2817s → 3.6× faster
+n8 32M: EDFS 10s vs TUS 4122s → 428.0× faster
+n8 32M: EDFS 801s vs TUS 4122s → 5.1× faster
+n8 32M: EDFS 835s vs TUS 4122s → 4.9× faster
+n8 32M: EDFS 10s vs TUS 4122s → 417.9× faster
+n21 32M: EDFS 833s vs TUS 4961s → 6.0× faster

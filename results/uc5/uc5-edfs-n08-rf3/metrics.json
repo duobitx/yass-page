@@ -1,0 +1,32 @@
+{
+  "run_id": "uc5-edfs-n08-rf3",
+  "engine": "edfs",
+  "file_size": "32M",
+  "sat_count": 8,
+  "priority": "default",
+  "rf": 3,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-08T08:23:32Z",
+  "duration_s": 966.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:15:06Z",
+  "first_gs": 360.077721836,
+  "last_gs": 360.077721836,
+  "mean_gs": 499.91330208178573,
+  "n_gs": 7,
+  "gs_reached": 7,
+  "files_to_gs": 1,
+  "delivery_success_rate": 80.0,
+  "producers": [
+    "oneweb-0027"
+  ],
+  "all_delivered": false,
+  "delivered": true,
+  "n_receivers": 10,
+  "produced": 4.0,
+  "notes": "3 of 4 file(s) undelivered",
+  "tx_mib": 2123.046887397766,
+  "peak_cpu": 280.0,
+  "peak_mem_mib": 166.44921875
+}

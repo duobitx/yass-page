@@ -1,0 +1,32 @@
+{
+  "run_id": "uc3-edfs-phigh-n21-rf3",
+  "engine": "edfs",
+  "file_size": "256M",
+  "sat_count": 21,
+  "priority": "high",
+  "rf": 3,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-08T02:19:27Z",
+  "duration_s": 1085.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:17:05Z",
+  "first_gs": 882.593335194,
+  "last_gs": 882.593335194,
+  "mean_gs": 889.536938999857,
+  "n_gs": 7,
+  "gs_reached": 7,
+  "files_to_gs": 1,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "oneweb-0027"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 11,
+  "produced": 1.0,
+  "notes": "\u2014",
+  "tx_mib": 3638.190909385681,
+  "peak_cpu": 510.0,
+  "peak_mem_mib": 223.65625
+}

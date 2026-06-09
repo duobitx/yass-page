@@ -1,0 +1,218 @@
+apiVersion: int.esa.yass/v1
+kind: Experiment
+metadata:
+  annotations:
+    experiment-controller/restart-baseline: "0"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Experiment","metadata":{"annotations":{},"name":"uc4-tus-td15m-n21","namespace":"uc4-tus-td15m-n21"},"spec":{"engineContainers":[{"env":[{"name":"GROUND_STATIONS","value":"*"}],"image":"ghcr.io/duobitx/yass-tus-fs-engine:latest","imagePullPolicy":"Always","name":"engine-tus"}],"experimentDefRef":"uc4-tus-td15m-n21","layoutDefRef":"uc4-n21","runId":"uc4-tus-td15m-n21","simulationStartTime":"2026-05-16T23:59:00.000Z","start":true}}
+  creationTimestamp: "2026-06-08T20:48:58Z"
+  finalizers:
+  - experiment-controller/cleanup-fsNodes
+  generation: 1
+  name: uc4-tus-td15m-n21
+  namespace: uc4-tus-td15m-n21
+  resourceVersion: "3725762"
+  uid: 313514dc-ca9e-43d1-9203-06db35c4b73e
+spec:
+  engineContainers:
+  - env:
+    - name: GROUND_STATIONS
+      value: '*'
+    image: ghcr.io/duobitx/yass-tus-fs-engine:latest
+    imagePullPolicy: Always
+    name: engine-tus
+    resources: {}
+  experimentDefRef: uc4-tus-td15m-n21
+  layoutDefRef: uc4-n21
+  runId: uc4-tus-td15m-n21
+  simulationStartTime: "2026-05-16T23:59:00Z"
+  start: true
+status:
+  conditions:
+  - lastTransitionTime: "2026-06-08T20:48:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentDefinition
+  - lastTransitionTime: "2026-06-08T20:48:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Layout
+  - lastTransitionTime: "2026-06-08T20:49:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Messaging
+  - lastTransitionTime: "2026-06-08T20:48:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: FsnodeBroadcast
+  - lastTransitionTime: "2026-06-08T20:49:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentExecutor
+  - lastTransitionTime: "2026-06-08T20:49:17Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: EventsWebapp
+  - lastTransitionTime: "2026-06-08T20:49:15Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: MetricsBridge
+  - lastTransitionTime: "2026-06-08T20:49:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Mqtt2prom
+  - lastTransitionTime: "2026-06-08T20:49:33Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: WebUi
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-producer
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0018
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0013
+  - lastTransitionTime: "2026-06-08T20:49:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0008
+  - lastTransitionTime: "2026-06-08T20:49:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0006
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0026
+  - lastTransitionTime: "2026-06-08T20:49:21Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0017
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0010
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0007
+  - lastTransitionTime: "2026-06-08T20:49:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0028
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0020
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0012
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0011
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0029
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0021
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0031
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0023
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0037
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0024
+  - lastTransitionTime: "2026-06-08T20:49:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0038
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0025
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-new-norcia
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kiruna
+  - lastTransitionTime: "2026-06-08T20:49:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-redu
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-cebreros
+  - lastTransitionTime: "2026-06-08T20:49:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-santa-maria
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kourou
+  - lastTransitionTime: "2026-06-08T20:49:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-malargue
+  experimentState: TimedOut
+  experimentTime: "2026-05-17T00:23:56Z"

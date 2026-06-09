@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC1 — Rapid Disaster Response</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC1 — Rapid Disaster Response
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC1 — Rapid Disaster Response</h1>
+
+<div class="doc"><h2>Abstract</h2>
+<p>A single Earth-Observation satellite captures one high-value image at a known
+moment and we measure how quickly that file reaches <strong>at least one</strong> ground
+station, under varying constellation sizes, file sizes, priorities and (for
+EDFS) replication factors. Compares the distributed file system <strong>EDFS</strong>
+against the legacy store-and-forward baseline <strong>TUS</strong>.</p>
+<h2>Success Condition</h2>
+<p>The run ends <strong>successfully the moment the file reaches any ground station.</strong></p>
+<h2>Detailed description</h2>
+<p>One designated satellite acts as the producer: on activation its agent writes
+a single image of size <code>S</code> MB with priority <code>P</code> and exits. Every other
+satellite in the constellation is idle ("pure relay"). The seven ESTRACK
+ground stations are fixed and act as receivers. The experiment ends as soon
+as the first GS reports a <code>RECEIVED</code> event for that file (<code>END_ON_ANY=true</code>
+on every GS agent).</p>
+<p>The producing satellite is positioned far from any ground station at <code>t=0</code> so
+the file cannot be downlinked instantly — the time advantage of EDFS comes
+from peer satellites that happen to be in LOS with both the producer (via
+ISL) and a GS earlier than the producer itself would.</p>
+<p>Each <code>(engine, S, P, sat_count, RF)</code> combination is one run with its own
+<code>Experiment.spec.runId</code> so dashboards can multi-select across them.</p>
+<h2>Main goal</h2>
+<p>Quantify how <strong>time-to-first-delivery</strong> scales for EDFS vs. TUS as a function
+of constellation size and file size. The hypothesis is:</p>
+<ul>
+<li>EDFS time-to-first-delivery decreases sub-linearly as <code>sat_count</code> grows
+  (more relay paths → more chances of an earlier hand-off).</li>
+<li>TUS time-to-first-delivery is largely insensitive to <code>sat_count</code> (the file
+  only exists on the producer until it meets a GS).</li>
+<li>High-priority files (UC1 also overlaps with UC3 here) should arrive
+  at least as fast as normal, ideally faster on EDFS.</li>
+</ul>
+<p>KPI: <strong><code>time_to_first_GS_delivery</code></strong> — EDFS/TUS ratio <strong>&lt; 0.50</strong> at
+<code>sat_count ≥ 8</code> (EDFS delivers in at most half the TUS time at the same
+<code>sat_count</code> and <code>S</code>). Defined on the <strong>median</strong> over repeated runs per cell;
+single-run cells are point estimates (run ≥ 3 repeats before declaring
+met/not-met).</p>
+<h2>Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine</code></td>
+<td><code>tus</code>, <code>edfs</code></td>
+<td>TUS is the baseline.</td>
+</tr>
+<tr>
+<td><code>S</code> (file size)</td>
+<td><code>128M</code>, <code>256M</code></td>
+<td>Two regimes — a baseline file and a larger multi-pass transfer. Encoded in the run-id as <code>s128m</code> / <code>s256m</code> (= 134217728 / 268435456 bytes).</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td><code>low</code>, <code>default</code>, <code>high</code></td>
+<td>Set via the producer agent's <code>FILE_PRIORITY</code> env, written to <code>.priority</code> so <code>fs_engine_wrapper</code> attaches it to the file.</td>
+</tr>
+<tr>
+<td><code>sat_count</code></td>
+<td>1, 2, 8, 21, 100, 200</td>
+<td>Walker-like sweep; "1" is a degenerate single-satellite control. 100/200 add synthetic OneWeb-like relays on top of the 60 real roster sats.</td>
+</tr>
+<tr>
+<td><code>RF</code> (replication factor)</td>
+<td>1, 3, 5 — <strong>EDFS only</strong></td>
+<td>TUS has no replication concept; for TUS runs <code>RF</code> is omitted.</td>
+</tr>
+<tr>
+<td><code>gs_count</code></td>
+<td>fixed at 7 (ESTRACK)</td>
+<td>Constant across the sweep to keep the headline result a one-dimensional EDFS-vs-TUS comparison.</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td><code>10h</code></td>
+<td>Far longer than any plausible EDFS delivery; cuts off pathological TUS runs.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TUS parameter coverage.</strong> TUS has no notion of file priority or
+replication factor — <code>priority</code> and <code>RF</code> are ignored by the engine.
+For TUS we therefore only sweep <code>(S, sat_count)</code>, pin <code>priority=default</code>
+and omit <code>RF</code> from the run-id. Each <code>(S, sat_count)</code> TUS run is then
+compared against the full <code>(priority, RF)</code> matrix of EDFS runs at the
+same <code>(S, sat_count)</code>.</p>
+<p>Each combination produces one overlay directory plus one
+<code>Experiment.spec.runId</code>:</p>
+<ul>
+<li>EDFS: <code>uc1-edfs-s&lt;size&gt;-p&lt;priority&gt;-n&lt;NN&gt;-rf&lt;rf&gt;</code> (e.g. <code>uc1-edfs-s128m-pdefault-n08-rf3</code>)</li>
+<li>TUS:  <code>uc1-tus-s&lt;size&gt;-n&lt;NN&gt;</code> (e.g. <code>uc1-tus-s128m-n08</code>)</li>
+</ul>
+<h2>Assumptions</h2>
+<ul>
+<li><strong>The inter-ground-station network is broadband and disturbance-free.</strong> Every
+  pair of ground stations is treated as permanently linked, independent of
+  orbital line-of-sight: the link is fixed at 10 Gbit/s with zero packet loss,
+  and only its propagation delay scales with the great-circle distance between
+  the two stations. Satellite links, by contrast, exist only while the two nodes
+  are in line-of-sight and their bandwidth degrades with distance. The only event
+  that can disturb a ground-station-to-ground-station link is a hardware failure
+  injected as a <code>HardwareEvent</code> (e.g. <code>NetworkFailure</code> or
+  <code>NetworkBandwidthReduced</code>) on one of the two stations.</li>
+</ul>
+<h2>Additional metrics</h2>
+<p>Beyond the headline <code>yass_file_delivery_seconds_bucket</code> histogram (filtered
+by source = the producer):</p>
+<ul>
+<li>Per-fsNode and aggregate:</li>
+<li><code>yass_container_cpu_millicores</code></li>
+<li><code>yass_container_memory_bytes</code></li>
+<li><code>yass_network_tx_bytes_total</code>, <code>yass_network_rx_bytes_total</code></li>
+<li>Bandwidth efficiency: <code>bytes_transmitted / file_size</code>. A pure TUS
+  bounce-and-forward should sit close to 1.0; high-RF EDFS will be &gt; 1.</li>
+<li>Total network cost: <code>sum(yass_network_tx_bytes_total)</code> aggregated over
+  the whole constellation for the run. Plain bytes shipped — engine-
+  agnostic, no made-up coefficients. Used as the proxy for "how much did
+  this engine cost us in total" when comparing EDFS vs TUS.</li>
+</ul></div>
+
+<h2>Variants (23)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>size</th><th>priority</th><th>sat</th><th>RF</th><th>firstGS(s)</th><th>state</th></tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n01-rf3/index.html">uc1-edfs-s128m-pdefault-n01-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>1</td><td>3</td><td>791</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n02-rf3/index.html">uc1-edfs-s128m-pdefault-n02-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>2</td><td>3</td><td>792</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n08-rf1/index.html">uc1-edfs-s128m-pdefault-n08-rf1</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>8</td><td>1</td><td>799</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n08-rf3/index.html">uc1-edfs-s128m-pdefault-n08-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>8</td><td>3</td><td>794</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s256m-pdefault-n08-rf3/index.html">uc1-edfs-s256m-pdefault-n08-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>8</td><td>3</td><td>845</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n08-rf5/index.html">uc1-edfs-s128m-pdefault-n08-rf5</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>8</td><td>5</td><td>794</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-phigh-n08-rf3/index.html">uc1-edfs-s128m-phigh-n08-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>high</td><td>8</td><td>3</td><td>805</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-plow-n08-rf3/index.html">uc1-edfs-s128m-plow-n08-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>low</td><td>8</td><td>3</td><td>803</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n21-rf3/index.html">uc1-edfs-s128m-pdefault-n21-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>21</td><td>3</td><td>804</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n100-rf1/index.html">uc1-edfs-s128m-pdefault-n100-rf1</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>100</td><td>1</td><td>154</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n100-rf3/index.html">uc1-edfs-s128m-pdefault-n100-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>100</td><td>3</td><td>164</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s256m-pdefault-n100-rf3/index.html">uc1-edfs-s256m-pdefault-n100-rf3</a></td>
+  <td>edfs</td><td>256M</td><td>default</td><td>100</td><td>3</td><td>768</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n100-rf5/index.html">uc1-edfs-s128m-pdefault-n100-rf5</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>100</td><td>5</td><td>122</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-phigh-n100-rf3/index.html">uc1-edfs-s128m-phigh-n100-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>high</td><td>100</td><td>3</td><td>200</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-plow-n100-rf3/index.html">uc1-edfs-s128m-plow-n100-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>low</td><td>100</td><td>3</td><td>838</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-edfs-s128m-pdefault-n200-rf3/index.html">uc1-edfs-s128m-pdefault-n200-rf3</a></td>
+  <td>edfs</td><td>128M</td><td>default</td><td>200</td><td>3</td><td>207</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n01/index.html">uc1-tus-s128m-n01</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>1</td><td>—</td><td>806</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n02/index.html">uc1-tus-s128m-n02</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>2</td><td>—</td><td>807</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n08/index.html">uc1-tus-s128m-n08</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>8</td><td>—</td><td>804</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s256m-n08/index.html">uc1-tus-s256m-n08</a></td>
+  <td>tus</td><td>256M</td><td>-</td><td>8</td><td>—</td><td>870</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n21/index.html">uc1-tus-s128m-n21</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>21</td><td>—</td><td>800</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n100/index.html">uc1-tus-s128m-n100</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>100</td><td>—</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc1-tus-s128m-n200/index.html">uc1-tus-s128m-n200</a></td>
+  <td>tus</td><td>128M</td><td>-</td><td>200</td><td>—</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

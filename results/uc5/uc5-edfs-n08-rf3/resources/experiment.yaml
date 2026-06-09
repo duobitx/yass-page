@@ -1,0 +1,206 @@
+apiVersion: int.esa.yass/v1
+kind: Experiment
+metadata:
+  annotations:
+    experiment-controller/restart-baseline: "0"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Experiment","metadata":{"annotations":{},"name":"uc5-edfs-n08-rf3","namespace":"uc5-edfs-n08-rf3"},"spec":{"engineContainers":[{"env":[{"name":"WATCH_DIR","value":"/mnt/transfer"},{"name":"EDFS_CLUSTER_SECRET","value":"50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d"},{"name":"EDFS_CLUSTER_HOST","value":"/ip4/127.0.0.1/tcp/9094"},{"name":"EDFS_CONNECTION_RETRIES","value":"3"},{"name":"EDFS_REPLICATION_FACTOR","value":"3"}],"image":"ghcr.io/duobitx/yass-edfs-engine","name":"edfs-engine"},{"env":[{"name":"EDFS_SWARM_KEY","value":"e0e6161ec71e8e8c6d18c64dd8ee37f178fc50cadf58f20d08c481131a09bbae"},{"name":"EDFS_BOOTSTRAP_PEER_NAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_HOSTNAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_ID","value":"12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT"},{"name":"EDFS_BOOTSTRAP_PEER_KEY","value":"CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY="}],"image":"ghcr.io/duobitx/yass-edfs-engine-node","name":"edfs-engine-node","readinessProbe":{"exec":{"command":["sh","-c","nc -z 127.0.0.1 5001"]},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":2}},{"env":[{"name":"EDFS_CLUSTER_SECRET","value":"50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d"},{"name":"EDFS_BOOTSTRAP_PEER_NAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_HOSTNAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_ID","value":"12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT"},{"name":"EDFS_BOOTSTRAP_PEER_KEY","value":"CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY="}],"image":"ghcr.io/duobitx/yass-edfs-engine-proxy","name":"edfs-engine-proxy","readinessProbe":{"exec":{"command":["sh","-c","nc -z 127.0.0.1 9094"]},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":2}}],"experimentDefRef":"uc5-edfs-n08-rf3","layoutDefRef":"uc5-n08","runId":"uc5-edfs-n08-rf3","simulationStartTime":"2026-05-16T23:59:00.000Z","start":true}}
+  creationTimestamp: "2026-06-08T08:23:32Z"
+  finalizers:
+  - experiment-controller/cleanup-fsNodes
+  generation: 1
+  name: uc5-edfs-n08-rf3
+  namespace: uc5-edfs-n08-rf3
+  resourceVersion: "3510618"
+  uid: b629fd3b-d37c-4d2f-8468-ced2a701aa99
+spec:
+  engineContainers:
+  - env:
+    - name: WATCH_DIR
+      value: /mnt/transfer
+    - name: EDFS_CLUSTER_SECRET
+      value: 50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d
+    - name: EDFS_CLUSTER_HOST
+      value: /ip4/127.0.0.1/tcp/9094
+    - name: EDFS_CONNECTION_RETRIES
+      value: "3"
+    - name: EDFS_REPLICATION_FACTOR
+      value: "3"
+    image: ghcr.io/duobitx/yass-edfs-engine
+    name: edfs-engine
+    resources: {}
+  - env:
+    - name: EDFS_SWARM_KEY
+      value: e0e6161ec71e8e8c6d18c64dd8ee37f178fc50cadf58f20d08c481131a09bbae
+    - name: EDFS_BOOTSTRAP_PEER_NAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_HOSTNAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_ID
+      value: 12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT
+    - name: EDFS_BOOTSTRAP_PEER_KEY
+      value: CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY=
+    image: ghcr.io/duobitx/yass-edfs-engine-node
+    name: edfs-engine-node
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - nc -z 127.0.0.1 5001
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 2
+    resources: {}
+  - env:
+    - name: EDFS_CLUSTER_SECRET
+      value: 50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d
+    - name: EDFS_BOOTSTRAP_PEER_NAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_HOSTNAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_ID
+      value: 12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT
+    - name: EDFS_BOOTSTRAP_PEER_KEY
+      value: CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY=
+    image: ghcr.io/duobitx/yass-edfs-engine-proxy
+    name: edfs-engine-proxy
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - nc -z 127.0.0.1 9094
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 2
+    resources: {}
+  experimentDefRef: uc5-edfs-n08-rf3
+  layoutDefRef: uc5-n08
+  runId: uc5-edfs-n08-rf3
+  simulationStartTime: "2026-05-16T23:59:00Z"
+  start: true
+status:
+  conditions:
+  - lastTransitionTime: "2026-06-08T08:23:33Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentDefinition
+  - lastTransitionTime: "2026-06-08T08:23:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Layout
+  - lastTransitionTime: "2026-06-08T08:23:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Messaging
+  - lastTransitionTime: "2026-06-08T08:23:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: FsnodeBroadcast
+  - lastTransitionTime: "2026-06-08T08:23:48Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentExecutor
+  - lastTransitionTime: "2026-06-08T08:23:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: EventsWebapp
+  - lastTransitionTime: "2026-06-08T08:23:47Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: MetricsBridge
+  - lastTransitionTime: "2026-06-08T08:23:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Mqtt2prom
+  - lastTransitionTime: "2026-06-08T08:24:04Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: WebUi
+  - lastTransitionTime: "2026-06-08T08:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0027
+  - lastTransitionTime: "2026-06-08T08:23:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0018
+  - lastTransitionTime: "2026-06-08T08:23:53Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0013
+  - lastTransitionTime: "2026-06-08T08:23:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0008
+  - lastTransitionTime: "2026-06-08T08:23:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0006
+  - lastTransitionTime: "2026-06-08T08:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0026
+  - lastTransitionTime: "2026-06-08T08:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0017
+  - lastTransitionTime: "2026-06-08T08:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0010
+  - lastTransitionTime: "2026-06-08T08:24:01Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-new-norcia
+  - lastTransitionTime: "2026-06-08T08:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kiruna
+  - lastTransitionTime: "2026-06-08T08:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-redu
+  - lastTransitionTime: "2026-06-08T08:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-cebreros
+  - lastTransitionTime: "2026-06-08T08:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-santa-maria
+  - lastTransitionTime: "2026-06-08T08:23:59Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kourou
+  - lastTransitionTime: "2026-06-08T08:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-malargue
+  experimentState: Success
+  experimentTime: "2026-05-17T00:15:06Z"

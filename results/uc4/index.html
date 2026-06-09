@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC4 — Sat Failure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC4 — Sat Failure
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC4 — Sat Failure</h1>
+
+<div class="doc"><h2>Abstract</h2>
+<p>A single satellite captures one high-priority image while flying over a
+pole (far from any ESTRACK ground station). Shortly afterwards — and
+<strong>before</strong> the satellite has any line-of-sight with any GS — the
+satellite is killed by a <code>Destroy</code> hardware event. We then watch whether
+the image still reaches the ground via peer satellites. Run on both
+engines: EDFS is expected to deliver via inter-satellite links; TUS is
+expected to lose the file entirely.</p>
+<h2>Success Condition</h2>
+<p>The run ends successfully if the image reaches any ground station despite the
+producer being destroyed. </p>
+<h2>Detailed description</h2>
+<p>The producer satellite is placed on an orbit whose initial position at
+<code>t=0</code> is high-latitude and out of LOS with every ESTRACK station. The
+producer's agent writes one file of size <code>S</code>, with priority <code>high</code>, and
+exits. Roughly <code>T_destroy</code> seconds after the photo is taken — but <strong>always
+before</strong> the producer's first contact window with any GS — a <code>Destroy</code>
+hardware event fires on the producer, irreversibly taking it offline.</p>
+<p>For EDFS, success requires that the producer has had enough time (between
+the photo and the destroy) to replicate at least one block of the file to
+at least one surviving peer satellite, which then carries it forward
+until a GS comes into LOS. For TUS, the file existed only on the producer
+and the run becomes a control: TUS should fail to deliver, demonstrating
+the loss-mode that EDFS is supposed to mitigate.</p>
+<p>The other satellites in the constellation do nothing besides act as
+relays; the seven ESTRACK ground stations all have <code>END_ON_ANY=true</code> so
+the first RECEIVED terminates the run.</p>
+<h3>Producer exit ordering (why <code>Destroy</code> does not mark the run failed)</h3>
+<p>The producer's agent writes its single file and <strong>exits with code 0 within
+seconds of activation</strong> — long before <code>Destroy</code> fires at <code>T_destroy</code> (≥ 5m).
+This ordering is deliberate and load-bearing: the operator decides the
+experiment's terminal <code>Success</code>/<code>Failure</code> from the <strong>agent containers' exit
+codes</strong> (<code>evaluateAgentExitCodes</code>), not from delivery. Because the producer's
+<code>agent</code> container has already terminated 0 before <code>Destroy</code>, the SIGKILL that
+<code>Destroy</code> delivers to the (now-empty) producer pod does <strong>not</strong> turn the run
+into a <code>Failure</code>. The producer agent must therefore always exit 0 right after
+producing; do not give it long-running / post-photo behaviour in UC4.</p>
+<p>Whether the file actually reached the ground (the real UC4 outcome) is
+determined by the ground-station agents' end-request on first RECEIVED, and is
+read from the delivery metrics — independently of the producer's destruction.</p>
+<h2>Main goal</h2>
+<p>Demonstrate that <strong>EDFS survives the loss of the file's original
+producer</strong> for an image with no remaining copies, and quantify the
+trade-off. The headline deliverable is a <strong>delivery-success surface</strong>
+<code>success(n_sat, dt)</code> per engine, where the two swept variables are:</p>
+<ul>
+<li><code>n_sat</code> — number of satellites in the layout (<code>sat_count</code>);</li>
+<li><code>dt</code> — time between the photo being taken (≈ t=0) and the producer's
+  total destruction (<code>T_destroy</code>, the <code>Destroy</code> event's <code>startOffset</code>).</li>
+</ul>
+<p><code>success</code> is the fraction (over repeats) of runs in which the image reached at
+least one GS. EDFS is expected to dominate TUS across the whole grid:</p>
+<ul>
+<li>Binary outcome: did the file reach a GS? (<code>delivered ∈ {true, false}</code>)</li>
+<li>Conditional metric: when it does reach a GS, what was
+  <code>time-to-first-delivery</code>?</li>
+<li>Comparison: <code>EDFS.delivered = true &amp;&amp; TUS.delivered = false</code> on every
+  <code>(sat_count, T_destroy)</code> combination.</li>
+</ul>
+<p>KPI:</p>
+<ul>
+<li>EDFS delivery success rate on UC4 is <strong>≥ 80%</strong> at <code>sat_count ≥ 8</code>.</li>
+<li>TUS delivery success rate on UC4 is <strong>0%</strong> by construction.</li>
+</ul>
+<h2>Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine</code></td>
+<td><code>tus</code>, <code>edfs</code></td>
+<td>TUS run is the negative-control baseline.</td>
+</tr>
+<tr>
+<td><code>sat_count</code></td>
+<td>1, 2, 8, 21, 100, 200</td>
+<td>At <code>sat_count = 1</code> even EDFS must fail — no peers to replicate to. That is itself a useful data point.</td>
+</tr>
+<tr>
+<td><code>T_destroy</code> (= <code>dt</code>)</td>
+<td><code>5m</code>, <code>15m</code>, <code>45m</code></td>
+<td>Minutes between "photo taken" (t≈0) and "Destroy fires" — the <strong>dt</strong> KPI axis. All three precede the producer's first GS contact (~54m, see orbit note), so all are genuine pre-contact destructions. Smaller <code>dt</code> = tighter race for replication.</td>
+</tr>
+<tr>
+<td><code>S</code> (file size)</td>
+<td><code>32M</code></td>
+<td>Single regime; the sweep is <code>priority × dt × sat_count</code>.</td>
+</tr>
+<tr>
+<td><code>priority</code> (EDFS)</td>
+<td><code>high</code>, <code>default</code>, <code>low</code></td>
+<td><strong>Swept (EDFS only).</strong> Sets EDFS replication width: <code>high</code>→ceil(0.9·peers), <code>default</code>→ceil(0.1·peers), <code>low</code>→local-only. <code>low</code> should fail like TUS (file never leaves the producer). TUS ignores priority (one TUS run per <code>dt × sat_count</code>).</td>
+</tr>
+<tr>
+<td><code>RF</code> (EDFS only)</td>
+<td>fixed at 3</td>
+<td>A single RF keeps the priority/<code>dt</code> effects interpretable.</td>
+</tr>
+<tr>
+<td><code>gs_count</code></td>
+<td>fixed at 7 (ESTRACK)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>simulationStartTime</code></td>
+<td>fixed <code>2026-05-16T23:59:00.000Z</code> (= synthetic producer's TLE epoch)</td>
+<td>Same for all sat_counts: the <code>producer</code> orbit is designed so its sub-point is over the South pole, out of LOS with every ESTRACK GS, at this epoch. See "Producer over the pole".</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td>EDFS <code>4h</code>; TUS <code>T_destroy + 10m</code></td>
+<td>EDFS needs a long window for a relay peer to fly into LOS with a GS. TUS cannot recover once the producer is destroyed (no inter-sat relay), so its run is stopped <strong>10 minutes after the Destroy event</strong> — no point burning the full EDFS budget. Set per engine in <code>run.sh</code> (<code>EDFS_MAX_DURATION</code>, <code>TUS_GRACE_SECONDS</code>).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TUS parameter coverage.</strong> <code>priority</code> (an EDFS-only axis) and <code>RF</code> are
+both ignored by TUS. The TUS sweep therefore reduces to <code>(sat_count,
+T_destroy)</code>; <code>priority</code> and <code>RF</code> are omitted from the TUS run-id entirely.
+This is by design — UC4 measures binary "does the file survive the
+producer's loss?", and on TUS that answer is "no" for every parameter
+combination, so a single run per <code>(sat_count, T_destroy)</code> suffices as the
+negative baseline.</p>
+<h2>Assumptions</h2>
+<ul>
+<li><strong>The inter-ground-station network is broadband and disturbance-free.</strong> Every
+  pair of ground stations is treated as permanently linked, independent of
+  orbital line-of-sight: the link is fixed at 10 Gbit/s with zero packet loss,
+  and only its propagation delay scales with the great-circle distance between
+  the two stations. Satellite links, by contrast, exist only while the two nodes
+  are in line-of-sight and their bandwidth degrades with distance. The only event
+  that can disturb a ground-station-to-ground-station link is a hardware failure
+  injected as a <code>HardwareEvent</code> (e.g. <code>NetworkFailure</code> or
+  <code>NetworkBandwidthReduced</code>) on one of the two stations.</li>
+</ul>
+<h2>Expectations</h2>
+<ul>
+<li>For TUS engine we expect all UC4 test will timed-out.</li>
+<li>For EDFS engine we expect UC4 tests with low number of satellites to time-out.</li>
+</ul>
+<h2>Additional metrics</h2>
+<p>Beyond <code>yass_file_delivery_seconds</code>:</p>
+<ul>
+<li><code>delivery_success</code> boolean: <code>count(file_delivered events) ≥ 1</code> per run.</li>
+<li>For EDFS, the <strong>fragmentation state at the moment of Destroy</strong>:
+  <code>yass_edfs_replica_completeness{cid, fsNode}</code> sampled at the
+  <code>HardwareDestroyActive</code> k8s event timestamp. If the producer hadn't
+  managed to replicate any blocks before being destroyed, the run will
+  fail and this snapshot will explain why.</li>
+<li>"Survival snapshot" per fsNode at <code>T_destroy</code>:
+  <code>yass_volume_used_bytes</code>, <code>yass_container_memory_bytes</code> for every node
+  alive at that instant.</li>
+<li>For TUS, "what would have delivered" — total bytes the producer managed
+  to push out before Destroy, so we can quantify the loss volume.</li>
+<li>Total network cost: <code>sum(yass_network_tx_bytes_total)</code> aggregated over
+  the whole constellation. For successful EDFS runs this tells us "how
+  expensive was the rescue" — i.e. how many bytes the constellation had
+  to shuffle through ISLs to compensate for the producer's loss.</li>
+</ul></div>
+
+<h2>Variants (40)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>priority</th><th>dt</th><th>sat</th><th>RF</th><th>delivered</th><th>firstGS(s)</th><th>state</th></tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td15m-n01-rf3/index.html">uc4-edfs-phigh-td15m-n01-rf3</a></td>
+  <td>edfs</td><td>high</td><td>15m</td><td>1</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td45m-n01-rf3/index.html">uc4-edfs-phigh-td45m-n01-rf3</a></td>
+  <td>edfs</td><td>high</td><td>45m</td><td>1</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td15m-n02-rf3/index.html">uc4-edfs-phigh-td15m-n02-rf3</a></td>
+  <td>edfs</td><td>high</td><td>15m</td><td>2</td><td>3</td><td>yes</td><td>2800</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td45m-n02-rf3/index.html">uc4-edfs-phigh-td45m-n02-rf3</a></td>
+  <td>edfs</td><td>high</td><td>45m</td><td>2</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td5m-n02-rf3/index.html">uc4-edfs-phigh-td5m-n02-rf3</a></td>
+  <td>edfs</td><td>high</td><td>5m</td><td>2</td><td>3</td><td>yes</td><td>2804</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-pdefault-td15m-n08-rf3/index.html">uc4-edfs-pdefault-td15m-n08-rf3</a></td>
+  <td>edfs</td><td>default</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1300</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-pdefault-td45m-n08-rf3/index.html">uc4-edfs-pdefault-td45m-n08-rf3</a></td>
+  <td>edfs</td><td>default</td><td>45m</td><td>8</td><td>3</td><td>yes</td><td>1326</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td15m-n08-rf3/index.html">uc4-edfs-phigh-td15m-n08-rf3</a></td>
+  <td>edfs</td><td>high</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1322</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td45m-n08-rf3/index.html">uc4-edfs-phigh-td45m-n08-rf3</a></td>
+  <td>edfs</td><td>high</td><td>45m</td><td>8</td><td>3</td><td>yes</td><td>1293</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td5m-n08-rf3/index.html">uc4-edfs-phigh-td5m-n08-rf3</a></td>
+  <td>edfs</td><td>high</td><td>5m</td><td>8</td><td>3</td><td>yes</td><td>1330</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td15m-n08-rf3/index.html">uc4-edfs-plow-td15m-n08-rf3</a></td>
+  <td>edfs</td><td>low</td><td>15m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">Ongoing</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td45m-n08-rf3/index.html">uc4-edfs-plow-td45m-n08-rf3</a></td>
+  <td>edfs</td><td>low</td><td>45m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td5m-n08-rf3/index.html">uc4-edfs-plow-td5m-n08-rf3</a></td>
+  <td>edfs</td><td>low</td><td>5m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">Ongoing</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-pdefault-td15m-n21-rf3/index.html">uc4-edfs-pdefault-td15m-n21-rf3</a></td>
+  <td>edfs</td><td>default</td><td>15m</td><td>21</td><td>3</td><td>yes</td><td>1302</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-pdefault-td45m-n21-rf3/index.html">uc4-edfs-pdefault-td45m-n21-rf3</a></td>
+  <td>edfs</td><td>default</td><td>45m</td><td>21</td><td>3</td><td>yes</td><td>1306</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-pdefault-td5m-n21-rf3/index.html">uc4-edfs-pdefault-td5m-n21-rf3</a></td>
+  <td>edfs</td><td>default</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1323</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td15m-n21-rf3/index.html">uc4-edfs-phigh-td15m-n21-rf3</a></td>
+  <td>edfs</td><td>high</td><td>15m</td><td>21</td><td>3</td><td>yes</td><td>1298</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td45m-n21-rf3/index.html">uc4-edfs-phigh-td45m-n21-rf3</a></td>
+  <td>edfs</td><td>high</td><td>45m</td><td>21</td><td>3</td><td>yes</td><td>1322</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td5m-n21-rf3/index.html">uc4-edfs-phigh-td5m-n21-rf3</a></td>
+  <td>edfs</td><td>high</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1301</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td15m-n21-rf3/index.html">uc4-edfs-plow-td15m-n21-rf3</a></td>
+  <td>edfs</td><td>low</td><td>15m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td45m-n21-rf3/index.html">uc4-edfs-plow-td45m-n21-rf3</a></td>
+  <td>edfs</td><td>low</td><td>45m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-plow-td5m-n21-rf3/index.html">uc4-edfs-plow-td5m-n21-rf3</a></td>
+  <td>edfs</td><td>low</td><td>5m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td15m-n100-rf3/index.html">uc4-edfs-phigh-td15m-n100-rf3</a></td>
+  <td>edfs</td><td>high</td><td>15m</td><td>100</td><td>3</td><td>yes</td><td>62</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td45m-n100-rf3/index.html">uc4-edfs-phigh-td45m-n100-rf3</a></td>
+  <td>edfs</td><td>high</td><td>45m</td><td>100</td><td>3</td><td>yes</td><td>101</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-edfs-phigh-td5m-n100-rf3/index.html">uc4-edfs-phigh-td5m-n100-rf3</a></td>
+  <td>edfs</td><td>high</td><td>5m</td><td>100</td><td>3</td><td>yes</td><td>60</td>
+  <td><span class="badge ok">Success</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td15m-n01/index.html">uc4-tus-td15m-n01</a></td>
+  <td>tus</td><td>-</td><td>15m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td45m-n01/index.html">uc4-tus-td45m-n01</a></td>
+  <td>tus</td><td>-</td><td>45m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td5m-n01/index.html">uc4-tus-td5m-n01</a></td>
+  <td>tus</td><td>-</td><td>5m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td15m-n02/index.html">uc4-tus-td15m-n02</a></td>
+  <td>tus</td><td>-</td><td>15m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td45m-n02/index.html">uc4-tus-td45m-n02</a></td>
+  <td>tus</td><td>-</td><td>45m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td5m-n02/index.html">uc4-tus-td5m-n02</a></td>
+  <td>tus</td><td>-</td><td>5m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td15m-n08/index.html">uc4-tus-td15m-n08</a></td>
+  <td>tus</td><td>-</td><td>15m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td45m-n08/index.html">uc4-tus-td45m-n08</a></td>
+  <td>tus</td><td>-</td><td>45m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td5m-n08/index.html">uc4-tus-td5m-n08</a></td>
+  <td>tus</td><td>-</td><td>5m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td15m-n21/index.html">uc4-tus-td15m-n21</a></td>
+  <td>tus</td><td>-</td><td>15m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td45m-n21/index.html">uc4-tus-td45m-n21</a></td>
+  <td>tus</td><td>-</td><td>45m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td5m-n21/index.html">uc4-tus-td5m-n21</a></td>
+  <td>tus</td><td>-</td><td>5m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td15m-n100/index.html">uc4-tus-td15m-n100</a></td>
+  <td>tus</td><td>-</td><td>15m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td45m-n100/index.html">uc4-tus-td45m-n100</a></td>
+  <td>tus</td><td>-</td><td>45m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+<tr>
+  <td><a href="uc4-tus-td5m-n100/index.html">uc4-tus-td5m-n100</a></td>
+  <td>tus</td><td>-</td><td>5m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">TimedOut</span></td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uc4-tus-td45m-n100</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../../index.html">YASS results</a>
+   / <a href="../index.html">uc4</a> / uc4-tus-td45m-n100
+</div>
+
+<h1><code>uc4-tus-td45m-n100</code>
+  <span class="badge">tus</span>
+  <span class="badge bad">TimedOut</span>
+</h1>
+
+
+<h2>Parameters</h2>
+<table class="kpi">
+<tr><th>parameter</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>engine</th><td>tus</td><td>—</td><td>Storage/transport engine under test (edfs or tus)</td></tr>
+
+<tr><th>file_size</th><td>?</td><td>—</td><td>Size of the produced photo file</td></tr>
+
+<tr><th>priority</th><td>-</td><td>—</td><td>File priority class (low/default/high; EDFS PAR)</td></tr>
+
+<tr><th>sat_count</th><td>100</td><td>sats</td><td>Number of satellites in the constellation</td></tr>
+
+<tr><th>t_destroy</th><td>45m</td><td>—</td><td>UC4: time from photo capture (≈t0) to the producer&#39;s Destroy event — the dt KPI axis</td></tr>
+
+</table>
+
+
+<h2>KPIs</h2>
+<table class="kpi">
+<tr><th>KPI</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>state</th><td>TimedOut</td><td>—</td><td>Terminal experiment state (Success/TimedOut/Failure)</td></tr>
+
+<tr><th>exec_date</th><td>2026-06-09 03:26 UTC</td><td>UTC</td><td>Wall-clock date/time the experiment was launched (CR creationTimestamp)</td></tr>
+
+<tr><th>duration</th><td>54m 56s</td><td>—</td><td>Experiment duration on the simulation clock (simulationStartTime → experimentTime)</td></tr>
+
+<tr><th>sim_start</th><td>2026-05-16 23:59 UTC</td><td>UTC</td><td>Simulation clock at experiment start (simulationStartTime)</td></tr>
+
+<tr><th>sim_end</th><td>2026-05-17 00:53 UTC</td><td>UTC</td><td>Simulation clock when the experiment finished (experimentTime)</td></tr>
+
+<tr><th>delivered</th><td>no</td><td>—</td><td>Whether the photo reached any ground station (UC4 success criterion)</td></tr>
+
+<tr><th>first_GS_delivery_s</th><td>n/a</td><td>s</td><td>Time from sim start until the first produced file reached any ground station</td></tr>
+
+<tr><th>produced</th><td>0</td><td>files</td><td>Files produced by the producer agent(s)</td></tr>
+
+<tr><th>GS_reached</th><td>0</td><td>count</td><td>Ground stations that received the file (from received_total — independent of the delivery-time metric)</td></tr>
+
+<tr><th>distinct_receivers</th><td>0</td><td>count</td><td>Distinct nodes that received a file (GS + relays)</td></tr>
+
+<tr><th>TX_MiB</th><td>0</td><td>MiB</td><td>Total network bytes transmitted, all nodes</td></tr>
+
+<tr><th>peak_cpu_m</th><td>20</td><td>millicores</td><td>Peak CPU across all containers</td></tr>
+
+<tr><th>peak_mem_MiB</th><td>14</td><td>MiB</td><td>Peak memory across all containers</td></tr>
+
+<tr><th>notes</th><td>—</td><td>—</td><td>Data-quality flags for this run (missing metrics, undelivered files)</td></tr>
+
+</table>
+
+<h2>Charts (interactive)</h2>
+<p class="cap">Node colours are consistent across every chart and the graph:
+  <span style="color:#f58518">■ ground station</span> ·
+  <span style="color:#4c78a8">■ relay satellite</span> ·
+  <span style="color:#54a24b">■ producer</span>.</p>
+<div class="charts">
+  <div class="chart"><h3>Per-target delivery time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cDeliv"></canvas></div>
+    <div class="cap">Seconds from file creation until each target node held the complete file. Bars coloured by node kind; the delivery KPI is the earliest ground-station bar.</div></div>
+  <div class="chart"><h3>Network TX over time (MiB)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cNetTs"></canvas></div>
+    <div class="cap">Cumulative TX summed across all nodes, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>CPU and memory over time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cResTs"></canvas></div>
+    <div class="cap">Aggregate CPU (millicores, left axis) and memory (MiB, right axis) across all containers, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>Network TX by node (top 20)</h3>
+    <div class="canvas-box" style="height:520px"><canvas id="cNet"></canvas></div>
+    <div class="cap">Total bytes transmitted per node over the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak CPU per node (top 20)</h3>
+    <div class="canvas-box" style="height:520px"><canvas id="cCpuNode"></canvas></div>
+    <div class="cap">Peak CPU (millicores) reached by each fsNode during the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak memory per node (top 20)</h3>
+    <div class="canvas-box" style="height:520px"><canvas id="cMemNode"></canvas></div>
+    <div class="cap">Peak memory (MiB) reached by each fsNode during the run, coloured by node kind.</div></div>
+</div>
+
+
+
+
+
+
+<h2>Charts</h2>
+<div class="charts">
+  
+  <div class="chart"><img src="charts/network_tx.png" alt="charts/network_tx.png"><div class="cap">charts/network_tx.png</div></div>
+  
+</div>
+
+
+<h2>Files</h2>
+<ul class="files">
+  <li><a href="resources/index.html">Kubernetes resources</a> — manifests to reproduce this run (hardwaredefinitions, layout, experimentdefinition, experiment)</li>
+  <li><a href="metrics.json">metrics.json</a> — KPIs as JSON</li>
+  <li><a href="raw-parquet.tar">raw-parquet.tar</a> — raw metrics &amp; events as typed, zstd-compressed Parquet (one file per series; read with pandas/polars/DuckDB)</li>
+</ul>
+
+<script>
+const D = {"delivery": {}, "producers": [], "pal": {"gs": "#f58518", "sat": "#4c78a8", "prod": "#54a24b", "tx": "#72b7b2", "rx": "#e45756", "cpu": "#b279a2", "mem": "#eeca3b", "vol": "#9d755d"}, "net": {"nodes": ["estrack-cebreros", "estrack-kiruna", "estrack-kourou", "estrack-malargue", "estrack-new-norcia", "estrack-redu", "estrack-santa-maria", "oneweb-0006", "oneweb-0007", "oneweb-0008", "oneweb-0010", "oneweb-0011", "oneweb-0012", "oneweb-0013", "oneweb-0017", "oneweb-0018", "oneweb-0020", "oneweb-0021", "oneweb-0023", "oneweb-0024"], "tx": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "kind": ["gs", "gs", "gs", "gs", "gs", "gs", "gs", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat"]}, "net_ts": {"t": [23, 38, 53, 68, 83, 98, 113, 128, 143, 158, 173, 188, 203, 218, 233, 248, 263, 278, 293, 308, 323, 338, 353, 368, 383, 398, 413, 428, 443, 458, 473, 488, 503, 518, 533, 548, 563, 578, 593, 608, 623, 638, 653, 668, 683, 698, 713, 728, 743, 758, 773, 788, 803, 818, 833, 848, 863, 878, 893, 908, 923, 938, 953, 968, 983, 998, 1013, 1028, 1043, 1058, 1073, 1088, 1103, 1118, 1133, 1148, 1163, 1178, 1193, 1208, 1223, 1238, 1253, 1268, 1283, 1298, 1313, 1328, 1343, 1358, 1373, 1388, 1403, 1418, 1433, 1448, 1463, 1478, 1493, 1508, 1523, 1538, 1553, 1568, 1583, 1598, 1613, 1628, 1643, 1658, 1673, 1688, 1703, 1718, 1733, 1748, 1763, 1778, 1793, 1808, 1823, 1838, 1853, 1868, 1883, 1898, 1913, 1928, 1943, 1958, 1973, 1988, 2003, 2018, 2033, 2048, 2063, 2078, 2093, 2108, 2123, 2138, 2153, 2168, 2183, 2198, 2213, 2228, 2243, 2258, 2273, 2288, 2303, 2318, 2333, 2348, 2363, 2378, 2393, 2408, 2423, 2438, 2453, 2468, 2483, 2498, 2513, 2528, 2543, 2558, 2573, 2588, 2603, 2618, 2633, 2648, 2663, 2678, 2693, 2708, 2723, 2738, 2753, 2768, 2783, 2798, 2813, 2828, 2843, 2858, 2873, 2888, 2903, 2918, 2933, 2948, 2963, 2978, 2993, 3008, 3023, 3038, 3053, 3068, 3083, 3098, 3113, 3128, 3143, 3158, 3173, 3188, 3203, 3218, 3233, 3248, 3263, 3278, 3293, 3308, 3323, 3338, 3353, 3368, 3383, 3398, 3413, 3428], "tx": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "res_ts": {"t": [-172, -157, -142, -127, -112, -97, -82, -67, -52, -37, -22, -7, 8, 23, 38, 53, 68, 83, 98, 113, 128, 143, 158, 173, 188, 203, 218, 233, 248, 263, 278, 293, 308, 323, 338, 353, 368, 383, 398, 413, 428, 443, 458, 473, 488, 503, 518, 533, 548, 563, 578, 593, 608, 623, 638, 653, 668, 683, 698, 713, 728, 743, 758, 773, 788, 803, 818, 833, 848, 863, 878, 893, 908, 923, 938, 953, 968, 983, 998, 1013, 1028, 1043, 1058, 1073, 1088, 1103, 1118, 1133, 1148, 1163, 1178, 1193, 1208, 1223, 1238, 1253, 1268, 1283, 1298, 1313, 1328, 1343, 1358, 1373, 1388, 1403, 1418, 1433, 1448, 1463, 1478, 1493, 1508, 1523, 1538, 1553, 1568, 1583, 1598, 1613, 1628, 1643, 1658, 1673, 1688, 1703, 1718, 1733, 1748, 1763, 1778, 1793, 1808, 1823, 1838, 1853, 1868, 1883, 1898, 1913, 1928, 1943, 1958, 1973, 1988, 2003, 2018, 2033, 2048, 2063, 2078, 2093, 2108, 2123, 2138, 2153, 2168, 2183, 2198, 2213, 2228, 2243, 2258, 2273, 2288, 2303, 2318, 2333, 2348, 2363, 2378, 2393, 2408, 2423, 2438, 2453, 2468, 2483, 2498, 2513, 2528, 2543, 2558, 2573, 2588, 2603, 2618, 2633, 2648, 2663, 2678, 2693, 2708, 2723, 2738, 2753, 2768, 2783, 2798, 2813, 2828, 2843, 2858, 2873, 2888, 2903, 2918, 2933, 2948, 2963, 2978, 2993, 3008, 3023, 3038, 3053, 3068, 3083, 3098, 3113, 3128, 3143, 3158, 3173, 3188, 3203, 3218, 3233, 3248, 3263, 3278, 3293, 3308, 3323, 3338, 3353, 3368, 3383, 3398, 3413, 3428], "cpu": [20.0, 30.0, 40.0, 10.0, 20.0, 0.0, 0.0, 30.0, 20.0, 20.0, 30.0, 0.0, 30.0, 20.0, 20.0, 50.0, 70.0, 10.0, 10.0, 10.0, 30.0, 10.0, 20.0, 30.0, 20.0, 60.0, 20.0, 20.0, 10.0, 30.0, 20.0, 30.0, 20.0, 30.0, 0.0, 20.0, 50.0, 30.0, 10.0, 60.0, 0.0, 40.0, 10.0, 30.0, 10.0, 20.0, 50.0, 60.0, 50.0, 50.0, 10.0, 10.0, 40.0, 20.0, 10.0, 40.0, 50.0, 30.0, 40.0, 10.0, 10.0, 30.0, 20.0, 20.0, 80.0, 40.0, 30.0, 20.0, 10.0, 20.0, 80.0, 50.0, 40.0, 30.0, 20.0, 20.0, 10.0, 10.0, 30.0, 30.0, 20.0, 30.0, 30.0, 10.0, 30.0, 70.0, 60.0, 60.0, 40.0, 0.0, 20.0, 30.0, 30.0, 40.0, 50.0, 30.0, 0.0, 30.0, 20.0, 40.0, 30.0, 10.0, 10.0, 30.0, 30.0, 30.0, 50.0, 20.0, 40.0, 20.0, 20.0, 30.0, 20.0, 20.0, 20.0, 40.0, 60.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 40.0, 30.0, 30.0, 20.0, 70.0, 20.0, 10.0, 40.0, 30.0, 30.0, 20.0, 20.0, 40.0, 10.0, 30.0, 70.0, 0.0, 20.0, 70.0, 40.0, 10.0, 70.0, 50.0, 40.0, 0.0, 20.0, 70.0, 20.0, 30.0, 30.0, 40.0, 50.0, 20.0, 30.0, 10.0, 30.0, 80.0, 20.0, 10.0, 0.0, 60.0, 70.0, 20.0, 30.0, 30.0, 10.0, 50.0, 50.0, 10.0, 50.0, 40.0, 40.0, 40.0, 50.0, 20.0, 30.0, 30.0, 60.0, 40.0, 30.0, 50.0, 10.0, 10.0, 50.0, 30.0, 60.0, 30.0, 30.0, 20.0, 10.0, 30.0, 10.0, 30.0, 30.0, 10.0, 30.0, 30.0, 40.0, 30.0, 30.0, 30.0, 10.0, 30.0, 0.0, 20.0, 40.0, 20.0, 40.0, 40.0, 20.0, 30.0, 20.0, 20.0, 30.0, 30.0, 70.0, 30.0, 10.0, 40.0, 10.0, 20.0, 20.0, 30.0, 10.0, 10.0, 30.0, 20.0, 40.0, 30.0, 20.0, 20.0, 0.0, 50.0, 20.0, 10.0, 20.0, 10.0, 40.0], "mem": [870.8, 1024.98, 1087.17, 1090.96, 1093.91, 1097.44, 1100.77, 1103.82, 1107.52, 1111.16, 1114.8, 1118.55, 1122.77, 1126.77, 1130.9, 1134.62, 1137.82, 1141.0, 1144.62, 1147.88, 1151.5, 1154.95, 1158.46, 1162.02, 1165.68, 1168.73, 1172.07, 1175.98, 1179.5, 1183.09, 1186.45, 1189.82, 1192.94, 1196.2, 1199.62, 1202.85, 1206.16, 1209.27, 1212.4, 1215.34, 1218.34, 1221.26, 1224.79, 1228.21, 1232.27, 1236.05, 1239.98, 1243.94, 1248.12, 1252.07, 1256.03, 1259.89, 1263.14, 1266.58, 1269.87, 1272.99, 1276.08, 1279.23, 1281.92, 1285.23, 1288.32, 1291.5, 1294.76, 1298.04, 1301.6, 1304.55, 1307.97, 1311.26, 1314.52, 1317.96, 1321.27, 1324.76, 1327.96, 1331.26, 1334.59, 1337.88, 1341.35, 1344.75, 1347.75, 1350.69, 1353.85, 1357.15, 1360.2, 1363.34, 1367.08, 1377.2, 1388.96, 1399.09, 1405.87, 1416.36, 1427.66, 1430.92, 1428.82, 1397.42, 1355.88, 1321.66, 1299.1, 1259.83, 1218.21, 1207.09, 1206.68, 1208.74, 1210.65, 1212.12, 1213.75, 1214.79, 1215.48, 1216.31, 1217.36, 1218.11, 1219.02, 1220.35, 1220.84, 1221.68, 1222.51, 1222.94, 1224.07, 1226.0, 1227.24, 1228.24, 1229.32, 1229.87, 1231.04, 1231.7, 1232.77, 1232.29, 1231.81, 1231.78, 1231.75, 1231.43, 1230.7, 1230.96, 1231.43, 1231.96, 1231.75, 1231.76, 1231.46, 1230.97, 1230.55, 1231.02, 1231.65, 1231.61, 1231.55, 1231.4, 1231.79, 1231.75, 1230.81, 1231.39, 1231.82, 1232.06, 1231.82, 1231.84, 1231.85, 1231.52, 1230.85, 1231.25, 1232.01, 1232.15, 1231.79, 1231.79, 1231.92, 1231.41, 1231.26, 1231.61, 1231.87, 1231.36, 1231.79, 1231.76, 1231.68, 1231.78, 1231.31, 1231.8, 1232.46, 1232.86, 1232.44, 1232.05, 1232.02, 1231.7, 1231.55, 1231.99, 1232.49, 1232.12, 1231.96, 1231.96, 1231.98, 1231.86, 1231.56, 1232.12, 1232.61, 1232.97, 1232.69, 1232.14, 1232.5, 1220.81, 1219.97, 1220.13, 1220.58, 1221.02, 1221.15, 1221.04, 1221.37, 1221.09, 1220.58, 1220.95, 1221.27, 1221.48, 1221.09, 1220.7, 1220.46, 1219.79, 1219.52, 1219.91, 1220.58, 1220.84, 1220.68, 1220.95, 1221.43, 1221.68, 1221.35, 1221.78, 1222.16, 1222.36, 1222.52, 1221.98, 1221.89, 1221.11, 1220.25, 1220.61, 1221.13, 1221.2, 1221.0, 1221.0, 1221.24, 1221.12, 1220.64, 1221.19, 1221.81, 1222.2, 1222.14, 1221.45, 1221.62]}, "cpu_by_node": {"nodes": ["estrack-malargue", "oneweb-0013", "oneweb-0036", "oneweb-0048", "oneweb-0057", "oneweb-0059", "oneweb-0080", "oneweb-0093", "estrack-cebreros", "estrack-kiruna", "estrack-kourou", "estrack-new-norcia", "estrack-redu", "estrack-santa-maria", "oneweb-0006", "oneweb-0007", "oneweb-0008", "oneweb-0010", "oneweb-0011", "oneweb-0012"], "vals": [20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0], "kind": ["gs", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "gs", "gs", "gs", "gs", "gs", "gs", "sat", "sat", "sat", "sat", "sat", "sat"]}, "mem_by_node": {"nodes": ["oneweb-9035", "oneweb-0057", "oneweb-0013", "oneweb-9030", "oneweb-0090", "oneweb-0048", "oneweb-0093", "oneweb-0080", "oneweb-0021", "oneweb-9039", "oneweb-9014", "oneweb-0062", "oneweb-9003", "oneweb-9027", "oneweb-9032", "oneweb-9018", "oneweb-0037", "oneweb-9029", "oneweb-0018", "oneweb-0043"], "vals": [14.2, 14.2, 14.2, 14.1, 14.0, 14.0, 14.0, 14.0, 13.9, 13.9, 13.9, 13.9, 13.8, 13.8, 13.8, 13.8, 13.8, 13.8, 13.8, 13.8], "kind": ["sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat", "sat"]}};
+const grid = 'rgba(168,184,208,.14)', txt = '#cdd7ea', P = D.pal;
+Chart.defaults.color = txt; Chart.defaults.borderColor = grid;
+const kc = k => (P && P[k]) || '#888';   // node-kind colour (gs / sat / prod) — same everywhere
+const nodeBars = (id, labels, vals, kinds, label, horiz) => {
+  if(!labels || !labels.length) return;
+  // value axis is x when bars are horizontal, y otherwise — title it with the
+  // unit-bearing label (e.g. "TX MiB", "peak CPU (millicores)") so every bar
+  // chart shows its unit even though the legend is hidden.
+  const valAxis = horiz ? 'x' : 'y';
+  new Chart(id,{type:'bar',data:{labels:labels,datasets:[{label:label,data:vals,
+      backgroundColor:(kinds||labels.map(()=>'sat')).map(kc)}]},
+    options:{indexAxis:horiz?'y':'x',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{[valAxis]:{title:{display:true,text:label}}}}});
+};
+const dk = Object.keys(D.delivery);
+// Per-target delivery — one bar per target, coloured by node kind (gs/sat/prod)
+new Chart(cDeliv,{type:'bar',data:{labels:dk,datasets:[{label:'delivery (s)',
+    data:dk.map(k=>D.delivery[k].s),backgroundColor:dk.map(k=>kc(D.delivery[k].kind))}]},
+  options:{indexAxis:'x',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{title:{display:true,text:'seconds'}} }}});
+// U1 — cumulative TX over time
+if(D.net_ts&&D.net_ts.t&&D.net_ts.t.length)new Chart(cNetTs,{type:'line',data:{labels:D.net_ts.t,
+  datasets:[{label:'TX MiB',data:D.net_ts.tx,borderColor:P.tx,pointRadius:0,tension:.2}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'s from start'}},y:{title:{display:true,text:'MiB (cumulative)'}}}}});
+// U2 — CPU (left axis) + memory (right axis) over time
+if(D.res_ts&&D.res_ts.t&&D.res_ts.t.length)new Chart(cResTs,{type:'line',data:{labels:D.res_ts.t,
+  datasets:[{label:'CPU millicores',data:D.res_ts.cpu,borderColor:P.cpu,pointRadius:0,tension:.2,yAxisID:'y'},
+            {label:'memory MiB',data:D.res_ts.mem,borderColor:P.mem,pointRadius:0,tension:.2,yAxisID:'y1'}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{
+    x:{title:{display:true,text:'s from start'}},
+    y:{position:'left',title:{display:true,text:'CPU (millicores)'}},
+    y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'memory (MiB)'}}}}});
+// U3 — TX by node, kind-coloured
+const netHoriz = 'y' === 'y';
+nodeBars('cNet', D.net.nodes, D.net.tx, D.net.kind, 'TX MiB', netHoriz);
+// U4 / U5 — peak CPU + memory per node, kind-coloured
+if(D.cpu_by_node)nodeBars('cCpuNode', D.cpu_by_node.nodes, D.cpu_by_node.vals, D.cpu_by_node.kind, 'peak CPU (millicores)', D.cpu_by_node.nodes.length>8);
+if(D.mem_by_node)nodeBars('cMemNode', D.mem_by_node.nodes, D.mem_by_node.vals, D.mem_by_node.kind, 'peak memory (MiB)', D.mem_by_node.nodes.length>8);
+</script>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>
