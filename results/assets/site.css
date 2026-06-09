@@ -51,6 +51,11 @@ p{margin:10px 0}
 .nav-links a{font-size:.875rem;font-weight:500;color:var(--grey-lt);padding:3px 9px;
   border-radius:4px;border:1px solid transparent}
 .nav-links a:hover{color:var(--orange-lt);border-color:rgba(232,98,26,.4);background:rgba(232,98,26,.08)}
+.nav-back-links{display:flex;gap:.75rem;align-items:center}
+.btn-back{font-size:.875rem;font-weight:600;color:var(--grey-lt);padding:5px 14px;
+  border-radius:6px;border:1px solid rgba(232,98,26,.35);background:transparent;
+  transition:all .2s}
+.btn-back:hover{color:var(--white);border-color:var(--orange);background:rgba(232,98,26,.12)}
 
 .crumbs{font-size:.82rem;color:var(--grey-md);margin-bottom:20px}
 .crumbs a{color:var(--grey-md)}

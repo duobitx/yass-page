@@ -5,3 +5,7 @@ _site/
 vendor/
 .bundle/
 Gemfile.lock
+.DS_Store
+.claude/settings.json
+.claude/settings.local.json
+
