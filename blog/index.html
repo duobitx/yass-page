@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How ESA's EDFS project is applying peer-to-peer technology to Earth Observation — and why it matters.">
+  <meta name="theme-color" content="#050b18">
+  <meta property="og:title" content="What If Satellites Could Share Data Like the Internet? — EDFS Blog">
+  <meta property="og:description" content="How ESA's EDFS project is applying peer-to-peer technology to Earth Observation — and why it matters.">
+  <meta property="og:type" content="article">
+
+  <title>What If Satellites Could Share Data Like the Internet? — EDFS Blog</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="https://edfs4eo.cloudferro.com/" class="nav-logo" aria-label="EDFS home">
+        <span class="logo-accent">EDFS</span>
+        <span class="logo-badge">ESA Φ-lab</span>
+      </a>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="https://edfs4eo.cloudferro.com/">← Main</a></li>
+        <li><a href="https://edfs4eo.cloudferro.com/#use-cases">Use Cases</a></li>
+        <li><a href="https://edfs4eo.cloudferro.com/results/">Results</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="blog-main">
+    <div class="blog-container">
+
+      <header class="blog-header">
+        <span class="section-label">Blog</span>
+        <div class="divider"></div>
+        <h1 class="blog-title">What If Satellites Could Share Data <span>Like the Internet?</span></h1>
+        <p class="blog-subtitle">How ESA's Φ-lab EDFS project is applying peer-to-peer technology to Earth Observation — and why it matters.</p>
+        <div class="blog-meta">
+          <span>CloudFerro &amp; DuoBit</span>
+          <span class="blog-meta-sep">·</span>
+          <span>ESA Φ-lab</span>
+          <span class="blog-meta-sep">·</span>
+          <span>June 2026</span>
+        </div>
+      </header>
+
+      <div class="blog-img-placeholder">
+        <p>EDFS — a peer-to-peer storage network for Earth Observation satellite constellations.<br>
+        <em>Illustration: AI-generated concept art.</em></p>
+      </div>
+
+      <article class="blog-body">
+
+        <p class="blog-lead">Earth Observation has a data problem. Not a shortage of data — quite the opposite. The exponential growth of EO missions has created a glut of imagery, telemetry, and sensor data that current ground infrastructure was never designed to handle at scale. Satellites acquire; ground stations receive; centralised processing centres store and serve. The pipeline is linear, sequential, and — at the edges where it matters most — fragile.</p>
+
+        <p>At CloudFerro, we've been working with ESA's Φ-lab to ask a different question: what if the data pipeline didn't have to be linear at all?</p>
+
+        <hr class="blog-rule">
+
+        <h2>The Problem with Centralised Pipelines</h2>
+
+        <p>The dominant model for EO data handling today is architecturally straightforward: a satellite downlinks its data to one of a limited number of ground stations, which forwards it to centralised processing and archive infrastructure. It works. But it carries costs that compound as mission density increases.</p>
+
+        <p><strong>Bandwidth bottlenecks</strong> arise when high-resolution imagery converges on a small number of ground station receivers. During disaster events — when satellite data is most urgently needed — this creates a cruel irony: the higher the demand, the more the pipeline strains.</p>
+
+        <p><strong>Latency</strong> is structural. Near-real-time (NRT) delivery windows of two to four hours are standard, not exceptional. For time-critical applications — flood mapping, wildfire monitoring, humanitarian response — that latency has real consequences.</p>
+
+        <p><strong>Single points of failure</strong> are everywhere. A ground station outage, a network interruption, a lost downlink window — any of these can delay or lose data that cannot be recaptured.</p>
+
+        <p>And as satellite constellations grow, these problems scale with them. More satellites means more data, more competition for ground station access, and more surface area for failure.</p>
+
+        <p>The question ESA's Φ-lab programme asked us to explore was whether distributed, peer-to-peer storage technologies — the same class of technologies that transformed how the internet handles large-scale data distribution — could be applied to this domain.</p>
+
+        <hr class="blog-rule">
+
+        <h2>The EDFS Approach</h2>
+
+        <p>The ESA Distributed File System (EDFS) is a software prototype developed under the Disruptive Technologies for Decentralized Storage and Provenance of EO Data programme (Theme 2), funded by ESA under Contract No. 4000148100/25/I-NS. It is a joint effort by CloudFerro as Prime Contractor and DuoBit as Sub-Contractor.</p>
+
+        <p>At its core, EDFS is a private, distributed storage network in which each node — whether a satellite or a ground station — participates actively in data propagation. Rather than a satellite waiting for a downlink window to transmit data to a single receiver, it pushes data into the network, from which any authorised node can retrieve it. The network handles replication, integrity, and routing automatically.</p>
+
+        <p>The technology stack is built on <strong>IPFS</strong> — the InterPlanetary File System — a well-established open-source protocol originally developed for terrestrial peer-to-peer content distribution, now repurposed for orbital constraints.</p>
+
+        <h3>Why IPFS?</h3>
+
+        <p>After a systematic evaluation of the distributed storage landscape — covering BitTorrent, Storj, Sia, Arweave, Filecoin, Hypercore, Holochain, and Ethereum Swarm — IPFS emerged as the most viable foundation for this application. Its MIT licence, active development community, and content-addressed architecture make it both practically deployable and technically suited to EO data characteristics.</p>
+
+        <p>IPFS stores data as Merkle-DAGs, where every block carries a Content Identifier (CID) derived from its cryptographic hash. This design provides deduplication and integrity by construction: any corruption of data yields a different CID, making tampering or bit rot immediately detectable. For EO data — where provenance and integrity are mission-critical — this is not a convenience feature. It is a fundamental property.</p>
+
+        <p>Data transfer runs over <strong>libp2p</strong> using <strong>Bitswap</strong>, a wantlist-driven block exchange protocol that requests and delivers content-addressed blocks between peers. Discovery, encryption, and NAT traversal are handled at the transport layer, meaning nodes can exchange data across heterogeneous network topologies — including the intermittent, bandwidth-constrained links characteristic of satellite communication.</p>
+
+        <p><strong>IPFS Cluster</strong> sits above the data layer as the control plane for persistence and placement. It maintains a global pinset across all nodes, enforces replication targets, and keeps the distributed state consistent even over intermittent links — using either Raft or CRDTs depending on consistency requirements. For EDFS, this means the system continuously reconciles desired versus actual replication state across the constellation, autonomously recovering from node outages, connectivity losses, and orbital gaps.</p>
+
+        <p>One component is entirely custom-built: the <strong>EDFS Name Server</strong>, a MQTT-based service that provides mapping between IPFS Content Identifiers and human-readable file names. Standard IPFS operates purely on CIDs; the name server adds a practical layer that allows the system to be used with conventional file naming conventions, and provides a clean abstraction boundary that allows the storage engine to be swapped and compared during experiments.</p>
+
+        <div class="blog-img-placeholder">
+          <p>The EDFS satellite constellation simulator — 2D ground track view showing LEO, MEO and GEO orbital layers with ESA ground station markers.</p>
+        </div>
+
+        <hr class="blog-rule">
+
+        <h2>Three Scenarios Where This Changes the Equation</h2>
+
+        <p>The EDFS design is grounded in three operational use cases drawn from real EO mission requirements.</p>
+
+        <h3>Use Case 1: Rapid Disaster Response</h3>
+
+        <p>A satellite passes over a major disaster event — a flood, an earthquake, a wildfire. Within seconds of acquisition, the imagery is chunked and injected into the EDFS network. Both satellite nodes and ground-station nodes participate in propagation. As soon as any chunk reaches a ground node, it is forwarded over the fastest available terrestrial links to other ground nodes — distributing the bandwidth load across the entire network rather than concentrating it on a single downlink.</p>
+
+        <p>The target is a measurable reduction in time-to-availability relative to the standard NRT baseline of two to four hours. In a centralised architecture, that window is bounded by when the satellite next passes over a ground station. In a distributed architecture, it is bounded by how quickly the network can propagate chunks between nodes already in range — a substantially shorter constraint.</p>
+
+        <h3>Use Case 2: Continuous LOS Relay for LEO Satellites</h3>
+
+        <p>A satellite in low Earth orbit has limited ground communication windows — a narrow pass, a spinning attitude, an intermittent link. Under current architectures, data acquired between passes simply waits. Under EDFS, the satellite uses any peer in line-of-sight to forward chunks onward: satellite-to-satellite, then satellite-to-ground, relayed across the constellation until it reaches a ground node.</p>
+
+        <p>The same mechanism applies in reverse: corrective files, mission commands, or updated parameters can be uploaded into the EDFS network and delivered to the target satellite the next time it is in line-of-sight with any peer that holds the data — not necessarily a ground station.</p>
+
+        <p>This use case demonstrates a target of ≥95% delivery success rate under degraded connectivity — conditions that would cause conventional downlink to fail entirely.</p>
+
+        <h3>Use Case 3: Situation-Aware Data Routing</h3>
+
+        <p>Small satellites carry constrained hardware: limited disk, CPU, RAM, and — critically — power. Standard IPFS, designed for terrestrial infrastructure, is resource-heavy by default. EDFS introduces energy and resource awareness into routing decisions.</p>
+
+        <p>Using orbital parameters to predict line-of-sight windows, the system routes data preferentially through nodes that maximise bandwidth efficiency while minimising power expenditure. A custom priority scoring function — incorporating data urgency, link quality, and node resource state — drives routing decisions dynamically. The indicative target for energy consumption reduction relative to baseline is ≥20%.</p>
+
+        <p>This is not theoretical optimisation. It reflects a practical reality of small satellite operations: a node that exhausts its power budget cannot participate in the network. Energy-aware routing is a prerequisite for reliable operation in constrained orbital environments.</p>
+
+        <div class="blog-img-placeholder">
+          <p>3D constellation view — inter-satellite data transfer links visualised in real time using CesiumJS.</p>
+        </div>
+
+        <hr class="blog-rule">
+
+        <h2>The Simulation Framework</h2>
+
+        <p>Validating a distributed storage system for space applications cannot be done on real hardware in the early stages of research. EDFS uses a Kubernetes-based simulation environment in which each satellite is represented as a pod — a containerised compute unit with defined resource limits, orbital parameters, and connectivity profiles.</p>
+
+        <p>The framework is built for programmable, repeatable experimentation. Key components include:</p>
+
+        <ul>
+          <li><strong>World Controller</strong> — manages each node's environment: throttles bandwidth, injects latency, cuts connections to simulate LOS interruptions or hardware failures.</li>
+          <li><strong>Experiment Executor</strong> — orchestrates scenario execution according to a declarative experiment definition, driving the World Controller and simulation agents.</li>
+          <li><strong>Simulation Agent</strong> — models satellite behaviour: generating files, injecting data into EDFS, requesting retrievals.</li>
+          <li><strong>Metrics Collector and Grafana Dashboards</strong> — capture per-node and system-wide telemetry in real time: network usage, CPU and memory load, disk I/O, replication success times, and latency.</li>
+          <li><strong>Chaos Mesh</strong> — fault injection engine, implementing realistic connectivity failures driven by orbital movement parameters.</li>
+        </ul>
+
+        <p>Each experiment is software-defined in a YAML configuration specifying satellite layout, orbital parameters, hardware limits, connectivity schedules, and planned fault events. Experiments are re-runnable with parameter sweeps across node count, file size, connectivity quality, and acquisition timing — producing trend analyses rather than single-point measurements.</p>
+
+        <p>The experiment definitions and sample configurations are published openly at <a href="https://github.com/ESA-PhiLab/yass-experiments" target="_blank" rel="noopener noreferrer">github.com/ESA-PhiLab/yass-experiments</a>, in line with ESA's open-source commitment.</p>
+
+        <p>The simulation infrastructure itself runs on CloudFerro's Kubernetes cluster, with persistent volumes provided via OpenStack Cinder — a deployment environment directly relevant to operational EO infrastructure.</p>
+
+        <div class="blog-img-placeholder">
+          <p>The EDFS experiment dashboard — real-time monitoring of active simulation runs, node metrics, and data processing across the constellation.</p>
+        </div>
+
+        <hr class="blog-rule">
+
+        <h2>What We Are Measuring</h2>
+
+        <p>The experimental evaluation framework targets four KPI groups:</p>
+
+        <p><strong>Availability and replication</strong> — replication success time as a function of node count; total replication completion time across the constellation under normal and degraded conditions.</p>
+
+        <p><strong>Latency</strong> — end-to-end time from data acquisition to availability on a ground node, measured against the standard NRT baseline.</p>
+
+        <p><strong>Bandwidth utilisation</strong> — effective aggregated use of multiple satellite and ground links versus the single-node downlink baseline.</p>
+
+        <p><strong>Energy and resource efficiency</strong> — CPU, disk I/O, and network usage as proxies for power consumption on resource-constrained nodes; compression gains and adaptive behaviour under hardware limits.</p>
+
+        <p>A note on honesty: power consumption estimates are derived from computational proxies, not measurements on real flight hardware. The simulated environment provides a controlled basis for comparing architectures and informing design decisions — not a substitute for in-orbit validation. We document this clearly, because reproducibility and intellectual honesty are prerequisites for scientific credibility.</p>
+
+        <hr class="blog-rule">
+
+        <h2>Why This Matters Beyond the Prototype</h2>
+
+        <p>The implications of EDFS extend beyond the specific use cases we are testing.</p>
+
+        <p><strong>Data provenance</strong> — the ability to trace the origin, movement, and processing history of a piece of data — is increasingly critical in EO applications. Content-addressed storage, as implemented in EDFS, provides provenance by construction: the CID of a data block is a cryptographic commitment to its content and history. Any transformation of the data produces a new CID, creating an immutable audit trail without additional instrumentation.</p>
+
+        <p><strong>Constellation scalability</strong> — as constellations grow from tens to hundreds of satellites, centralised ground architectures face quadratic scaling pressure. Distributed architectures, by contrast, gain capability as nodes are added: more nodes means more propagation paths, more storage, and more resilience. The network becomes stronger as it grows.</p>
+
+        <p><strong>Resilience in contested environments</strong> — distributed storage has no single point of failure by design. Data that has been replicated across multiple nodes survives the loss of any individual node — including ground stations, which are themselves vulnerable infrastructure.</p>
+
+        <p>The technology we are building on is not experimental in the terrestrial context. IPFS underpins real-world content distribution systems at scale. What EDFS explores is the translation of those capabilities to the orbital environment — with its specific constraints of intermittent connectivity, limited energy budgets, and the physical realities of orbital mechanics.</p>
+
+        <hr class="blog-rule">
+
+        <h2>Where We Are Now</h2>
+
+        <p>The EDFS project is approaching its Final Review at ESA's ESRIN facility in June 2026. The core components — the EDFS file transfer engine, the satellite constellation simulator with its 2D/3D graphical interface, the energy cycle simulation module, and the reference test dataset — are complete or in final integration.</p>
+
+        <p>Experiments are beginning. Results will follow.</p>
+
+        <p>For those working in Earth Observation infrastructure, distributed systems, or space technology policy: we think this is worth watching.</p>
+
+        <div class="blog-cta-box">
+          <p>Explore the experiment results or go back to the main project page.</p>
+          <div class="blog-cta-buttons">
+            <a href="https://edfs4eo.cloudferro.com/results/" class="btn btn-primary">View Results</a>
+            <a href="https://edfs4eo.cloudferro.com/" class="btn btn-outline">← Main</a>
+          </div>
+        </div>
+
+      </article>
+
+      <footer class="blog-footer">
+        <p><em>EDFS is developed by CloudFerro (Poland) as Prime Contractor and DuoBit (Poland) as Sub-Contractor, under ESA Contract No. 4000148100/25/I-NS, as part of the ESA Φ-lab Disruptive Technologies for Decentralized Storage and Provenance of EO Data programme.</em></p>
+        <p><em>For enquiries: Łukasz Kubowicz, Project Manager — <a href="mailto:lkubowicz@cloudferro.com">lkubowicz@cloudferro.com</a></em></p>
+      </footer>
+
+    </div>
+  </main>
+
+</body>
+</html>
