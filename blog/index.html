@@ -177,13 +177,19 @@
 
         <hr class="blog-rule">
 
-        <h2>Where We Are Now</h2>
+        <h2>Where We Are Now &mdash; Experiments Complete, Results In</h2>
 
-        <p>The EDFS project is approaching its Final Review at ESA's ESRIN facility in June 2026. The core components — the EDFS file transfer engine, the satellite constellation simulator with its 2D/3D graphical interface, the energy cycle simulation module, and the reference test dataset — are complete or in final integration.</p>
+        <p>After months of development and simulation runs, the EDFS experimentation phase is complete. All five use cases have been executed across the full parameter sweep &mdash; constellation sizes from 1 to 200 satellites, replication factors 1 through 5, and fault injection ranging from intermittent connectivity to complete satellite destruction.</p>
 
-        <p>Experiments are beginning. Results will follow.</p>
+        <p>The headline finding is unambiguous: when a satellite captures critical imagery far from any ground station and is then completely destroyed before establishing a downlink window, EDFS recovers and delivers the file through surviving relay peers &mdash; achieving 100% delivery across the large majority of viable configurations. The point-to-point baseline (TUS) delivered nothing in every single one of 15 such variants. This is not a marginal improvement; it is a structural difference.</p>
 
-        <p>For those working in Earth Observation infrastructure, distributed systems, or space technology policy: we think this is worth watching.</p>
+        <p>At scale, the results are counter-intuitive. Larger constellations deliver <em>faster</em>, not slower. In Use Case 1 (Rapid Disaster Response), EDFS delivered in 122 seconds at 100 satellites &mdash; compared to roughly 800 seconds at small constellations &mdash; because a denser relay pool means some node is almost always already near a ground station. TUS timed out entirely at the same constellation size.</p>
+
+        <p>The cost is real and quantifiable. EDFS uses roughly 13&ndash;15 times more memory per node (~180&ndash;260&nbsp;MiB vs ~13&ndash;15&nbsp;MiB for TUS) and substantially more CPU and network bandwidth &mdash; the price of content-addressing and bitswap relay. For small, fault-free, direct-downlink deployments, that overhead buys nothing. For large, fault-prone constellations where producers may fail before reaching ground contact, it buys everything.</p>
+
+        <p>With the Final Review scheduled for 15 June at ESRIN and a live demonstration at the &Phi;nnovation Summit 2026 on 25 June, the team is finalising the full results package.</p>
+
+        <a href="https://edfs4eo.cloudferro.com/results/conclusion.html" target="_blank" rel="noopener noreferrer" class="blog-btn-results">Read Full Results &rarr;</a>
 
       </article>
 

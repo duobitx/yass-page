@@ -160,6 +160,28 @@
   box-shadow: 0 6px 20px rgba(232, 98, 26, 0.4);
 }
 
+.blog-btn-results {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+
+.blog-btn-results:hover {
+  background: rgba(232, 98, 26, 0.1);
+  color: var(--orange-lt);
+  border-color: var(--orange-lt);
+  transform: translateY(-2px);
+}
+
 .blog-cta-btn-ghost {
   display: inline-flex;
   align-items: center;
