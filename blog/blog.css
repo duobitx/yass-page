@@ -45,22 +45,6 @@
   color: var(--orange);
 }
 
-.blog-img-placeholder {
-  background: rgba(232, 98, 26, 0.06);
-  border: 1px dashed rgba(232, 98, 26, 0.3);
-  border-radius: 10px;
-  padding: 2rem;
-  text-align: center;
-  color: var(--grey-md);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  margin: 2rem 0;
-}
-
-.blog-img-placeholder em {
-  color: rgba(255,255,255,0.35);
-}
-
 .blog-body {
   color: var(--grey-lt);
   font-size: 1.05rem;
@@ -123,18 +107,29 @@
   margin: 2.5rem 0;
 }
 
+/* CTA box */
 .blog-cta-box {
   background: rgba(10, 22, 40, 0.7);
   border: 1px solid rgba(232, 98, 26, 0.25);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 2rem 2rem 2rem;
   margin: 2.5rem 0;
   text-align: center;
 }
 
-.blog-cta-box p {
+.blog-cta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.5rem !important;
+}
+
+.blog-cta-desc {
   color: var(--grey-lt);
-  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem !important;
 }
 
 .blog-cta-buttons {
@@ -144,6 +139,45 @@
   flex-wrap: wrap;
 }
 
+.blog-cta-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+
+.blog-cta-btn-primary:hover {
+  background: var(--orange-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 98, 26, 0.4);
+}
+
+.blog-cta-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--grey-lt);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s;
+}
+
+.blog-cta-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--white);
+}
+
+/* Footer */
 .blog-footer {
   margin-top: 3rem;
   padding-top: 1.5rem;

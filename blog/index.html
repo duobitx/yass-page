@@ -51,11 +51,6 @@
         </div>
       </header>
 
-      <div class="blog-img-placeholder">
-        <p>EDFS — a peer-to-peer storage network for Earth Observation satellite constellations.<br>
-        <em>Illustration: AI-generated concept art.</em></p>
-      </div>
-
       <article class="blog-body">
 
         <p class="blog-lead">Earth Observation has a data problem. Not a shortage of data — quite the opposite. The exponential growth of EO missions has created a glut of imagery, telemetry, and sensor data that current ground infrastructure was never designed to handle at scale. Satellites acquire; ground stations receive; centralised processing centres store and serve. The pipeline is linear, sequential, and — at the edges where it matters most — fragile.</p>
@@ -100,10 +95,6 @@
 
         <p>One component is entirely custom-built: the <strong>EDFS Name Server</strong>, a MQTT-based service that provides mapping between IPFS Content Identifiers and human-readable file names. Standard IPFS operates purely on CIDs; the name server adds a practical layer that allows the system to be used with conventional file naming conventions, and provides a clean abstraction boundary that allows the storage engine to be swapped and compared during experiments.</p>
 
-        <div class="blog-img-placeholder">
-          <p>The EDFS satellite constellation simulator — 2D ground track view showing LEO, MEO and GEO orbital layers with ESA ground station markers.</p>
-        </div>
-
         <hr class="blog-rule">
 
         <h2>Three Scenarios Where This Changes the Equation</h2>
@@ -132,10 +123,6 @@
 
         <p>This is not theoretical optimisation. It reflects a practical reality of small satellite operations: a node that exhausts its power budget cannot participate in the network. Energy-aware routing is a prerequisite for reliable operation in constrained orbital environments.</p>
 
-        <div class="blog-img-placeholder">
-          <p>3D constellation view — inter-satellite data transfer links visualised in real time using CesiumJS.</p>
-        </div>
-
         <hr class="blog-rule">
 
         <h2>The Simulation Framework</h2>
@@ -157,10 +144,6 @@
         <p>The experiment definitions and sample configurations are published openly at <a href="https://github.com/ESA-PhiLab/yass-experiments" target="_blank" rel="noopener noreferrer">github.com/ESA-PhiLab/yass-experiments</a>, in line with ESA's open-source commitment.</p>
 
         <p>The simulation infrastructure itself runs on CloudFerro's Kubernetes cluster, with persistent volumes provided via OpenStack Cinder — a deployment environment directly relevant to operational EO infrastructure.</p>
-
-        <div class="blog-img-placeholder">
-          <p>The EDFS experiment dashboard — real-time monitoring of active simulation runs, node metrics, and data processing across the constellation.</p>
-        </div>
 
         <hr class="blog-rule">
 
@@ -203,10 +186,11 @@
         <p>For those working in Earth Observation infrastructure, distributed systems, or space technology policy: we think this is worth watching.</p>
 
         <div class="blog-cta-box">
-          <p>Explore the experiment results or go back to the main project page.</p>
+          <p class="blog-cta-label">Continue exploring</p>
+          <p class="blog-cta-desc">See how the experiments turned out, or return to the main project page.</p>
           <div class="blog-cta-buttons">
-            <a href="https://edfs4eo.cloudferro.com/results/" class="btn btn-primary">View Results</a>
-            <a href="https://edfs4eo.cloudferro.com/" class="btn btn-outline">← Main</a>
+            <a href="https://edfs4eo.cloudferro.com/results/" class="blog-cta-btn-primary">View Results →</a>
+            <a href="https://edfs4eo.cloudferro.com/" class="blog-cta-btn-ghost">← Main page</a>
           </div>
         </div>
 
