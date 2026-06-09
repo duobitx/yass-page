@@ -343,9 +343,9 @@
         <h2 class="section-title">Use <span>Cases</span></h2>
 
         <p class="bg-intro">
-          EDFS is validated against three operational use cases derived from the project's
-          Use Case Definition document (ESA-DECENTRALIZED-STORAGE-UCD-0001). Each use case
-          drives the design, implementation, and benchmarking of the EDFS prototype.
+          EDFS is validated against five operational use cases. The first three are derived
+          from the project's Use Case Definition document (ESA-DECENTRALIZED-STORAGE-UCD-0001);
+          two additional use cases extend validation into fault-tolerance and resilience scenarios.
         </p>
 
         <div class="background-content">
@@ -382,6 +382,34 @@
               Line of Sight and resource constraints. Expected impact: energy consumption
               reduction with indicative target &ge;&nbsp;20%; improved replication
               performance with Priority-Aware Routing versus baseline.
+            </p>
+          </div>
+        </div>
+
+        <div class="uc-additional-label">
+          <span class="section-label">Additional Use Cases</span>
+        </div>
+
+        <div class="background-content uc-additional">
+          <div class="bg-card bg-card--additional">
+            <h3>Use Case 04 &mdash; Satellite Failure Recovery</h3>
+            <p>
+              A satellite captures a high-priority image at high latitude, far from any
+              ground station, and is then destroyed before establishing any downlink window.
+              EDFS is expected to deliver the image via inter-satellite relay through surviving
+              peers; TUS — lacking inter-satellite relay — loses the file entirely. Validates
+              EDFS resilience against a single point of failure at the producer.
+            </p>
+          </div>
+
+          <div class="bg-card bg-card--additional">
+            <h3>Use Case 05 &mdash; General Fault Resilience <span class="uc-badge">EDFS only</span></h3>
+            <p>
+              Twenty percent of the constellation produces a batch of images while the entire
+              network &mdash; satellites and ground stations alike &mdash; is subjected to a
+              continuous stream of non-terminal hardware faults (bandwidth reduction, network
+              interruptions, disk failures). Measures EDFS eventual consistency and delivery
+              completeness under sustained, non-catastrophic degradation.
             </p>
           </div>
         </div>
