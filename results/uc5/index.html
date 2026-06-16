@@ -45,6 +45,19 @@ EDFS only; TUS is out of scope here.</p>
 (one terminal failure on one producer). It's the long-duration stress test
 of EDFS's eventual consistency under sustained but non-catastrophic
 degradation.</p>
+<p><strong>Relationship to UC2.</strong> UC5 is essentially the same experiment as UC2 —
+the same constellation, the same continuous stream of non-terminal hardware
+faults (<code>Destroy</code> is excluded in both), measuring the same time-to-ground
+KPI — only with a different parametrization: a sparser, time-distributed
+workload (only ~20% of satellites produce, each a small finite batch of
+images over time, instead of every satellite producing one file at <code>t=0</code>)
+and a stricter 100% completeness bar. The one practical consequence worth
+calling out is that <strong>UC5 is EDFS-only, so there is nothing to compare
+against</strong>: there is no point-to-point (TUS) baseline here, because the
+eventual whole-set convergence under sustained relay has no point-to-point
+analogue (TUS would simply lose files under the fault stream). UC5 is
+therefore an absolute characterization of EDFS across the <code>RF</code> axis rather
+than a head-to-head.</p>
 <h2>Success Condition</h2>
 <p>The run ends successfully once a single ground station holds every image
 produced in the run.</p>
@@ -192,56 +205,75 @@ non-catastrophic faults</strong>, and quantify "how long is eventual?":</p>
   per-file progress.</li>
 </ul></div>
 
+
+<h2>Charts</h2>
+<div class="charts">
+
+  <div class="chart"><img src="charts/uc5_delivery_by_n.png" alt="Delivery success (% of produced files reaching a GA) by constellation size (EDFS, mean over RF) (white-background copy: charts/uc5_delivery_by_n_light.png)"><div class="cap">Delivery success (% of produced files reaching a GA) by constellation size (EDFS, mean over RF) (white-background copy: charts/uc5_delivery_by_n_light.png)</div></div>
+
+  <div class="chart"><img src="charts/uc5_delivery_by_rf.png" alt="Delivery success (% of produced files reaching a GA) by replication factor (EDFS, mean over constellation size) (white-background copy: charts/uc5_delivery_by_rf_light.png)"><div class="cap">Delivery success (% of produced files reaching a GA) by replication factor (EDFS, mean over constellation size) (white-background copy: charts/uc5_delivery_by_rf_light.png)</div></div>
+
+</div>
+
+
 <h2>Variants (8)</h2>
 <table class="variants">
-<tr><th>variant</th><th>engine</th><th>sat</th><th>RF</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>state</th></tr>
+<tr><th>variant</th><th>engine</th><th>sat</th><th>RF</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>status</th><th>delivered %</th></tr>
 
 <tr>
   <td><a href="uc5-edfs-n01-rf1/index.html">uc5-edfs-n01-rf1</a></td>
   <td>edfs</td><td>1</td><td>1</td><td>5</td><td>1</td><td>no</td><td>570</td>
   <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n02-rf1/index.html">uc5-edfs-n02-rf1</a></td>
   <td>edfs</td><td>2</td><td>1</td><td>4</td><td>1</td><td>no</td><td>508</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>80%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n08-rf1/index.html">uc5-edfs-n08-rf1</a></td>
-  <td>edfs</td><td>8</td><td>1</td><td>5</td><td>5</td><td>yes</td><td>784</td>
+  <td>edfs</td><td>8</td><td>1</td><td>5</td><td>1</td><td>no</td><td>411</td>
   <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n08-rf3/index.html">uc5-edfs-n08-rf3</a></td>
   <td>edfs</td><td>8</td><td>3</td><td>4</td><td>1</td><td>no</td><td>360</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>80%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n08-rf5/index.html">uc5-edfs-n08-rf5</a></td>
   <td>edfs</td><td>8</td><td>5</td><td>4</td><td>1</td><td>no</td><td>365</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>80%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n21-rf1/index.html">uc5-edfs-n21-rf1</a></td>
   <td>edfs</td><td>21</td><td>1</td><td>17</td><td>2</td><td>no</td><td>113</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>15%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n21-rf3/index.html">uc5-edfs-n21-rf3</a></td>
   <td>edfs</td><td>21</td><td>3</td><td>16</td><td>4</td><td>no</td><td>518</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>80%</td>
 </tr>
 
 <tr>
   <td><a href="uc5-edfs-n21-rf5/index.html">uc5-edfs-n21-rf5</a></td>
   <td>edfs</td><td>21</td><td>5</td><td>17</td><td>4</td><td>no</td><td>703</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>50%</td>
 </tr>
 
 </table>

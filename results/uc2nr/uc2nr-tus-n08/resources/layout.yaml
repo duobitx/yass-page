@@ -1,0 +1,119 @@
+apiVersion: int.esa.yass/v1
+kind: Layout
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Layout","metadata":{"annotations":{"yass.experiments/sat-selection":"even-stride across mixed-constellation snapshot","yass.experiments/source-tles":"tools/tle-snapshot.txt"},"name":"uc2nr-n08"},"spec":[{"fsNode":"orbcomm-fm06","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 25118U 97084G   26160.12865578  .00001153  00000+0  34963-3 0  9999","2 25118  45.0138  91.5055 0001849 306.1714  72.9851 14.47542159493223"]}},{"fsNode":"globalstar-m081","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 37743U 11033E   26160.46457311 -.00000096  00000+0  45147-4 0  9998","2 37743  51.9940 219.1569 0000216 129.5643 332.5715 12.62264813688964"]}},{"fsNode":"iridium-116","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 43072U 17083C   26160.54045301  .00000121  00000+0  36100-4 0  9999","2 43072  86.3958 325.1993 0001882  95.0586 265.0824 14.34217693443076"]}},{"fsNode":"oneweb-0173","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 48069U 21025AD  26160.43945678  .00000405  00000+0  10739-2 0  9998","2 48069  87.8951 321.7652 0001765 107.5978 252.5344 13.13470042252783"]}},{"fsNode":"oneweb-0614","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 55156U 23004S   26160.37290236  .00000543  00000+0  14955-2 0  9995","2 55156  87.8890  22.6332 0002048  82.9645 277.1716 13.11418109164810"]}},{"fsNode":"flock-4be-17","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 60492U 24149AA  26160.48683624  .00013804  00000+0  35282-3 0  9995","2 60492  97.3767 243.7970 0001542 282.6686  77.4387 15.39567880101071"]}},{"fsNode":"flock-4h-9","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 66712U 25276AY  26160.50357957  .00006093  00000+0  28301-3 0  9994","2 66712  97.4215 234.3639 0003536  31.9574 328.1875 15.20362333 29269"]}},{"fsNode":"lemur-2-squirrelcomm","hardwareSpecRef":"oneweb","nodeType":"satellite","orbit":{"tle":["1 60578U 24149DQ  26160.22177735  .00005305  00000+0  35767-3 0  9998","2 60578  97.6716 241.1591 0006956  83.9423 276.2596 15.07063859 99203"]}},{"earthPosition":{"heightOverSeaLevel":0,"lat":-31.048,"lng":116.192},"fsNode":"estrack-new-norcia","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":67.857,"lng":20.964},"fsNode":"estrack-kiruna","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":50,"lng":5.167},"fsNode":"estrack-redu","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":40.453,"lng":-4.368},"fsNode":"estrack-cebreros","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":36.974,"lng":-25.094},"fsNode":"estrack-santa-maria","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":5.251,"lng":-52.805},"fsNode":"estrack-kourou","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"},{"earthPosition":{"heightOverSeaLevel":0,"lat":-35.776,"lng":-69.398},"fsNode":"estrack-malargue","hardwareSpecRef":"ground-station-hwdef","nodeType":"groundStation"}]}
+    yass.experiments/sat-selection: even-stride across mixed-constellation snapshot
+    yass.experiments/source-tles: tools/tle-snapshot.txt
+  creationTimestamp: "2026-06-10T01:40:08Z"
+  generation: 1
+  name: uc2nr-n08
+  resourceVersion: "4581188"
+  uid: d7899a63-28e3-46d2-b720-394bad7876e3
+spec:
+- fsNode: orbcomm-fm06
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 25118U 97084G   26160.12865578  .00001153  00000+0  34963-3 0  9999
+    - 2 25118  45.0138  91.5055 0001849 306.1714  72.9851 14.47542159493223
+- fsNode: globalstar-m081
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 37743U 11033E   26160.46457311 -.00000096  00000+0  45147-4 0  9998
+    - 2 37743  51.9940 219.1569 0000216 129.5643 332.5715 12.62264813688964
+- fsNode: iridium-116
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 43072U 17083C   26160.54045301  .00000121  00000+0  36100-4 0  9999
+    - 2 43072  86.3958 325.1993 0001882  95.0586 265.0824 14.34217693443076
+- fsNode: oneweb-0173
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 48069U 21025AD  26160.43945678  .00000405  00000+0  10739-2 0  9998
+    - 2 48069  87.8951 321.7652 0001765 107.5978 252.5344 13.13470042252783
+- fsNode: oneweb-0614
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 55156U 23004S   26160.37290236  .00000543  00000+0  14955-2 0  9995
+    - 2 55156  87.8890  22.6332 0002048  82.9645 277.1716 13.11418109164810
+- fsNode: flock-4be-17
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 60492U 24149AA  26160.48683624  .00013804  00000+0  35282-3 0  9995
+    - 2 60492  97.3767 243.7970 0001542 282.6686  77.4387 15.39567880101071
+- fsNode: flock-4h-9
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 66712U 25276AY  26160.50357957  .00006093  00000+0  28301-3 0  9994
+    - 2 66712  97.4215 234.3639 0003536  31.9574 328.1875 15.20362333 29269
+- fsNode: lemur-2-squirrelcomm
+  hardwareSpecRef: oneweb
+  nodeType: satellite
+  orbit:
+    tle:
+    - 1 60578U 24149DQ  26160.22177735  .00005305  00000+0  35767-3 0  9998
+    - 2 60578  97.6716 241.1591 0006956  83.9423 276.2596 15.07063859 99203
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: -31.048
+    lng: 116.192
+  fsNode: estrack-new-norcia
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 67.857
+    lng: 20.964
+  fsNode: estrack-kiruna
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 50
+    lng: 5.167
+  fsNode: estrack-redu
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 40.453
+    lng: -4.368
+  fsNode: estrack-cebreros
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 36.974
+    lng: -25.094
+  fsNode: estrack-santa-maria
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: 5.251
+    lng: -52.805
+  fsNode: estrack-kourou
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation
+- earthPosition:
+    heightOverSeaLevel: 0
+    lat: -35.776
+    lng: -69.398
+  fsNode: estrack-malargue
+  hardwareSpecRef: ground-station-hwdef
+  nodeType: groundStation

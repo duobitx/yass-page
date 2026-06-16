@@ -134,11 +134,6 @@ expected to fall below.</p>
 <td>One regime per UC2 run; we sweep RF/sat_count rather than file size to keep the deliverable set focused.</td>
 </tr>
 <tr>
-<td><code>fault_intensity</code></td>
-<td>mean interval <code>5m</code>, jitter <code>50%</code>, duration <code>30-60s</code></td>
-<td>Encoded directly in each behaviour's <code>hardwareEvents.schedule</code>; the run-id includes a <code>seed</code> for reproducibility.</td>
-</tr>
-<tr>
 <td><code>max_duration</code></td>
 <td><code>6h</code></td>
 <td>Tight enough that "still in flight at the deadline" actually counts against the success rate.</td>
@@ -147,8 +142,8 @@ expected to fall below.</p>
 </table>
 <p><strong>TUS parameter coverage.</strong> TUS has no notion of file priority or
 replication factor — <code>priority</code> and <code>RF</code> are ignored by the engine.
-For TUS we therefore only sweep <code>(sat_count)</code> (with <code>fault_intensity</code>
-held to the same per-run schedule), pin <code>priority=default</code> and omit
+For TUS we therefore only sweep <code>(sat_count)</code> (under the same per-run
+fault schedule), pin <code>priority=default</code> and omit
 <code>RF</code>. Each TUS run is compared against the full <code>(priority, RF)</code>
 matrix of EDFS runs at the same <code>sat_count</code> and the same fault seed.</p>
 <h2>Assumptions</h2>
@@ -184,128 +179,157 @@ delivery"):</p>
   fault stream.</li>
 </ul></div>
 
+
+<h2>Charts</h2>
+<div class="charts">
+
+  <div class="chart"><img src="charts/delivery_pct_compare.png" alt="Delivery success (% of produced files reaching a GA): EDFS vs TUS by constellation size (EDFS = default priority, mean over RF). Dashed line = success threshold (white-background copy: charts/delivery_pct_compare_light.png)"><div class="cap">Delivery success (% of produced files reaching a GA): EDFS vs TUS by constellation size (EDFS = default priority, mean over RF). Dashed line = success threshold (white-background copy: charts/delivery_pct_compare_light.png)</div></div>
+
+</div>
+
+
 <h2>Variants (20)</h2>
 <table class="variants">
-<tr><th>variant</th><th>engine</th><th>priority</th><th>RF</th><th>sat</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>state</th></tr>
+<tr><th>variant</th><th>engine</th><th>priority</th><th>RF</th><th>sat</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>status</th><th>delivered %</th></tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n01-rf3/index.html">uc2-edfs-pdefault-n01-rf3</a></td>
   <td>edfs</td><td>default</td><td>3</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>754</td>
   <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n02-rf3/index.html">uc2-edfs-pdefault-n02-rf3</a></td>
-  <td>edfs</td><td>default</td><td>3</td><td>2</td><td>2</td><td>2</td><td>yes</td><td>775</td>
-  <td><span class="badge ok">Success</span></td>
+  <td>edfs</td><td>default</td><td>3</td><td>2</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>0%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n08-rf1/index.html">uc2-edfs-pdefault-n08-rf1</a></td>
-  <td>edfs</td><td>default</td><td>1</td><td>8</td><td>3</td><td>1</td><td>no</td><td>10</td>
-  <td><span class="badge ok">Success</span></td>
+  <td>edfs</td><td>default</td><td>1</td><td>8</td><td>6</td><td>1</td><td>no</td><td>9</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>12%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n08-rf3/index.html">uc2-edfs-pdefault-n08-rf3</a></td>
-  <td>edfs</td><td>default</td><td>3</td><td>8</td><td>4</td><td>3</td><td>no</td><td>801</td>
-  <td><span class="badge ok">Success</span></td>
+  <td>edfs</td><td>default</td><td>3</td><td>8</td><td>6</td><td>6</td><td>yes</td><td>1283</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>75%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n08-rf5/index.html">uc2-edfs-pdefault-n08-rf5</a></td>
-  <td>edfs</td><td>default</td><td>5</td><td>8</td><td>5</td><td>3</td><td>no</td><td>835</td>
-  <td><span class="badge ok">Success</span></td>
+  <td>edfs</td><td>default</td><td>5</td><td>8</td><td>7</td><td>4</td><td>no</td><td>837</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>50%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-phigh-n08-rf3/index.html">uc2-edfs-phigh-n08-rf3</a></td>
   <td>edfs</td><td>high</td><td>3</td><td>8</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>0%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-plow-n08-rf3/index.html">uc2-edfs-plow-n08-rf3</a></td>
-  <td>edfs</td><td>low</td><td>3</td><td>8</td><td>4</td><td>1</td><td>no</td><td>10</td>
-  <td><span class="badge ok">Success</span></td>
+  <td>edfs</td><td>low</td><td>3</td><td>8</td><td>6</td><td>6</td><td>yes</td><td>6309</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>75%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n21-rf3/index.html">uc2-edfs-pdefault-n21-rf3</a></td>
   <td>edfs</td><td>default</td><td>3</td><td>21</td><td>21</td><td>20</td><td>no</td><td>833</td>
   <td><span class="badge ok">Success</span></td>
+  <td>95%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n100-rf1/index.html">uc2-edfs-pdefault-n100-rf1</a></td>
   <td>edfs</td><td>default</td><td>1</td><td>100</td><td>100</td><td>5</td><td>no</td><td>283</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>5%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n100-rf3/index.html">uc2-edfs-pdefault-n100-rf3</a></td>
   <td>edfs</td><td>default</td><td>3</td><td>100</td><td>100</td><td>5</td><td>no</td><td>548</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>5%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n100-rf5/index.html">uc2-edfs-pdefault-n100-rf5</a></td>
   <td>edfs</td><td>default</td><td>5</td><td>100</td><td>46</td><td>46</td><td>yes</td><td>1836</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>46%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-phigh-n100-rf3/index.html">uc2-edfs-phigh-n100-rf3</a></td>
   <td>edfs</td><td>high</td><td>3</td><td>100</td><td>30</td><td>100</td><td>yes</td><td>2290</td>
-  <td><span class="badge ok">Success</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>30%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-plow-n100-rf3/index.html">uc2-edfs-plow-n100-rf3</a></td>
   <td>edfs</td><td>low</td><td>3</td><td>100</td><td>100</td><td>16</td><td>no</td><td>21076</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>16%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-edfs-pdefault-n200-rf3/index.html">uc2-edfs-pdefault-n200-rf3</a></td>
   <td>edfs</td><td>default</td><td>3</td><td>200</td><td>200</td><td>200</td><td>yes</td><td>4424</td>
   <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n01/index.html">uc2-tus-n01</a></td>
-  <td>tus</td><td>-</td><td>—</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>743</td>
+  <td>tus</td><td>-</td><td>—</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>742</td>
   <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n02/index.html">uc2-tus-n02</a></td>
   <td>tus</td><td>-</td><td>—</td><td>2</td><td>2</td><td>2</td><td>yes</td><td>2817</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n08/index.html">uc2-tus-n08</a></td>
   <td>tus</td><td>-</td><td>—</td><td>8</td><td>8</td><td>8</td><td>yes</td><td>4122</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n21/index.html">uc2-tus-n21</a></td>
   <td>tus</td><td>-</td><td>—</td><td>21</td><td>19</td><td>19</td><td>yes</td><td>4961</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge ok">Success</span></td>
+  <td>90%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n100/index.html">uc2-tus-n100</a></td>
   <td>tus</td><td>-</td><td>—</td><td>100</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>0%</td>
 </tr>
 
 <tr>
   <td><a href="uc2-tus-n200/index.html">uc2-tus-n200</a></td>
   <td>tus</td><td>-</td><td>—</td><td>200</td><td>0</td><td>0</td><td>no</td><td>n/a</td>
-  <td><span class="badge bad">TimedOut</span></td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>0%</td>
 </tr>
 
 </table>

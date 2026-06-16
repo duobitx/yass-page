@@ -1,0 +1,33 @@
+{
+  "run_id": "uc2nr-edfs-pdefault-n02-rf3",
+  "engine": "edfs",
+  "file_size": "32M",
+  "sat_count": 2,
+  "priority": "default",
+  "rf": 3,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-10T19:46:04Z",
+  "duration_s": 276.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:03:36Z",
+  "first_gs": 268.085233583,
+  "last_gs": 272.076433215,
+  "mean_gs": 270.211644091,
+  "n_gs": 12,
+  "gs_reached": 6,
+  "files_to_gs": 2,
+  "delivery_success_rate": 100.0,
+  "producers": [
+    "oneweb-0614",
+    "orbcomm-fm06"
+  ],
+  "all_delivered": true,
+  "delivered": true,
+  "n_receivers": 8,
+  "produced": 2.0,
+  "notes": "\u2014",
+  "tx_mib": 1131.901349067688,
+  "peak_cpu": 360.0,
+  "peak_mem_mib": 162.6171875
+}

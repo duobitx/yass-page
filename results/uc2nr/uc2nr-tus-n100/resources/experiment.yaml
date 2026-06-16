@@ -1,0 +1,613 @@
+apiVersion: int.esa.yass/v1
+kind: Experiment
+metadata:
+  annotations:
+    experiment-controller/restart-baseline: "0"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Experiment","metadata":{"annotations":{},"name":"uc2nr-tus-n100","namespace":"uc2nr-tus-n100"},"spec":{"engineContainers":[{"env":[{"name":"GROUND_STATIONS","value":"*"}],"image":"ghcr.io/duobitx/yass-tus-fs-engine:latest","imagePullPolicy":"Always","name":"engine-tus"}],"experimentDefRef":"uc2nr-tus-n100","layoutDefRef":"uc2nr-n100","runId":"uc2nr-tus-n100","simulationStartTime":"2026-05-16T23:59:00.000Z","start":true}}
+  creationTimestamp: "2026-06-10T02:15:54Z"
+  finalizers:
+  - experiment-controller/cleanup-fsNodes
+  generation: 1
+  name: uc2nr-tus-n100
+  namespace: uc2nr-tus-n100
+  resourceVersion: "50783327"
+  uid: 882331fa-1464-4e67-ab85-88352684efa9
+spec:
+  engineContainers:
+  - env:
+    - name: GROUND_STATIONS
+      value: '*'
+    image: ghcr.io/duobitx/yass-tus-fs-engine:latest
+    imagePullPolicy: Always
+    name: engine-tus
+    resources: {}
+  experimentDefRef: uc2nr-tus-n100
+  layoutDefRef: uc2nr-n100
+  runId: uc2nr-tus-n100
+  simulationStartTime: "2026-05-16T23:59:00Z"
+  start: true
+status:
+  conditions:
+  - lastTransitionTime: "2026-06-10T02:15:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentDefinition
+  - lastTransitionTime: "2026-06-10T02:15:54Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Layout
+  - lastTransitionTime: "2026-06-10T02:16:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Messaging
+  - lastTransitionTime: "2026-06-10T02:15:54Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: FsnodeBroadcast
+  - lastTransitionTime: "2026-06-10T02:16:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentExecutor
+  - lastTransitionTime: "2026-06-10T02:16:15Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: EventsWebapp
+  - lastTransitionTime: "2026-06-10T02:16:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: MetricsBridge
+  - lastTransitionTime: "2026-06-10T02:16:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Mqtt2prom
+  - lastTransitionTime: "2026-06-10T02:16:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: WebUi
+  - lastTransitionTime: "2026-06-10T02:22:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm06
+  - lastTransitionTime: "2026-06-10T02:22:33Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm19
+  - lastTransitionTime: "2026-06-10T02:22:38Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm27
+  - lastTransitionTime: "2026-06-10T02:22:38Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm109
+  - lastTransitionTime: "2026-06-10T02:22:40Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm118
+  - lastTransitionTime: "2026-06-10T02:22:41Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm113
+  - lastTransitionTime: "2026-06-10T02:22:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm117
+  - lastTransitionTime: "2026-06-10T02:22:44Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m069
+  - lastTransitionTime: "2026-06-10T02:22:44Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m079
+  - lastTransitionTime: "2026-06-10T02:22:45Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m076
+  - lastTransitionTime: "2026-06-10T02:22:47Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m075
+  - lastTransitionTime: "2026-06-10T02:22:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m083
+  - lastTransitionTime: "2026-06-10T02:22:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m085
+  - lastTransitionTime: "2026-06-10T02:22:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m089
+  - lastTransitionTime: "2026-06-10T02:22:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m080
+  - lastTransitionTime: "2026-06-10T02:22:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m090
+  - lastTransitionTime: "2026-06-10T02:22:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m097
+  - lastTransitionTime: "2026-06-10T02:22:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m094
+  - lastTransitionTime: "2026-06-10T02:22:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m078
+  - lastTransitionTime: "2026-06-10T02:22:52Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-106
+  - lastTransitionTime: "2026-06-10T02:22:57Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-104
+  - lastTransitionTime: "2026-06-10T02:22:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-113
+  - lastTransitionTime: "2026-06-10T02:22:59Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-117
+  - lastTransitionTime: "2026-06-10T02:23:04Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-122
+  - lastTransitionTime: "2026-06-10T02:23:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-136
+  - lastTransitionTime: "2026-06-10T02:23:17Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-116
+  - lastTransitionTime: "2026-06-10T02:23:20Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-144
+  - lastTransitionTime: "2026-06-10T02:23:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-146
+  - lastTransitionTime: "2026-06-10T02:23:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-161
+  - lastTransitionTime: "2026-06-10T02:23:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-160
+  - lastTransitionTime: "2026-06-10T02:23:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-156
+  - lastTransitionTime: "2026-06-10T02:23:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-168
+  - lastTransitionTime: "2026-06-10T02:23:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-171
+  - lastTransitionTime: "2026-06-10T02:23:27Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-174
+  - lastTransitionTime: "2026-06-10T02:23:29Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0049
+  - lastTransitionTime: "2026-06-10T02:23:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0037
+  - lastTransitionTime: "2026-06-10T02:23:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0121
+  - lastTransitionTime: "2026-06-10T02:23:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0115
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0209
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0207
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0213
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0279
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0310
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0334
+  - lastTransitionTime: "2026-06-10T02:23:31Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0360
+  - lastTransitionTime: "2026-06-10T02:23:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0401
+  - lastTransitionTime: "2026-06-10T02:23:33Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0416
+  - lastTransitionTime: "2026-06-10T02:23:33Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0473
+  - lastTransitionTime: "2026-06-10T02:23:34Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0519
+  - lastTransitionTime: "2026-06-10T02:23:35Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0607
+  - lastTransitionTime: "2026-06-10T02:23:35Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0614
+  - lastTransitionTime: "2026-06-10T02:23:36Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0562
+  - lastTransitionTime: "2026-06-10T02:23:36Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0548
+  - lastTransitionTime: "2026-06-10T02:23:36Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0636
+  - lastTransitionTime: "2026-06-10T02:23:36Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0692
+  - lastTransitionTime: "2026-06-10T02:23:37Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c1
+  - lastTransitionTime: "2026-06-10T02:23:37Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c9
+  - lastTransitionTime: "2026-06-10T02:23:37Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c12
+  - lastTransitionTime: "2026-06-10T02:23:38Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-28
+  - lastTransitionTime: "2026-06-10T02:23:38Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-30
+  - lastTransitionTime: "2026-06-10T02:23:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-9
+  - lastTransitionTime: "2026-06-10T02:23:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-7
+  - lastTransitionTime: "2026-06-10T02:23:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-23
+  - lastTransitionTime: "2026-06-10T02:23:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-11
+  - lastTransitionTime: "2026-06-10T02:23:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-2
+  - lastTransitionTime: "2026-06-10T02:23:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-14
+  - lastTransitionTime: "2026-06-10T02:23:44Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-3
+  - lastTransitionTime: "2026-06-10T02:23:46Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-11
+  - lastTransitionTime: "2026-06-10T02:23:47Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-20
+  - lastTransitionTime: "2026-06-10T02:23:48Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-22
+  - lastTransitionTime: "2026-06-10T02:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-21
+  - lastTransitionTime: "2026-06-10T02:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-14
+  - lastTransitionTime: "2026-06-10T02:23:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-18
+  - lastTransitionTime: "2026-06-10T02:23:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-pelican-4
+  - lastTransitionTime: "2026-06-10T02:23:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-3
+  - lastTransitionTime: "2026-06-10T02:23:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-9
+  - lastTransitionTime: "2026-06-10T02:23:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-14
+  - lastTransitionTime: "2026-06-10T02:23:53Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-19
+  - lastTransitionTime: "2026-06-10T02:23:54Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-26
+  - lastTransitionTime: "2026-06-10T02:23:54Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-31
+  - lastTransitionTime: "2026-06-10T02:23:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-35
+  - lastTransitionTime: "2026-06-10T02:23:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-1
+  - lastTransitionTime: "2026-06-10T02:23:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-peterg
+  - lastTransitionTime: "2026-06-10T02:23:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-amanda-svante
+  - lastTransitionTime: "2026-06-10T02:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-deverill-m-t
+  - lastTransitionTime: "2026-06-10T02:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-nimbus2000
+  - lastTransitionTime: "2026-06-10T02:23:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-tomatokechup
+  - lastTransitionTime: "2026-06-10T02:23:57Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-ahmed-asrar
+  - lastTransitionTime: "2026-06-10T02:24:00Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-sierrini
+  - lastTransitionTime: "2026-06-10T02:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-roundtripper
+  - lastTransitionTime: "2026-06-10T02:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-deloitte-1
+  - lastTransitionTime: "2026-06-10T02:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-thefalconer
+  - lastTransitionTime: "2026-06-10T02:24:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-thermoraptor
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-balto
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-sejong-2
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-lucille-rose
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-teodor
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-tartiflette
+  - lastTransitionTime: "2026-06-10T02:24:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-myra
+  - lastTransitionTime: "2026-06-10T02:24:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-mario-sousa
+  - lastTransitionTime: "2026-06-10T02:24:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-new-norcia
+  - lastTransitionTime: "2026-06-10T02:24:07Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kiruna
+  - lastTransitionTime: "2026-06-10T02:24:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-redu
+  - lastTransitionTime: "2026-06-10T02:24:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-cebreros
+  - lastTransitionTime: "2026-06-10T02:24:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-santa-maria
+  - lastTransitionTime: "2026-06-10T02:24:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kourou
+  - lastTransitionTime: "2026-06-10T02:24:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-malargue
+  experimentState: TimedOut
+  experimentTime: "2026-05-17T05:58:56Z"

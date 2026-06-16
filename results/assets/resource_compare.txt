@@ -1,0 +1,12 @@
+Matched EDFS/TUS variant pairs with resource data for both (8 pairs)
+EDFS = default priority, mean over RF; pair shares uc/size/n/td.
+
+uc   size     n    td | EDFS cpu(m)  mem(Mi)   tx(Mi) | TUS cpu(m)  mem(Mi)   tx(Mi)
+uc1  128M     1  None |         500      187     1456 |         40       14      134
+uc1  128M     2  None |         270      202     1435 |         70       14      134
+uc1  128M     8  None |         390      187     1664 |         50       14      134
+uc1  128M    21  None |         500      204     2159 |         40       13      135
+uc1  128M   100  None |         847      230     8786 |         20       14        0
+uc1  128M   200  None |        1950      240    20526 |         20       11        0
+uc1  256M     8  None |         510      226     2817 |         50       14      268
+uc2  32M     21  None |         690      249    13414 |         90       15      644

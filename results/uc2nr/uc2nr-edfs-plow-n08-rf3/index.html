@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>uc2nr-edfs-plow-n08-rf3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../../index.html">YASS results</a>
+   / <a href="../index.html">uc2nr</a> / uc2nr-edfs-plow-n08-rf3
+</div>
+
+<h1><code>uc2nr-edfs-plow-n08-rf3</code>
+  <span class="badge">edfs</span>
+  <span class="badge bad">Failed</span>
+</h1>
+
+
+<h2>Parameters</h2>
+<table class="kpi">
+<tr><th>parameter</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>engine</th><td>edfs</td><td>—</td><td>Storage/transport engine under test (edfs or tus)</td></tr>
+
+<tr><th>priority</th><td>low</td><td>—</td><td>File priority class (low/default/high; EDFS PAR)</td></tr>
+
+<tr><th>sat_count</th><td>8</td><td>sats</td><td>Number of satellites in the constellation</td></tr>
+
+<tr><th>RF</th><td>3</td><td>copies</td><td>EDFS replication factor (n/a for TUS)</td></tr>
+
+</table>
+
+
+<h2>KPIs</h2>
+<table class="kpi">
+<tr><th>KPI</th><th>value</th><th>unit</th><th>description</th></tr>
+
+<tr><th>state</th><td>Success</td><td>—</td><td>Terminal experiment state (Success/TimedOut/Failure)</td></tr>
+
+<tr><th>exec_date</th><td>2026-06-10 19:46 UTC</td><td>UTC</td><td>Wall-clock date/time the experiment was launched (CR creationTimestamp)</td></tr>
+
+<tr><th>duration</th><td>1h 17m 46s</td><td>—</td><td>Experiment duration on the simulation clock (simulationStartTime → experimentTime)</td></tr>
+
+<tr><th>sim_start</th><td>2026-05-16 23:59 UTC</td><td>UTC</td><td>Simulation clock at experiment start (simulationStartTime)</td></tr>
+
+<tr><th>sim_end</th><td>2026-05-17 01:16 UTC</td><td>UTC</td><td>Simulation clock when the experiment finished (experimentTime)</td></tr>
+
+<tr><th>produced</th><td>8</td><td>files</td><td>Files produced by the producer agent(s)</td></tr>
+
+<tr><th>files_to_GS</th><td>6</td><td>count</td><td>Distinct produced files that reached at least one ground station</td></tr>
+
+<tr><th>delivery_success_rate</th><td>75</td><td>%</td><td>Distinct files reaching ≥1 GS as a percentage of files produced (UC2/UC5 primary KPI)</td></tr>
+
+<tr><th>all_delivered</th><td>no</td><td>—</td><td>Whether every produced file reached a ground station</td></tr>
+
+<tr><th>first_GS_delivery_s</th><td>868</td><td>s</td><td>Time from sim start until the first produced file reached any ground station</td></tr>
+
+<tr><th>last_GS_delivery_s</th><td>4660</td><td>s</td><td>Time from sim start until the last produced file reached a ground station (all-delivered time)</td></tr>
+
+<tr><th>GS_reached</th><td>7</td><td>count</td><td>Ground stations that received the file (from received_total — independent of the delivery-time metric)</td></tr>
+
+<tr><th>distinct_receivers</th><td>7</td><td>count</td><td>Distinct nodes that received a file (GS + relays)</td></tr>
+
+<tr><th>TX_MiB</th><td>2515</td><td>MiB</td><td>Total network bytes transmitted, all nodes</td></tr>
+
+<tr><th>peak_cpu_m</th><td>430</td><td>millicores</td><td>Peak CPU across all containers</td></tr>
+
+<tr><th>peak_mem_MiB</th><td>192</td><td>MiB</td><td>Peak memory across all containers</td></tr>
+
+<tr><th>notes</th><td>2 of 8 file(s) undelivered</td><td>—</td><td>Data-quality flags for this run (missing metrics, undelivered files)</td></tr>
+
+</table>
+
+<h2>Charts (interactive)</h2>
+<p class="cap">Node colours are consistent across every chart and the graph:
+  <span style="color:#f58518">■ ground station</span> ·
+  <span style="color:#4c78a8">■ relay satellite</span> ·
+  <span style="color:#54a24b">■ producer</span>.</p>
+<div class="charts">
+  <div class="chart"><h3>Per-target delivery time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cDeliv"></canvas></div>
+    <div class="cap">Seconds from file creation until each target node held the complete file. Bars coloured by node kind; the delivery KPI is the earliest ground-station bar.</div></div>
+  <div class="chart"><h3>Network TX over time (MiB)</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cNetTs"></canvas></div>
+    <div class="cap">Cumulative TX summed across all nodes, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>CPU and memory over time</h3>
+    <div class="canvas-box" style="height:340px"><canvas id="cResTs"></canvas></div>
+    <div class="cap">Aggregate CPU (millicores, left axis) and memory (MiB, right axis) across all containers, vs seconds from experiment start.</div></div>
+  <div class="chart"><h3>Network TX by node (top 20)</h3>
+    <div class="canvas-box" style="height:390px"><canvas id="cNet"></canvas></div>
+    <div class="cap">Total bytes transmitted per node over the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak CPU per node (top 20)</h3>
+    <div class="canvas-box" style="height:390px"><canvas id="cCpuNode"></canvas></div>
+    <div class="cap">Peak CPU (millicores) reached by each fsNode during the run, coloured by node kind.</div></div>
+  <div class="chart"><h3>Peak memory per node (top 20)</h3>
+    <div class="canvas-box" style="height:390px"><canvas id="cMemNode"></canvas></div>
+    <div class="cap">Peak memory (MiB) reached by each fsNode during the run, coloured by node kind.</div></div>
+</div>
+
+
+<h2>File propagation graph</h2>
+<div class="chart">
+  <div class="graph-controls">
+    <label>file <select id="gFile"></select></label>
+    <button id="gPlay" class="badge">▶ play</button>
+    <label>speed <select id="gSpeed">
+      <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+      <option value="1" selected>1×</option><option value="2">2×</option>
+      <option value="4">4×</option><option value="8">8×</option>
+      <option value="16">16×</option><option value="32">32×</option>
+      <option value="64">64×</option></select></label>
+    <input id="gTime" type="range" min="0" step="0.1">
+    <span id="gTimeLbl" class="muted"></span>
+  </div>
+  <div id="gNet" class="graph-box"></div>
+  <div class="cap"><span style="color:#f58518">■ ground station</span> · <span style="color:#4c78a8">● relay satellite</span> · <span style="color:#54a24b">● producer</span> (same colours as the charts). <b>Spread tree</b>: one edge <code>from → to</code> per node = where it <b>first</b> acquired the file by the selected time. Grouped per file; 0-byte control messages omitted; times bucketed to ~2&nbsp;s for cross-node clock skew. Timeline spans the whole experiment (0&nbsp;= simulation start). Delivery completeness is the <b>File deliveries</b> table below. <span id="gSrc" class="muted"></span></div>
+</div>
+
+<h2>File transfer graph (rate)</h2>
+<div class="chart">
+  <div class="graph-controls">
+    <label>file <select id="tFile"></select></label>
+    <button id="tPlay" class="badge">▶ play</button>
+    <label>speed <select id="tSpeed">
+      <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+      <option value="1" selected>1×</option><option value="2">2×</option>
+      <option value="4">4×</option><option value="8">8×</option>
+      <option value="16">16×</option><option value="32">32×</option>
+      <option value="64">64×</option></select></label>
+    <label>window <select id="tWin">
+      <option value="5">5 s</option><option value="10" selected>10 s</option>
+      <option value="20">20 s</option><option value="60">60 s</option></select></label>
+    <input id="tTime" type="range" min="0" step="0.1">
+    <span id="tTimeLbl" class="muted"></span>
+  </div>
+  <div id="tNet" class="graph-box"></div>
+  <div class="cap">Same nodes; edge <code>from → to</code> = bytes transferred <b>within the trailing window</b> ending at the selected time (instantaneous flow). <b>Edge colour = bandwidth</b> (bits/s, blue = low → red = high); label shows the rate. Play to watch where traffic moves moment-to-moment. Timeline is the simulation clock (0&nbsp;= simulation start), shared with the charts above.</div>
+</div>
+
+
+
+<h2>File deliveries</h2>
+<table class="deliveries">
+<tr><th>file</th><th>received by</th><th>delivery (s from creation)</th><th>time from start</th><th>#fsNodes with file</th></tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>flock-4be-17 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>14s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.2s</td>
+  <td>34m 23s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.3s</td>
+  <td>34m 23s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.3s</td>
+  <td>34m 23s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.3s</td>
+  <td>34m 23s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.4s</td>
+  <td>34m 23s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.7s</td>
+  <td>34m 23s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>flock-4be-17_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 2048.8s</td>
+  <td>34m 23s from start</td>
+  <td>8</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>flock-4h-9 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>12s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 868.2s</td>
+  <td>14m 40s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 868.3s</td>
+  <td>14m 40s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 868.3s</td>
+  <td>14m 40s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 868.4s</td>
+  <td>14m 40s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 868.4s</td>
+  <td>14m 40s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 868.7s</td>
+  <td>14m 40s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>flock-4h-9_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 868.7s</td>
+  <td>14m 40s from start</td>
+  <td>8</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>lemur-2-squirrelcomm <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>11s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 4660.1s</td>
+  <td>1h 17m 51s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 4660.1s</td>
+  <td>1h 17m 52s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 4660.2s</td>
+  <td>1h 17m 52s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 4660.7s</td>
+  <td>1h 17m 52s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 4660.7s</td>
+  <td>1h 17m 52s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 4670.1s</td>
+  <td>1h 18m 0s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>lemur-2-squirrelcomm_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 4676.8s</td>
+  <td>1h 18m 7s from start</td>
+  <td>8</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>oneweb-0173 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>14s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 2069.5s</td>
+  <td>34m 44s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 4665.7s</td>
+  <td>1h 17m 59s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 4665.9s</td>
+  <td>1h 17m 59s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 4665.9s</td>
+  <td>1h 17m 59s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 4666.1s</td>
+  <td>1h 17m 59s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 4668.9s</td>
+  <td>1h 18m 2s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>oneweb-0173_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 4675.9s</td>
+  <td>1h 18m 9s from start</td>
+  <td>8</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>oneweb-0614 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>11s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.3s</td>
+  <td>27m 6s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.4s</td>
+  <td>27m 6s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.6s</td>
+  <td>27m 6s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.6s</td>
+  <td>27m 6s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.7s</td>
+  <td>27m 6s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>oneweb-0614_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 1614.9s</td>
+  <td>27m 6s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>orbcomm-fm06 <span class="badge">producer</span></td>
+  <td>t0</td>
+  <td>14s from start <span class="muted">← t0</span></td>
+  <td>1</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-redu <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.0s</td>
+  <td>27m 18s from start</td>
+  <td>2</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-cebreros <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.2s</td>
+  <td>27m 18s from start</td>
+  <td>3</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-malargue <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.3s</td>
+  <td>27m 18s from start</td>
+  <td>4</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-kourou <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.5s</td>
+  <td>27m 18s from start</td>
+  <td>5</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-kiruna <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.6s</td>
+  <td>27m 18s from start</td>
+  <td>6</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-new-norcia <span class="badge ok">GS</span></td>
+  <td>t0 + 1624.8s</td>
+  <td>27m 19s from start</td>
+  <td>7</td>
+</tr>
+
+<tr>
+  <td>orbcomm-fm06_0</td>
+  <td>estrack-santa-maria <span class="badge ok">GS</span></td>
+  <td>t0 + 1630.6s</td>
+  <td>27m 24s from start</td>
+  <td>8</td>
+</tr>
+
+</table>
+
+
+
+<h2>Charts</h2>
+<div class="charts">
+  
+  <div class="chart"><img src="charts/network_tx.png" alt="charts/network_tx.png"><div class="cap">charts/network_tx.png</div></div>
+  
+  <div class="chart"><img src="gnuplot/delivery.png" alt="gnuplot/delivery.png"><div class="cap">gnuplot/delivery.png</div></div>
+  
+</div>
+
+
+<h2>Files</h2>
+<ul class="files">
+  <li><a href="resources/index.html">Kubernetes resources</a> — manifests to reproduce this run (hardwaredefinitions, layout, experimentdefinition, experiment)</li>
+  <li><a href="metrics.json">metrics.json</a> — KPIs as JSON</li>
+  <li><a href="raw-parquet.tar">raw-parquet.tar</a> — raw metrics &amp; events as typed, zstd-compressed Parquet (one file per series; read with pandas/polars/DuckDB)</li>
+</ul>
+
+<script>
+const D = {"delivery":{"estrack-cebreros":{"s":4665.9,"gs":true,"kind":"gs"},"estrack-redu":{"s":4665.9,"gs":true,"kind":"gs"},"estrack-santa-maria":{"s":4666.1,"gs":true,"kind":"gs"},"estrack-kourou":{"s":4670.1,"gs":true,"kind":"gs"},"estrack-malargue":{"s":4660.7,"gs":true,"kind":"gs"},"estrack-kiruna":{"s":4665.7,"gs":true,"kind":"gs"},"estrack-new-norcia":{"s":4676.8,"gs":true,"kind":"gs"}},"producers":["flock-4be-17","flock-4h-9","lemur-2-squirrelcomm","oneweb-0173","oneweb-0614","orbcomm-fm06"],"pal":{"gs":"#f58518","sat":"#4c78a8","prod":"#54a24b","tx":"#72b7b2","rx":"#e45756","cpu":"#b279a2","mem":"#eeca3b","vol":"#9d755d"},"net":{"nodes":["estrack-santa-maria","estrack-redu","estrack-cebreros","estrack-malargue","estrack-new-norcia","estrack-kourou","estrack-kiruna","oneweb-0614","orbcomm-fm06","flock-4be-17","lemur-2-squirrelcomm","oneweb-0173","flock-4h-9","iridium-116","globalstar-m081"],"tx":[542.3,480.6,422.3,341.7,222.6,188.2,110.6,35.4,34.7,34.0,34.0,33.9,33.7,0.9,0.5],"kind":["gs","gs","gs","gs","gs","gs","gs","prod","prod","prod","prod","prod","prod","sat","sat"]},"net_ts":{"t":[31,46,61,76,91,106,121,136,151,166,181,196,211,226,241,256,271,286,301,316,331,346,361,376,391,406,421,436,451,466,481,496,511,526,541,556,571,586,601,616,631,646,661,676,691,706,721,736,751,766,781,796,811,826,841,856,871,886,901,916,931,946,961,976,991,1006,1021,1036,1051,1066,1081,1096,1111,1126,1141,1156,1171,1186,1201,1216,1231,1246,1261,1276,1291,1306,1321,1336,1351,1366,1381,1396,1411,1426,1441,1456,1471,1486,1501,1516,1531,1546,1561,1576,1591,1606,1621,1636,1651,1666,1681,1696,1711,1726,1741,1756,1771,1786,1801,1816,1831,1846,1861,1876,1891,1906,1921,1936,1951,1966,1981,1996,2011,2026,2041,2056,2071,2086,2101,2116,2131,2146,2161,2176,2191,2206,2221,2236,2251,2266,2281,2296,2311,2326,2341,2356,2371,2386,2401,2416,2431,2446,2461,2476,2491,2506,2521,2536,2551,2566,2581,2596,2611,2626,2641,2656,2671,2686,2701,2716,2731,2746,2761,2776,2791,2806,2821,2836,2851,2866,2881,2896,2911,2926,2941,2956,2971,2986,3001,3016,3031,3046,3061,3076,3091,3106,3121,3136,3151,3166,3181,3196,3211,3226,3241,3256,3271,3286,3301,3316,3331,3346,3361,3376,3391,3406,3421,3436,3451,3466,3481,3496,3511,3526,3541,3556,3571,3586,3601,3616,3631,3646,3661,3676,3691,3706,3721,3736,3751,3766,3781,3796,3811,3826,3841,3856,3871,3886,3901,3916,3931,3946,3961,3976,3991,4006,4021,4036,4051,4066,4081,4096,4111,4126,4141,4156,4171,4186,4201,4216,4231,4246,4261,4276,4291,4306,4321,4336,4351,4366,4381,4396,4411,4426,4441,4456,4471,4486,4501,4516,4531,4546,4561,4576,4591,4606,4621,4636,4651,4666,4681,4696,4711,4726,4741,4756,4771,4786,4801,4816],"tx":[0.69,1.36,2.09,2.64,3.24,3.73,4.32,4.82,5.42,5.91,6.31,6.6,7.28,7.74,8.31,8.8,9.39,9.89,10.41,10.93,11.52,12.0,12.43,12.74,13.37,13.83,14.35,14.84,15.42,15.92,16.35,16.64,17.26,17.72,18.25,18.75,19.38,19.89,20.48,21.0,21.6,22.11,22.58,22.94,23.56,24.07,24.71,25.26,25.86,26.36,26.78,27.06,27.62,28.12,28.69,29.18,29.78,30.27,562.87,563.34,563.89,564.35,564.86,565.23,565.82,566.28,566.82,567.31,567.89,568.37,568.83,569.11,569.74,570.19,570.72,571.21,571.76,572.24,572.84,573.33,573.9,574.38,574.85,575.23,575.81,576.28,576.84,577.32,577.88,578.36,578.81,579.14,579.72,580.2,580.8,581.31,581.86,582.32,582.84,583.3,583.84,584.3,584.81,585.19,585.74,586.23,715.68,1011.08,1417.47,1514.37,1519.31,1519.69,1520.73,1521.35,1521.97,1522.57,1523.18,1523.79,1524.4,1524.93,1525.49,1526.04,1526.54,1526.94,1527.42,1527.98,1528.59,1529.12,1529.67,1530.23,1530.64,1530.95,1531.57,1532.14,1532.77,1533.31,1533.88,1982.32,2004.75,2005.31,2005.86,2006.43,2006.98,2007.38,2007.88,2008.49,2009.04,2009.56,2010.1,2010.7,2011.23,2011.58,2012.12,2012.84,2013.37,2013.87,2014.41,2015.01,2015.62,2016.16,2016.72,2017.29,2017.78,2018.17,2018.68,2019.27,2019.88,2020.4,2020.94,2021.54,2022.04,2022.38,2022.93,2023.62,2024.23,2024.79,2025.34,2025.9,2026.45,2026.98,2027.53,2028.1,2028.63,2029.05,2029.58,2030.19,2030.75,2031.28,2031.85,2032.47,2033.07,2033.43,2034.03,2034.75,2035.32,2035.84,2036.41,2036.98,2037.61,2038.18,2038.73,2039.32,2039.84,2040.24,2040.7,2041.4,2042.01,2042.56,2043.11,2043.71,2044.24,2044.57,2045.18,2045.84,2046.44,2046.98,2047.53,2048.14,2048.7,2049.24,2049.79,2050.37,2050.92,2051.33,2051.8,2052.38,2052.93,2053.45,2054.0,2054.55,2055.14,2055.48,2055.99,2056.67,2057.22,2057.73,2058.26,2058.82,2059.44,2059.98,2060.53,2061.09,2061.6,2061.99,2062.42,2063.09,2063.7,2064.24,2064.79,2065.37,2065.88,2066.21,2066.7,2067.34,2067.93,2068.46,2068.99,2069.56,2070.1,2070.62,2071.15,2071.73,2072.27,2072.68,2073.08,2073.79,2074.38,2074.95,2075.53,2076.14,2076.78,2077.18,2077.59,2078.5,2079.12,2079.69,2080.28,2080.91,2081.58,2082.18,2082.76,2083.38,2083.95,2084.35,2084.79,2085.42,2086.03,2086.55,2087.07,2087.64,2088.16,2088.51,2088.88,2089.71,2090.32,2090.85,2091.39,2091.97,2092.52,2093.05,2093.6,2094.16,2094.75,2095.19,2095.64,2096.25,2096.83,2097.4,2097.98,2102.69,2111.71,2444.91,2509.91,2511.81,2512.4,2512.98,2513.53,2514.15,2514.79,2515.39]},"res_ts":{"t":[1,16,31,46,61,76,91,106,121,136,151,166,181,196,211,226,241,256,271,286,301,316,331,346,361,376,391,406,421,436,451,466,481,496,511,526,541,556,571,586,601,616,631,646,661,676,691,706,721,736,751,766,781,796,811,826,841,856,871,886,901,916,931,946,961,976,991,1006,1021,1036,1051,1066,1081,1096,1111,1126,1141,1156,1171,1186,1201,1216,1231,1246,1261,1276,1291,1306,1321,1336,1351,1366,1381,1396,1411,1426,1441,1456,1471,1486,1501,1516,1531,1546,1561,1576,1591,1606,1621,1636,1651,1666,1681,1696,1711,1726,1741,1756,1771,1786,1801,1816,1831,1846,1861,1876,1891,1906,1921,1936,1951,1966,1981,1996,2011,2026,2041,2056,2071,2086,2101,2116,2131,2146,2161,2176,2191,2206,2221,2236,2251,2266,2281,2296,2311,2326,2341,2356,2371,2386,2401,2416,2431,2446,2461,2476,2491,2506,2521,2536,2551,2566,2581,2596,2611,2626,2641,2656,2671,2686,2701,2716,2731,2746,2761,2776,2791,2806,2821,2836,2851,2866,2881,2896,2911,2926,2941,2956,2971,2986,3001,3016,3031,3046,3061,3076,3091,3106,3121,3136,3151,3166,3181,3196,3211,3226,3241,3256,3271,3286,3301,3316,3331,3346,3361,3376,3391,3406,3421,3436,3451,3466,3481,3496,3511,3526,3541,3556,3571,3586,3601,3616,3631,3646,3661,3676,3691,3706,3721,3736,3751,3766,3781,3796,3811,3826,3841,3856,3871,3886,3901,3916,3931,3946,3961,3976,3991,4006,4021,4036,4051,4066,4081,4096,4111,4126,4141,4156,4171,4186,4201,4216,4231,4246,4261,4276,4291,4306,4321,4336,4351,4366,4381,4396,4411,4426,4441,4456,4471,4486,4501,4516,4531,4546,4561,4576,4591,4606,4621,4636,4651,4666,4681,4696,4711,4726,4741,4756,4771,4786,4801,4816],"cpu":[210.0,120.0,620.0,210.0,190.0,160.0,220.0,150.0,260.0,140.0,180.0,90.0,170.0,110.0,190.0,150.0,270.0,170.0,180.0,140.0,110.0,160.0,160.0,160.0,190.0,150.0,310.0,220.0,210.0,150.0,160.0,160.0,200.0,200.0,310.0,210.0,180.0,120.0,230.0,220.0,320.0,180.0,210.0,230.0,190.0,170.0,270.0,240.0,280.0,260.0,300.0,180.0,200.0,130.0,250.0,230.0,370.0,180.0,270.0,210.0,210.0,210.0,200.0,160.0,190.0,140.0,330.0,270.0,180.0,140.0,190.0,200.0,200.0,130.0,310.0,240.0,170.0,250.0,100.0,170.0,310.0,220.0,330.0,200.0,160.0,230.0,240.0,180.0,260.0,170.0,230.0,250.0,190.0,160.0,320.0,180.0,270.0,160.0,240.0,190.0,200.0,260.0,280.0,230.0,220.0,160.0,240.0,120.0,1520.0,1700.0,1950.0,210.0,250.0,150.0,210.0,210.0,260.0,160.0,230.0,200.0,290.0,220.0,250.0,190.0,210.0,160.0,190.0,180.0,300.0,160.0,250.0,190.0,180.0,160.0,250.0,200.0,320.0,230.0,280.0,340.0,720.0,180.0,230.0,200.0,200.0,140.0,300.0,160.0,180.0,210.0,200.0,250.0,250.0,200.0,180.0,160.0,220.0,160.0,140.0,160.0,250.0,210.0,250.0,190.0,220.0,210.0,380.0,190.0,230.0,130.0,220.0,220.0,220.0,160.0,220.0,180.0,200.0,190.0,260.0,190.0,300.0,280.0,270.0,300.0,230.0,200.0,350.0,220.0,270.0,230.0,310.0,240.0,290.0,160.0,240.0,170.0,220.0,180.0,210.0,170.0,250.0,280.0,240.0,180.0,210.0,130.0,170.0,250.0,290.0,170.0,170.0,170.0,230.0,180.0,230.0,250.0,250.0,200.0,260.0,220.0,250.0,220.0,180.0,140.0,200.0,230.0,170.0,150.0,200.0,200.0,150.0,210.0,210.0,170.0,200.0,190.0,190.0,170.0,210.0,240.0,220.0,230.0,270.0,210.0,220.0,160.0,230.0,270.0,220.0,190.0,220.0,160.0,160.0,180.0,250.0,220.0,220.0,230.0,280.0,290.0,210.0,180.0,260.0,220.0,210.0,200.0,180.0,170.0,170.0,170.0,190.0,170.0,240.0,200.0,220.0,120.0,200.0,190.0,260.0,240.0,280.0,180.0,240.0,220.0,210.0,220.0,280.0,140.0,180.0,220.0,220.0,230.0,260.0,180.0,250.0,250.0,230.0,300.0,260.0,190.0,210.0,180.0,240.0,200.0,240.0,230.0,250.0,220.0,260.0,190.0,250.0,350.0,410.0,2260.0,200.0,270.0,230.0,190.0,130.0,210.0,260.0,190.0],"mem":[1942.35,2197.92,2874.21,2901.05,3008.69,3017.71,3025.96,3033.82,3071.79,3078.32,2914.77,2880.8,2902.84,2904.26,2907.7,2910.38,2916.16,2917.19,2747.78,2748.26,2767.65,2769.09,2770.14,2771.5,2721.7,2722.46,2723.59,2724.59,2804.55,2805.21,2805.82,2806.29,2781.75,2765.34,2764.72,2765.77,2734.11,2734.51,2735.0,2735.49,2752.17,2747.6,2750.14,2719.89,2736.34,2736.97,2737.84,2732.41,2818.63,2820.44,2810.25,2809.67,2789.3,2789.6,2771.54,2771.92,2724.8,2725.11,2719.08,2718.16,3037.21,3038.96,3042.6,3046.16,3073.01,3073.48,3074.25,3058.36,3071.67,3072.0,3072.77,3074.36,3086.94,3087.17,3059.3,3034.16,3058.49,3058.94,3045.2,3046.9,3069.92,3070.25,3070.57,3071.98,3090.36,3084.7,3079.36,3060.86,2986.93,2970.48,2972.09,2974.42,2995.13,2995.66,2996.44,2988.0,3048.05,3049.09,3050.35,3052.15,3050.37,3051.58,3053.08,3038.13,3039.81,3011.64,3012.36,3000.71,3054.47,3151.0,3250.61,3157.06,3126.13,3126.87,3120.72,3125.27,3077.12,3062.79,3046.95,3019.62,3134.6,3135.67,3136.62,3139.05,3110.09,3110.92,3112.16,3058.16,3092.38,3093.44,3094.94,3096.5,3096.87,3095.12,3096.02,3078.86,3065.73,3044.83,3027.97,3134.02,3133.99,3135.5,3137.48,3141.59,3121.23,3123.78,3125.46,3094.85,3104.44,3092.38,3093.41,3074.04,3065.52,3066.85,3067.99,3056.29,3115.96,3117.13,3114.01,3102.1,3049.11,3050.92,3025.39,3024.65,3074.5,3075.02,3076.17,3048.39,3093.25,3066.59,3051.46,3042.47,3116.23,3119.04,3091.25,3082.62,3127.77,3129.25,3131.43,3115.5,3102.01,3094.54,3095.88,3098.97,3072.33,3069.2,3070.61,3013.98,3084.34,3085.54,3038.88,3041.69,3157.96,3159.12,3159.94,3162.98,3116.65,3118.12,3103.5,3106.71,3080.83,3074.3,3074.93,3078.23,3073.54,3053.51,3021.82,3009.32,3105.88,3084.56,3086.28,3066.93,3154.64,3152.6,3130.84,3132.58,3098.04,3099.3,3095.18,3098.12,3084.94,3085.93,3082.89,3071.58,3121.34,3122.27,3123.22,3125.9,3120.17,3121.24,3122.86,3121.25,3152.66,3153.05,3153.75,3134.3,3130.43,3118.55,3120.21,3123.18,3106.48,3080.84,3083.23,3050.64,3070.58,3064.1,3065.59,3069.45,3103.43,3104.78,3106.45,3066.36,3123.89,3111.0,3109.21,3111.52,3107.54,3109.16,3111.17,3114.39,3143.38,3142.92,3144.92,3148.68,3149.19,3150.39,3129.05,3110.93,3107.69,3109.45,3111.49,3115.43,3117.42,3118.78,3119.58,3094.93,3066.59,3068.5,3070.85,3039.07,3102.81,3059.45,3061.9,3065.41,3076.3,3077.55,3079.39,3044.57,3179.02,3180.88,3182.59,3185.32,3078.87,3079.87,3060.05,3037.98,3047.21,3049.1,3010.17,3014.01,3076.1,3078.0,3053.84,3057.54,3172.98,3174.14,3184.25,3178.42,3090.96,3070.09,3071.62,3208.7,3185.38,3159.77,3136.27,3122.86,3043.59,3045.42,3030.11,3015.38,3162.17,3104.52]},"cpu_by_node":{"nodes":["estrack-kiruna","estrack-santa-maria","estrack-malargue","estrack-new-norcia","estrack-redu","estrack-cebreros","estrack-kourou","flock-4be-17","oneweb-0173","iridium-116","orbcomm-fm06","lemur-2-squirrelcomm","flock-4h-9","globalstar-m081","oneweb-0614"],"vals":[620.0,560.0,510.0,480.0,480.0,360.0,280.0,150.0,140.0,130.0,110.0,100.0,60.0,60.0,60.0],"kind":["gs","gs","gs","gs","gs","gs","gs","prod","prod","sat","prod","prod","prod","sat","prod"]},"mem_by_node":{"nodes":["oneweb-0173","iridium-116","lemur-2-squirrelcomm","globalstar-m081","oneweb-0614","estrack-kiruna","flock-4be-17","orbcomm-fm06","flock-4h-9","estrack-santa-maria","estrack-redu","estrack-new-norcia","estrack-kourou","estrack-malargue","estrack-cebreros"],"vals":[286.9,284.6,284.4,283.0,282.0,281.0,280.4,278.2,269.9,267.0,259.7,251.4,250.1,245.4,244.9],"kind":["prod","sat","prod","sat","prod","gs","prod","prod","prod","gs","gs","gs","gs","gs","gs"]}};
+const grid = 'rgba(168,184,208,.14)', txt = '#cdd7ea', P = D.pal;
+Chart.defaults.color = txt; Chart.defaults.borderColor = grid;
+const kc = k => (P && P[k]) || '#888';   // node-kind colour (gs / sat / prod) — same everywhere
+const nodeBars = (id, labels, vals, kinds, label, horiz) => {
+  if(!labels || !labels.length) return;
+  // value axis is x when bars are horizontal, y otherwise — title it with the
+  // unit-bearing label (e.g. "TX MiB", "peak CPU (millicores)") so every bar
+  // chart shows its unit even though the legend is hidden.
+  const valAxis = horiz ? 'x' : 'y';
+  new Chart(id,{type:'bar',data:{labels:labels,datasets:[{label:label,data:vals,
+      backgroundColor:(kinds||labels.map(()=>'sat')).map(kc)}]},
+    options:{indexAxis:horiz?'y':'x',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{[valAxis]:{title:{display:true,text:label}}}}});
+};
+const dk = Object.keys(D.delivery);
+// Per-target delivery — one bar per target, coloured by node kind (gs/sat/prod)
+new Chart(cDeliv,{type:'bar',data:{labels:dk,datasets:[{label:'delivery (s)',
+    data:dk.map(k=>D.delivery[k].s),backgroundColor:dk.map(k=>kc(D.delivery[k].kind))}]},
+  options:{indexAxis:'x',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{ y:{title:{display:true,text:'seconds'}} }}});
+// U1 — cumulative TX over time
+if(D.net_ts&&D.net_ts.t&&D.net_ts.t.length)new Chart(cNetTs,{type:'line',data:{labels:D.net_ts.t,
+  datasets:[{label:'TX MiB',data:D.net_ts.tx,borderColor:P.tx,pointRadius:0,tension:.2}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'s from start'}},y:{title:{display:true,text:'MiB (cumulative)'}}}}});
+// U2 — CPU (left axis) + memory (right axis) over time
+if(D.res_ts&&D.res_ts.t&&D.res_ts.t.length)new Chart(cResTs,{type:'line',data:{labels:D.res_ts.t,
+  datasets:[{label:'CPU millicores',data:D.res_ts.cpu,borderColor:P.cpu,pointRadius:0,tension:.2,yAxisID:'y'},
+            {label:'memory MiB',data:D.res_ts.mem,borderColor:P.mem,pointRadius:0,tension:.2,yAxisID:'y1'}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{
+    x:{title:{display:true,text:'s from start'}},
+    y:{position:'left',title:{display:true,text:'CPU (millicores)'}},
+    y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'memory (MiB)'}}}}});
+// U3 — TX by node, kind-coloured
+const netHoriz = 'y' === 'y';
+nodeBars('cNet', D.net.nodes, D.net.tx, D.net.kind, 'TX MiB', netHoriz);
+// U4 / U5 — peak CPU + memory per node, kind-coloured
+if(D.cpu_by_node)nodeBars('cCpuNode', D.cpu_by_node.nodes, D.cpu_by_node.vals, D.cpu_by_node.kind, 'peak CPU (millicores)', D.cpu_by_node.nodes.length>8);
+if(D.mem_by_node)nodeBars('cMemNode', D.mem_by_node.nodes, D.mem_by_node.vals, D.mem_by_node.kind, 'peak memory (MiB)', D.mem_by_node.nodes.length>8);
+</script>
+
+
+<script>
+const G = {"source":"block_recv","files":["flock-4be-17_0","flock-4h-9_0","lemur-2-squirrelcomm_0","oneweb-0173_0","oneweb-0614_0","orbcomm-fm06_0"],"nodes":[{"id":"estrack-cebreros","kind":"gs","producer":false},{"id":"estrack-kiruna","kind":"gs","producer":false},{"id":"estrack-kourou","kind":"gs","producer":false},{"id":"estrack-malargue","kind":"gs","producer":false},{"id":"estrack-new-norcia","kind":"gs","producer":false},{"id":"estrack-redu","kind":"gs","producer":false},{"id":"estrack-santa-maria","kind":"gs","producer":false},{"id":"flock-4be-17","kind":"sat","producer":true},{"id":"flock-4h-9","kind":"sat","producer":true},{"id":"lemur-2-squirrelcomm","kind":"sat","producer":true},{"id":"oneweb-0173","kind":"sat","producer":true},{"id":"oneweb-0614","kind":"sat","producer":true},{"id":"orbcomm-fm06","kind":"sat","producer":true}],"events":[{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":6154.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":6154.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":6154.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":6154.0},{"t":872.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":1841260.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":268312.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":268312.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":874.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":876.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":878.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-kiruna","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-kourou","to":"estrack-redu","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-malargue","to":"estrack-new-norcia","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":880.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":262158.0},{"t":882.0,"file":"flock-4h-9_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":882.0,"file":"flock-4h-9_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":882.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":6154.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":6154.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":6154.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":6154.0},{"t":1598.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":6154.0},{"t":1600.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":6154.0},{"t":1600.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":6154.0},{"t":1600.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":2097264.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1602.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":1572948.0},{"t":1604.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1604.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1604.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1604.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1604.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":2359422.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1606.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":1608.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":1610.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1612.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1614.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1616.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":1618.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-kourou","to":"estrack-redu","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":1620.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":1622.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-kourou","to":"estrack-redu","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1624.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kiruna","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1626.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":262158.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":268312.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":6154.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":6154.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":6154.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":1841260.0},{"t":1628.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":1628.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":268312.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":6154.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":4456686.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1630.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1632.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-malargue","to":"estrack-kourou","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1634.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1636.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1638.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":1640.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1642.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1642.0,"file":"orbcomm-fm06_0","from":"estrack-kourou","to":"estrack-santa-maria","bytes":262158.0},{"t":1642.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":262158.0},{"t":1644.0,"file":"orbcomm-fm06_0","from":"estrack-cebreros","to":"estrack-santa-maria","bytes":262158.0},{"t":1652.0,"file":"orbcomm-fm06_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1652.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1662.0,"file":"orbcomm-fm06_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":1662.0,"file":"orbcomm-fm06_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":262158.0},{"t":1662.0,"file":"orbcomm-fm06_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":1662.0,"file":"orbcomm-fm06_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":262158.0},{"t":2056.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":6154.0},{"t":2056.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":6154.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":268312.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-cebreros","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-kiruna","bytes":6154.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":268312.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":6154.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"flock-4be-17","to":"estrack-santa-maria","bytes":268312.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-kiruna","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-malargue","to":"estrack-new-norcia","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":2060.0,"file":"flock-4be-17_0","from":"flock-4be-17","to":"estrack-santa-maria","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-kourou","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-cebreros","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-kiruna","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-malargue","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-kourou","to":"estrack-redu","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":262158.0},{"t":2062.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-kourou","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":2064.0,"file":"flock-4be-17_0","from":"flock-4be-17","to":"estrack-santa-maria","bytes":262158.0},{"t":2064.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":530470.0},{"t":2066.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":3145896.0},{"t":2068.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":3408054.0},{"t":2070.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2072.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2074.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2076.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2078.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2080.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2082.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":2084.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":262158.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":6154.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":6154.0},{"t":4646.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":786474.0},{"t":4648.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":1048632.0},{"t":4650.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":786474.0},{"t":4652.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":1048632.0},{"t":4654.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":1048632.0},{"t":4656.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":1048632.0},{"t":4658.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":786474.0},{"t":4660.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":1048632.0},{"t":4662.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4664.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4666.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":4666.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":4666.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":4666.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4666.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4668.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-cebreros","to":"estrack-kiruna","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-cebreros","to":"estrack-malargue","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4670.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-malargue","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-malargue","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":524316.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4672.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":262158.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-cebreros","to":"estrack-redu","bytes":6154.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":6154.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":6154.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":6154.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4674.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4674.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":4674.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":4674.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-cebreros","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-kiruna","bytes":262158.0},{"t":4676.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":4678.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-cebreros","to":"estrack-redu","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-cebreros","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-redu","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-santa-maria","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-cebreros","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-redu","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":262158.0},{"t":4680.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":262158.0},{"t":4682.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":4682.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-kourou","bytes":268312.0},{"t":4684.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-kourou","bytes":262158.0},{"t":4688.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":262158.0},{"t":4688.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":6154.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-cebreros","to":"estrack-new-norcia","bytes":262158.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":262158.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-new-norcia","bytes":262158.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":262158.0},{"t":4690.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":262158.0}],"tree":[{"t":2064.0,"file":"oneweb-0173_0","from":"oneweb-0173","to":"estrack-malargue","bytes":9181684.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-malargue","to":"estrack-santa-maria","bytes":1054786.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":6154.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-cebreros","to":"estrack-redu","bytes":268312.0},{"t":4672.0,"file":"oneweb-0173_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":6154.0},{"t":4682.0,"file":"oneweb-0173_0","from":"estrack-redu","to":"estrack-kourou","bytes":530470.0},{"t":4688.0,"file":"oneweb-0173_0","from":"estrack-kourou","to":"estrack-new-norcia","bytes":262158.0},{"t":2058.0,"file":"flock-4be-17_0","from":"flock-4be-17","to":"estrack-santa-maria","bytes":792628.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":530470.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":1048632.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-kiruna","to":"estrack-new-norcia","bytes":530470.0},{"t":2058.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":792628.0},{"t":2056.0,"file":"flock-4be-17_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":792628.0},{"t":2056.0,"file":"flock-4be-17_0","from":"estrack-cebreros","to":"estrack-redu","bytes":786474.0},{"t":1598.0,"file":"oneweb-0614_0","from":"oneweb-0614","to":"estrack-new-norcia","bytes":8919526.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-kourou","bytes":2627734.0},{"t":1600.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-malargue","bytes":3414208.0},{"t":1600.0,"file":"oneweb-0614_0","from":"estrack-malargue","to":"estrack-kiruna","bytes":1835106.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-santa-maria","bytes":1841260.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-cebreros","bytes":2103418.0},{"t":1598.0,"file":"oneweb-0614_0","from":"estrack-new-norcia","to":"estrack-redu","bytes":2627734.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"orbcomm-fm06","to":"estrack-redu","bytes":7608736.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-new-norcia","bytes":1316944.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kourou","bytes":1316944.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-malargue","bytes":1054786.0},{"t":1628.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-kiruna","bytes":1841260.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-santa-maria","bytes":1841260.0},{"t":1626.0,"file":"orbcomm-fm06_0","from":"estrack-redu","to":"estrack-cebreros","bytes":1841260.0},{"t":872.0,"file":"flock-4h-9_0","from":"flock-4h-9","to":"estrack-santa-maria","bytes":2889892.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":1054786.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":1054786.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":6154.0},{"t":872.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":530470.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":1054786.0},{"t":874.0,"file":"flock-4h-9_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":1316944.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"lemur-2-squirrelcomm","to":"estrack-santa-maria","bytes":9181684.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-cebreros","bytes":792628.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-malargue","bytes":1054786.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-redu","bytes":1054786.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kiruna","bytes":792628.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-new-norcia","bytes":268312.0},{"t":4644.0,"file":"lemur-2-squirrelcomm_0","from":"estrack-santa-maria","to":"estrack-kourou","bytes":6154.0}],"acq":{"flock-4h-9_0":{"estrack-cebreros":872.0,"estrack-kourou":872.0,"estrack-new-norcia":872.0,"estrack-redu":872.0,"estrack-santa-maria":872.0,"estrack-kiruna":874.0,"estrack-malargue":874.0,"flock-4h-9":0.0},"oneweb-0614_0":{"estrack-cebreros":1598.0,"estrack-kourou":1598.0,"estrack-redu":1598.0,"estrack-santa-maria":1598.0,"estrack-new-norcia":1598.0,"estrack-kiruna":1600.0,"estrack-malargue":1600.0,"oneweb-0614":0.0},"orbcomm-fm06_0":{"estrack-cebreros":1626.0,"estrack-kourou":1626.0,"estrack-new-norcia":1626.0,"estrack-santa-maria":1626.0,"estrack-redu":1626.0,"estrack-kiruna":1628.0,"estrack-malargue":1628.0,"orbcomm-fm06":0.0},"flock-4be-17_0":{"estrack-cebreros":2056.0,"estrack-redu":2056.0,"estrack-kiruna":2058.0,"estrack-new-norcia":2058.0,"estrack-kourou":2058.0,"estrack-malargue":2058.0,"estrack-santa-maria":2058.0,"flock-4be-17":0.0},"oneweb-0173_0":{"estrack-malargue":2064.0,"estrack-redu":4672.0,"estrack-cebreros":4672.0,"estrack-kiruna":4672.0,"estrack-santa-maria":4672.0,"estrack-kourou":4682.0,"estrack-new-norcia":4688.0,"oneweb-0173":0.0},"lemur-2-squirrelcomm_0":{"estrack-cebreros":4644.0,"estrack-kiruna":4644.0,"estrack-kourou":4644.0,"estrack-malargue":4644.0,"estrack-new-norcia":4644.0,"estrack-redu":4644.0,"estrack-santa-maria":4644.0,"lemur-2-squirrelcomm":0.0}},"tmax":4690.0};
+(function(){
+  if(!G || !G.events.length) return;
+  // Per-file edge colours — deliberately distinct from the node-kind palette
+  // (orange/blue/green) and the metric palette, so a file's edges are never
+  // confused with a node kind.
+  const palette=['#9467bd','#e377c2','#17becf','#bcbd22','#7f7f7f','#c5b0d5','#9edae5','#dbdb8d'];
+  const fcol={}; G.files.forEach((f,i)=>fcol[f]=palette[i%palette.length]);
+  const fmt=b=>b>=1048576?(b/1048576).toFixed(1)+' MiB':b>=1024?(b/1024).toFixed(0)+' KiB':b+' B';
+  // Rate-graph edge colour = bandwidth (bytes/s, log-scaled blue→red over the model's
+  // ~100 kbit/s … 10 Gbit/s range); label/tooltip show bits/s.
+  const fmtRate=bps=>bps*8>=1e6?(bps*8/1e6).toFixed(1)+' Mbit/s':(bps*8/1e3).toFixed(0)+' kbit/s';
+  const rateColor=bps=>{const n=Math.max(0,Math.min(1,(Math.log10(bps+1)-4)/5.5));return 'hsl('+Math.round(240*(1-n))+',75%,55%)';};
+  const tmax=G.tmax||0;
+  // One factory builds both graphs. With a window control (o.win) edges show bytes
+  // in the trailing window (rate); otherwise cumulative bytes up to t (propagation).
+  function makeGraph(o){
+    const sel=document.getElementById(o.sel), tEl=document.getElementById(o.time),
+          lbl=document.getElementById(o.lbl), playBtn=document.getElementById(o.play),
+          spEl=document.getElementById(o.speed), winEl=o.win?document.getElementById(o.win):null;
+    const DATA = o.data || G.events;
+    const all=document.createElement('option'); all.value='__all__';
+    all.text='all files ('+G.files.length+')'; sel.add(all);
+    G.files.forEach(f=>{const op=document.createElement('option');op.value=f;op.text=f;sel.add(op);});
+    tEl.max=tmax; tEl.value=tmax;
+    if(o.src){const s=document.getElementById(o.src); if(s) s.textContent='source: '+G.source;}
+    const nodesDS=new vis.DataSet(G.nodes.map(n=>{
+      const nd={ id:n.id, label:n.id,
+        shape:n.kind==='gs'?'square':'dot',  // producer keeps its node-type shape
+        color:n.producer?{background:'#21331a',border:D.pal.prod}
+              :(n.kind==='gs'?{background:'#3a2a14',border:D.pal.gs}:{background:'#1d2633',border:D.pal.sat}),
+        borderWidth:n.producer?3:1, font:{color:'#cfd6e4'}};
+      if(o.pos && o.pos[n.id]){ nd.x=o.pos[n.id].x; nd.y=o.pos[n.id].y; }  // shared layout
+      return nd;}));
+    const edgesDS=new vis.DataSet();
+    // With a shared precomputed layout, physics is off from the start so both graphs
+    // place every fsNode at the same coordinates; otherwise stabilize then freeze.
+    const net=new vis.Network(document.getElementById(o.net),{nodes:nodesDS,edges:edgesDS},{
+      edges:{arrows:'to',smooth:{type:'dynamic'}}, interaction:{hover:true},
+      physics: o.pos ? false : {stabilization:{iterations:200}}});
+    if(!o.pos) net.once('stabilizationIterationsDone',()=>net.setOptions({physics:false}));
+    function rebuild(){
+      const t=parseFloat(tEl.value), file=sel.value;
+      const win=winEl?parseFloat(winEl.value):null;
+      lbl.textContent=(win!=null?('window '+win+'s · t≤'):'t≤')+t.toFixed(1)+' / '+tmax.toFixed(1)+' s';
+      const agg={};
+      for(const e of DATA){
+        if(e.t>t) continue;
+        if(win!=null && e.t<=t-win) continue;
+        if(file!=='__all__' && e.file!==file) continue;
+        const af=G.acq&&G.acq[e.file]; if(af){const a=af[e.from]; if(a==null||a>e.t) continue;}  // sender must already hold the file
+        const key=e.from+'\x01'+e.to+'\x01'+e.file;
+        agg[key]=(agg[key]||0)+e.bytes;
+      }
+      const edges=[];
+      for(const key in agg){
+        const p=key.split('\x01'), b=agg[key];
+        let col, title, lab, w;
+        if(win!=null){                       // rate graph: colour + label by bandwidth
+          const bps=b/win;
+          col=rateColor(bps); title=p[2]+': '+fmtRate(bps)+' ('+fmt(b)+' / '+win+'s)';
+          lab=file==='__all__'?'':fmtRate(bps);
+          w=Math.max(1,Math.log10(b+1));
+        }else{                                // propagation/spread tree: colour by file only
+          // No edge label or tooltip: the only per-edge number we have is the
+          // block_recv-traced bytes of this single hop, which under-counts the real
+          // transfer and misleads — so show nothing rather than a wrong figure.
+          col=fcol[p[2]]||'#888'; lab=''; w=2;   // title left undefined -> no tooltip
+        }
+        edges.push({id:key,from:p[0],to:p[1],color:{color:col},
+          width:w,title:title,
+          label:lab,font:{color:'#cfd6e4',size:11,strokeWidth:0}});
+      }
+      edgesDS.clear(); edgesDS.add(edges);
+    }
+    tEl.oninput=rebuild; sel.onchange=rebuild; if(winEl) winEl.onchange=rebuild;
+    // 1× is real-time: one simulated second per wall-clock second. The speed
+    // selector multiplies that (e.g. 8× advances 8 simulated seconds per second).
+    const TICK_MS=100;
+    let timer=null;
+    playBtn.onclick=function(){
+      if(timer){clearInterval(timer);timer=null;this.textContent='▶ play';return;}
+      this.textContent='⏸ pause';
+      if(parseFloat(tEl.value)>=tmax) tEl.value=0;
+      timer=setInterval(()=>{
+        const spd=parseFloat(spEl&&spEl.value)||1;
+        const step=(TICK_MS/1000)*spd;
+        let v=parseFloat(tEl.value)+step;
+        if(v>=tmax){v=tmax;clearInterval(timer);timer=null;playBtn.textContent='▶ play';}
+        tEl.value=v; rebuild();
+      },TICK_MS);
+    };
+    rebuild();
+  }
+  // Compute ONE layout from the full mesh (all nodes + all distinct edges) and reuse
+  // it for both graphs, so the same fsNode sits at the same spot in each.
+  function computeLayout(cb){
+    const seen={}, le=[];
+    for(const e of G.events){const k=e.from+'>'+e.to; if(!seen[k]){seen[k]=1; le.push({from:e.from,to:e.to});}}
+    const box=document.createElement('div');
+    box.style.cssText='position:absolute;left:-9999px;top:-9999px;width:900px;height:650px';
+    document.body.appendChild(box);
+    const tmp=new vis.Network(box,
+      {nodes:new vis.DataSet(G.nodes.map(n=>({id:n.id}))), edges:new vis.DataSet(le)},
+      {physics:{stabilization:{iterations:300}}});
+    let done=false;
+    const finish=()=>{ if(done) return; done=true;
+      let pos=null; try{ pos=tmp.getPositions(); }catch(e){}
+      tmp.destroy(); box.remove(); cb(pos); };
+    tmp.once('stabilizationIterationsDone',finish);
+    setTimeout(finish,5000);  // fallback if stabilization is slow or never fires
+  }
+  computeLayout(function(pos){
+    makeGraph({net:'gNet',sel:'gFile',time:'gTime',lbl:'gTimeLbl',play:'gPlay',speed:'gSpeed',src:'gSrc',data:G.tree,pos:pos});
+    makeGraph({net:'tNet',sel:'tFile',time:'tTime',lbl:'tTimeLbl',play:'tPlay',speed:'tSpeed',win:'tWin',data:G.events,pos:pos});
+  });
+})();
+</script>
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>
