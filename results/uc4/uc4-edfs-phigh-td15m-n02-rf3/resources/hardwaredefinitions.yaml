@@ -7,8 +7,8 @@ metadata:
   creationTimestamp: "2026-06-04T19:07:11Z"
   generation: 2
   name: ground-station-hwdef
-  resourceVersion: "1796840"
-  uid: bad0bd4f-22e0-4efb-a04d-cf02741e0ab9
+  resourceVersion: "1739030"
+  uid: 93916f6f-dc7e-4dc1-a67d-bea38fd6c9e4
 spec:
   batteryCapacityWh: 1000
   batteryChargeW: 1000
@@ -40,8 +40,8 @@ metadata:
   creationTimestamp: "2026-06-04T19:07:11Z"
   generation: 2
   name: oneweb
-  resourceVersion: "810121"
-  uid: e4e688e5-2c9b-401d-badf-a560fed589d3
+  resourceVersion: "694560"
+  uid: 5bfb1b9e-b9d9-45d3-9620-8337c83266ba
 spec:
   batteryCapacityWh: 5000
   batteryChargeW: 800

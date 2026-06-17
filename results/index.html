@@ -1,14 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1RWYW0VDZK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-1RWYW0VDZK');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>YASS experiment results</title>
@@ -21,26 +13,26 @@
 <body>
 <nav class="site-nav">
   <div class="nav-inner">
-    <a href="https://edfs4eo.cloudferro.com/" class="nav-logo" aria-label="EDFS results home">
+    <a href="index.html" class="nav-logo" aria-label="EDFS — YASS results home">
       <span class="logo-accent">EDFS</span>
       <span class="logo-badge">ESA Φ-lab</span>
-      <span class="nav-sub">EDFS results</span>
+      <span class="nav-sub">YASS results</span>
     </a>
-    <div class="nav-back-links">
-      <a href="https://edfs4eo.cloudferro.com/" class="btn-back">&#8592; Main</a>
-      <a href="https://edfs4eo.cloudferro.com/#use-cases" class="btn-back">Use Cases</a>
-    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
   </div>
 </nav>
 <div class="wrap">
 <div class="crumbs">
-  <a href="index.html">EDFS results</a>
+  <a href="index.html">YASS results</a>
   
 </div>
 
 <div class="hero">
   <span class="section-label">EDFS vs TUS · UC1–UC5</span>
-  <h1 class="hero-title">EDFS Experiment <span>Results</span></h1>
+  <h1 class="hero-title">YASS Experiment <span>Results</span></h1>
   <p class="hero-subtitle">Comparing EDFS (the IPFS-based decentralized file system) with the
   current communication standard (TUS) across use cases UC1–UC5, simulated on the YASS
   satellite / ground-station simulator.</p>
@@ -61,6 +53,12 @@
 </div>
 
 <div class="uc-card">
+  <h2><a href="uc2nr/index.html">UC2NR — Continuous LOS Relay (evenly distributed, no randomness)</a></h2>
+  <p class="muted">19 variant(s) · engines: edfs, tus</p>
+  
+</div>
+
+<div class="uc-card">
   <h2><a href="uc3/index.html">UC3 — Priority-Aware Routing (EDFS only)</a></h2>
   <p class="muted">18 variant(s) · engines: edfs</p>
   <p>One satellite produces one large file. We re-run the same scenario for each</p>
@@ -78,45 +76,6 @@
   <p>Twenty per cent of the constellation produces a small, finite batch of</p>
 </div>
 
-
-<section class="results-summary" style="margin-top:36px;padding-top:20px;border-top:1px solid rgba(255,255,255,.10)">
-<span class="section-label">Results Summary</span>
-<h2 style="margin:.2rem 0 .6rem">EDFS vs TUS — what the experiments show</h2>
-<p>Across UC1–UC5 the YASS simulator compared <strong>EDFS</strong> (an IPFS / bitswap-based
-decentralized store) against <strong>TUS</strong> (resumable point-to-point upload, modelling the
-current operational downlink). EDFS buys resilience and favourable scaling — it relays content through
-surviving peers, survives producer failure, and delivers <em>faster</em> as the constellation grows —
-at roughly an order-of-magnitude higher resource cost. TUS is competitive only in the small,
-fault-free, direct-downlink regime, where it is far lighter.</p>
-
-<div class="uc-card">
-  <h3 style="margin-top:0">Headline findings</h3>
-  <ul>
-    <li><strong>Resilience (UC4):</strong> when the producing satellite is destroyed before any ground
-    contact, EDFS relays the photo around the dead node and delivers it (100% wherever a relay peer
-    exists, n&nbsp;≥&nbsp;2, high/default priority), while <strong>TUS delivers 0 of 15</strong> variants.</li>
-    
-    <li><strong>Latency (UC1):</strong> at small constellations both engines land the file in ~800&nbsp;s;
-    EDFS pulls ahead only at scale.</li>
-
-    <li><strong>Cost:</strong> EDFS peak RAM ~180–260&nbsp;MiB vs TUS ~13–15&nbsp;MiB (≈13–15×), with
-    much higher CPU and network transmit.</li>
-
-    <li><strong>Priority &amp; EDFS-only UCs:</strong> priority ordering is weak/unobservable in these
-    runs; UC3 and UC5 (EDFS-only, no TUS baseline) delivered in every variant, with per-photo
-    completeness in UC5 gated by replication factor.</li>
-  </ul>
-</div>
-
-<p class="muted">Caveats bounding the above: EDFS network-TX is an upper bound (~4.46× exporter
-inflation); receive-side RX is unrecoverable; several large-roster runs have Prometheus
-metric-extraction gaps; and the TUS-at-scale failures partly coincide with shared-cluster pressure
-(warrant an independent re-run).</p>
-
-<p>Full per-UC analysis, comparison charts and the external related-work annex:
-<a href="conclusion.html">EDFS vs TUS — Conclusions</a> (and each
-<code>results/&lt;uc&gt;/conclusion.md</code>).</p>
-</section>
 
 </div>
 <footer class="site-footer">

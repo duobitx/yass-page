@@ -7,7 +7,7 @@
   "rf": null,
   "t_destroy": null,
   "state": "TimedOut",
-  "exec_date": "2026-06-08T02:11:30Z",
+  "exec_date": "2026-06-09T00:21:09Z",
   "duration_s": 35996.0,
   "sim_start": "2026-05-16T23:59:00Z",
   "sim_end": "2026-05-17T09:58:56Z",
@@ -26,5 +26,5 @@
   "notes": "\u2014",
   "tx_mib": 0.0,
   "peak_cpu": 20.0,
-  "peak_mem_mib": 14.18359375
+  "peak_mem_mib": 14.03515625
 }

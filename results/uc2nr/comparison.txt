@@ -1,0 +1,14 @@
+UC2NR — automatic comparison (EDFS vs TUS)
+
+n2 32M: EDFS 272s vs TUS 263s → 1.0× slower
+n8 32M: EDFS 1819s vs TUS 4659s → 2.6× faster
+n8 32M: EDFS 4016s vs TUS 4659s → 1.2× faster
+n8 32M: EDFS 1820s vs TUS 4659s → 2.6× faster
+n8 32M: EDFS 3968s vs TUS 4659s → 1.2× faster
+n8 32M: EDFS 4660s vs TUS 4659s → 1.0× slower
+n21 32M: EDFS 3207s vs TUS 3681s → 1.1× faster
+n100 32M: EDFS 1788s vs TUS 6289s → 3.5× faster
+n100 32M: EDFS 1732s vs TUS 6289s → 3.6× faster
+n100 32M: EDFS 1675s vs TUS 6289s → 3.8× faster
+n100 32M: EDFS 1845s vs TUS 6289s → 3.4× faster
+n100 32M: EDFS 5549s vs TUS 6289s → 1.1× faster

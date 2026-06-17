@@ -10,8 +10,8 @@ metadata:
   creationTimestamp: "2026-06-04T21:58:16Z"
   generation: 2
   name: uc4-n21
-  resourceVersion: "1561804"
-  uid: 02ddcc31-1915-43a0-aaf2-6845fc9ec456
+  resourceVersion: "1788924"
+  uid: 654b34e5-9e77-458d-8675-00d9f5d791da
 spec:
 - fsNode: producer
   hardwareSpecRef: oneweb

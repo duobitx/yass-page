@@ -1,0 +1,668 @@
+apiVersion: int.esa.yass/v1
+kind: Experiment
+metadata:
+  annotations:
+    experiment-controller/restart-baseline: "0"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"int.esa.yass/v1","kind":"Experiment","metadata":{"annotations":{},"name":"uc2nr-edfs-pdefault-n100-rf3","namespace":"uc2nr-edfs-pdefault-n100-rf3"},"spec":{"engineContainers":[{"env":[{"name":"WATCH_DIR","value":"/mnt/transfer"},{"name":"EDFS_CLUSTER_SECRET","value":"50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d"},{"name":"EDFS_CLUSTER_HOST","value":"/ip4/127.0.0.1/tcp/9094"},{"name":"EDFS_CONNECTION_RETRIES","value":"3"},{"name":"EDFS_REPLICATION_PROTOCOL","value":"true"},{"name":"EDFS_REPLICATION_FACTOR","value":"3"}],"image":"ghcr.io/duobitx/yass-edfs-engine:f2abbf4a","name":"edfs-engine"},{"env":[{"name":"EDFS_SWARM_KEY","value":"e0e6161ec71e8e8c6d18c64dd8ee37f178fc50cadf58f20d08c481131a09bbae"},{"name":"EDFS_BOOTSTRAP_PEER_NAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_HOSTNAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_ID","value":"12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT"},{"name":"EDFS_BOOTSTRAP_PEER_KEY","value":"CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY="}],"image":"ghcr.io/duobitx/yass-edfs-engine-node","name":"edfs-engine-node","readinessProbe":{"exec":{"command":["sh","-c","nc -z 127.0.0.1 5001"]},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":2}},{"env":[{"name":"EDFS_CLUSTER_SECRET","value":"50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d"},{"name":"EDFS_BOOTSTRAP_PEER_NAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_HOSTNAME","value":"estrack-new-norcia"},{"name":"EDFS_BOOTSTRAP_PEER_ID","value":"12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT"},{"name":"EDFS_BOOTSTRAP_PEER_KEY","value":"CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY="}],"image":"ghcr.io/duobitx/yass-edfs-engine-proxy","name":"edfs-engine-proxy","readinessProbe":{"exec":{"command":["sh","-c","nc -z 127.0.0.1 9094"]},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":2}}],"experimentDefRef":"uc2nr-edfs-pdefault-n100-rf3","layoutDefRef":"uc2nr-n100","runId":"uc2nr-edfs-pdefault-n100-rf3","simulationStartTime":"2026-05-16T23:59:00.000Z","start":true}}
+  creationTimestamp: "2026-06-10T01:40:14Z"
+  finalizers:
+  - experiment-controller/cleanup-fsNodes
+  generation: 1
+  name: uc2nr-edfs-pdefault-n100-rf3
+  namespace: uc2nr-edfs-pdefault-n100-rf3
+  resourceVersion: "48691204"
+  uid: 3dec69c5-824d-48aa-9ef4-49f9fff6bb1d
+spec:
+  engineContainers:
+  - env:
+    - name: WATCH_DIR
+      value: /mnt/transfer
+    - name: EDFS_CLUSTER_SECRET
+      value: 50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d
+    - name: EDFS_CLUSTER_HOST
+      value: /ip4/127.0.0.1/tcp/9094
+    - name: EDFS_CONNECTION_RETRIES
+      value: "3"
+    - name: EDFS_REPLICATION_PROTOCOL
+      value: "true"
+    - name: EDFS_REPLICATION_FACTOR
+      value: "3"
+    image: ghcr.io/duobitx/yass-edfs-engine:f2abbf4a
+    name: edfs-engine
+    resources: {}
+  - env:
+    - name: EDFS_SWARM_KEY
+      value: e0e6161ec71e8e8c6d18c64dd8ee37f178fc50cadf58f20d08c481131a09bbae
+    - name: EDFS_BOOTSTRAP_PEER_NAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_HOSTNAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_ID
+      value: 12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT
+    - name: EDFS_BOOTSTRAP_PEER_KEY
+      value: CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY=
+    image: ghcr.io/duobitx/yass-edfs-engine-node
+    name: edfs-engine-node
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - nc -z 127.0.0.1 5001
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 2
+    resources: {}
+  - env:
+    - name: EDFS_CLUSTER_SECRET
+      value: 50896c846aed59faeec45d1779e6b9ca6fac89d135d988b52c2f366f1b7f373d
+    - name: EDFS_BOOTSTRAP_PEER_NAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_HOSTNAME
+      value: estrack-new-norcia
+    - name: EDFS_BOOTSTRAP_PEER_ID
+      value: 12D3KooWLJFr7nesNtEQrQ9PqyjT8kvxbdUqfF4xwZZKEzJHnEhT
+    - name: EDFS_BOOTSTRAP_PEER_KEY
+      value: CAESQNU9ILPST19ucrp2ZzY4BN1+LnoLK5XnH86F8m2Ce3R7m7n8DOzBtVlE/3GS9UCxChfcU+Y/lkjR/T5nBJEujGY=
+    image: ghcr.io/duobitx/yass-edfs-engine-proxy
+    name: edfs-engine-proxy
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - nc -z 127.0.0.1 9094
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 2
+    resources: {}
+  experimentDefRef: uc2nr-edfs-pdefault-n100-rf3
+  layoutDefRef: uc2nr-n100
+  runId: uc2nr-edfs-pdefault-n100-rf3
+  simulationStartTime: "2026-05-16T23:59:00Z"
+  start: true
+status:
+  conditions:
+  - lastTransitionTime: "2026-06-10T01:40:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentDefinition
+  - lastTransitionTime: "2026-06-10T01:40:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Layout
+  - lastTransitionTime: "2026-06-10T01:40:27Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Messaging
+  - lastTransitionTime: "2026-06-10T01:40:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: FsnodeBroadcast
+  - lastTransitionTime: "2026-06-10T01:40:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: ExperimentExecutor
+  - lastTransitionTime: "2026-06-10T01:40:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: EventsWebapp
+  - lastTransitionTime: "2026-06-10T01:40:29Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: MetricsBridge
+  - lastTransitionTime: "2026-06-10T01:40:39Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: Mqtt2prom
+  - lastTransitionTime: "2026-06-10T01:40:47Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: WebUi
+  - lastTransitionTime: "2026-06-10T01:41:07Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm06
+  - lastTransitionTime: "2026-06-10T01:41:07Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm19
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm27
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm109
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm118
+  - lastTransitionTime: "2026-06-10T01:41:15Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm113
+  - lastTransitionTime: "2026-06-10T01:41:17Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-orbcomm-fm117
+  - lastTransitionTime: "2026-06-10T01:41:18Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m069
+  - lastTransitionTime: "2026-06-10T01:41:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m079
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m076
+  - lastTransitionTime: "2026-06-10T01:41:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m075
+  - lastTransitionTime: "2026-06-10T01:41:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m083
+  - lastTransitionTime: "2026-06-10T01:40:46Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m085
+  - lastTransitionTime: "2026-06-10T01:40:47Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m089
+  - lastTransitionTime: "2026-06-10T01:40:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m080
+  - lastTransitionTime: "2026-06-10T01:40:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m090
+  - lastTransitionTime: "2026-06-10T01:40:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m097
+  - lastTransitionTime: "2026-06-10T01:40:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m094
+  - lastTransitionTime: "2026-06-10T01:40:59Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-globalstar-m078
+  - lastTransitionTime: "2026-06-10T01:41:01Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-106
+  - lastTransitionTime: "2026-06-10T01:41:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-104
+  - lastTransitionTime: "2026-06-10T01:41:04Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-113
+  - lastTransitionTime: "2026-06-10T01:41:05Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-117
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-122
+  - lastTransitionTime: "2026-06-10T01:41:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-136
+  - lastTransitionTime: "2026-06-10T01:41:10Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-116
+  - lastTransitionTime: "2026-06-10T01:41:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-144
+  - lastTransitionTime: "2026-06-10T01:41:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-146
+  - lastTransitionTime: "2026-06-10T01:41:15Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-161
+  - lastTransitionTime: "2026-06-10T01:41:18Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-160
+  - lastTransitionTime: "2026-06-10T01:41:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-156
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-168
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-171
+  - lastTransitionTime: "2026-06-10T01:41:24Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-iridium-174
+  - lastTransitionTime: "2026-06-10T01:41:25Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0049
+  - lastTransitionTime: "2026-06-10T01:41:26Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0037
+  - lastTransitionTime: "2026-06-10T01:41:27Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0121
+  - lastTransitionTime: "2026-06-10T01:41:28Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0115
+  - lastTransitionTime: "2026-06-10T01:41:30Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0209
+  - lastTransitionTime: "2026-06-10T01:41:32Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0207
+  - lastTransitionTime: "2026-06-10T01:40:43Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0213
+  - lastTransitionTime: "2026-06-10T01:40:44Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0279
+  - lastTransitionTime: "2026-06-10T01:40:46Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0310
+  - lastTransitionTime: "2026-06-10T01:40:46Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0334
+  - lastTransitionTime: "2026-06-10T01:40:48Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0360
+  - lastTransitionTime: "2026-06-10T01:40:49Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0401
+  - lastTransitionTime: "2026-06-10T01:40:50Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0416
+  - lastTransitionTime: "2026-06-10T01:40:51Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0473
+  - lastTransitionTime: "2026-06-10T01:40:52Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0519
+  - lastTransitionTime: "2026-06-10T01:40:52Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0607
+  - lastTransitionTime: "2026-06-10T01:40:53Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0614
+  - lastTransitionTime: "2026-06-10T01:40:54Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0562
+  - lastTransitionTime: "2026-06-10T01:40:55Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0548
+  - lastTransitionTime: "2026-06-10T01:40:56Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0636
+  - lastTransitionTime: "2026-06-10T01:40:57Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-oneweb-0692
+  - lastTransitionTime: "2026-06-10T01:40:57Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c1
+  - lastTransitionTime: "2026-06-10T01:40:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c9
+  - lastTransitionTime: "2026-06-10T01:40:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-skysat-c12
+  - lastTransitionTime: "2026-06-10T01:40:58Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-28
+  - lastTransitionTime: "2026-06-10T01:40:59Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-30
+  - lastTransitionTime: "2026-06-10T01:40:59Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4q-9
+  - lastTransitionTime: "2026-06-10T01:41:00Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-7
+  - lastTransitionTime: "2026-06-10T01:41:00Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-23
+  - lastTransitionTime: "2026-06-10T01:41:01Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-11
+  - lastTransitionTime: "2026-06-10T01:41:01Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-2
+  - lastTransitionTime: "2026-06-10T01:41:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-14
+  - lastTransitionTime: "2026-06-10T01:41:02Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4be-3
+  - lastTransitionTime: "2026-06-10T01:41:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-11
+  - lastTransitionTime: "2026-06-10T01:41:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-20
+  - lastTransitionTime: "2026-06-10T01:41:03Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-22
+  - lastTransitionTime: "2026-06-10T01:41:04Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-21
+  - lastTransitionTime: "2026-06-10T01:41:05Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-14
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4g-18
+  - lastTransitionTime: "2026-06-10T01:41:06Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-pelican-4
+  - lastTransitionTime: "2026-06-10T01:41:07Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-3
+  - lastTransitionTime: "2026-06-10T01:41:07Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-9
+  - lastTransitionTime: "2026-06-10T01:41:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-14
+  - lastTransitionTime: "2026-06-10T01:41:08Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-19
+  - lastTransitionTime: "2026-06-10T01:41:09Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-26
+  - lastTransitionTime: "2026-06-10T01:41:10Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-31
+  - lastTransitionTime: "2026-06-10T01:41:10Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-flock-4h-35
+  - lastTransitionTime: "2026-06-10T01:41:10Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-1
+  - lastTransitionTime: "2026-06-10T01:41:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-peterg
+  - lastTransitionTime: "2026-06-10T01:41:11Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-amanda-svante
+  - lastTransitionTime: "2026-06-10T01:41:12Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-deverill-m-t
+  - lastTransitionTime: "2026-06-10T01:41:13Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-nimbus2000
+  - lastTransitionTime: "2026-06-10T01:41:13Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-tomatokechup
+  - lastTransitionTime: "2026-06-10T01:41:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-ahmed-asrar
+  - lastTransitionTime: "2026-06-10T01:41:14Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-sierrini
+  - lastTransitionTime: "2026-06-10T01:41:15Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-roundtripper
+  - lastTransitionTime: "2026-06-10T01:41:16Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-deloitte-1
+  - lastTransitionTime: "2026-06-10T01:41:17Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-thefalconer
+  - lastTransitionTime: "2026-06-10T01:41:17Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-thermoraptor
+  - lastTransitionTime: "2026-06-10T01:41:18Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-balto
+  - lastTransitionTime: "2026-06-10T01:41:18Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-sejong-2
+  - lastTransitionTime: "2026-06-10T01:41:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-lucille-rose
+  - lastTransitionTime: "2026-06-10T01:41:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-teodor
+  - lastTransitionTime: "2026-06-10T01:41:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-tartiflette
+  - lastTransitionTime: "2026-06-10T01:41:19Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-myra
+  - lastTransitionTime: "2026-06-10T01:41:21Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-lemur-2-mario-sousa
+  - lastTransitionTime: "2026-06-10T01:41:22Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-new-norcia
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kiruna
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-redu
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-cebreros
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-santa-maria
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-kourou
+  - lastTransitionTime: "2026-06-10T01:41:23Z"
+    message: ""
+    reason: ok
+    status: "True"
+    type: fsNode-estrack-malargue
+  experimentState: Success
+  experimentTime: "2026-05-17T00:27:46Z"

@@ -1,0 +1,32 @@
+{
+  "run_id": "uc2nr-tus-n02",
+  "engine": "tus",
+  "file_size": "32M",
+  "sat_count": 2,
+  "priority": "-",
+  "rf": null,
+  "t_destroy": null,
+  "state": "Success",
+  "exec_date": "2026-06-10T01:40:14Z",
+  "duration_s": 256.0,
+  "sim_start": "2026-05-16T23:59:00Z",
+  "sim_end": "2026-05-17T00:03:16Z",
+  "first_gs": 262.94626264,
+  "last_gs": 262.94626264,
+  "mean_gs": 262.94626264,
+  "n_gs": 1,
+  "gs_reached": 1,
+  "files_to_gs": 1,
+  "delivery_success_rate": 50.0,
+  "producers": [
+    "orbcomm-fm06"
+  ],
+  "all_delivered": false,
+  "delivered": true,
+  "n_receivers": 1,
+  "produced": 2.0,
+  "notes": "1 of 2 file(s) undelivered",
+  "tx_mib": 33.519476890563965,
+  "peak_cpu": 80.0,
+  "peak_mem_mib": 11.92578125
+}

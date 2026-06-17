@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC2NR — Continuous LOS Relay (evenly distributed, no randomness)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
+      <span class="logo-accent">EDFS</span>
+      <span class="logo-badge">ESA Φ-lab</span>
+      <span class="nav-sub">YASS results</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Use Cases</a></li>
+      <li><a href="https://edfs4eo.cloudferro.com/" target="_blank" rel="noopener">Project</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="wrap">
+<div class="crumbs">
+  <a href="../index.html">YASS results</a>
+   / UC2NR — Continuous LOS Relay (evenly distributed, no randomness)
+</div>
+
+<span class="section-label">Use Case</span>
+<h1>UC2NR — Continuous LOS Relay (evenly distributed, no randomness)</h1>
+
+<div class="doc"><p>A variant of <a href="../uc2-continuous-los-relay/">UC2</a> with <strong>two</strong> changes and nothing
+else:</p>
+<ol>
+<li><strong>Even, multi-constellation satellite distribution.</strong> Instead of UC2's single
+   OneWeb ~87.9° polar shell (<code>_common_/oneweb-roster.yaml</code> + synthetic top-up),
+   the satellites are drawn from a mixed-constellation TLE snapshot (Orbcomm,
+   Globalstar, Starlink, Iridium-NEXT, OneWeb, Planet — inclinations ~43–97° and
+   a range of altitudes) and <strong>even-strided</strong> per <code>sat_count</code>, the same recipe as
+   <a href="../big-scale/"><code>big-scale</code></a>. This spreads the constellation evenly across
+   orbital regimes rather than clustering it in one shell.</li>
+<li><strong>No randomness in the fault stream.</strong> The recurring hardware faults keep the
+   same menu, mean interval and duration, but the schedule is <strong>fully
+   deterministic</strong>: <code>intervalJitterPercent: 0</code>, <code>durationJitterPercent: 0</code>, no
+   per-fsNode seed. To avoid the whole constellation pulsing in and out of fault
+   together, each fsNode's <code>startOffset</code> is <strong>phased by its index</strong> (10 buckets at
+   60…330 s across the 5 m interval), so ~10% of nodes are faulted at any instant
+   — UC2's intended fault intensity, but with zero RNG.</li>
+</ol>
+<p>Everything else matches UC2 exactly: engines (TUS, EDFS — same images, keys and
+<code>estrack-new-norcia</code> bootstrap peer), <code>hardwareSpecRef: oneweb</code> satellites +
+<code>ground-station-hwdef</code> GS, the seven ESTRACK ground stations, the success
+condition (a GS holding ≥95% of files), the pinned <code>simulationStartTime</code>,
+<code>maxDuration: 6h</code>, and the tier matrix.</p>
+<h2>Why</h2>
+<p>UC2's OneWeb shell clusters every satellite in near-identical orbits and its
+fault schedule is randomised (only reproducible via seed). UC2NR removes both
+confounders so the EDFS-vs-TUS delivery comparison is driven by an even global
+constellation under an identical, repeatable fault load — making per-run
+differences attributable to the engines, not to roster clustering or RNG.</p>
+<p>See <a href="../uc2-continuous-los-relay/README.md">UC2's README</a> for the full scenario,
+success condition, parameters and metrics, all of which carry over unchanged.</p></div>
+
+
+<h2>Charts</h2>
+<div class="charts">
+
+  <div class="chart"><img src="charts/delivery_pct_compare.png" alt="Delivery success (% of produced files reaching a GA): EDFS vs TUS by constellation size (EDFS = default priority, mean over RF). Dashed line = success threshold (white-background copy: charts/delivery_pct_compare_light.png)"><div class="cap">Delivery success (% of produced files reaching a GA): EDFS vs TUS by constellation size (EDFS = default priority, mean over RF). Dashed line = success threshold (white-background copy: charts/delivery_pct_compare_light.png)</div></div>
+
+</div>
+
+
+<h2>Variants (19)</h2>
+<table class="variants">
+<tr><th>variant</th><th>engine</th><th>priority</th><th>RF</th><th>sat</th><th>produced</th><th>files→GS</th><th>all?</th><th>lastGS(s)</th><th>status</th><th>delivered %</th></tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n01-rf3/index.html">uc2nr-edfs-pdefault-n01-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>1</td><td>1</td><td>1</td><td>yes</td><td>249</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n02-rf3/index.html">uc2nr-edfs-pdefault-n02-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>2</td><td>2</td><td>2</td><td>yes</td><td>272</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n08-rf1/index.html">uc2nr-edfs-pdefault-n08-rf1</a></td>
+  <td>edfs</td><td>default</td><td>1</td><td>8</td><td>8</td><td>7</td><td>no</td><td>1819</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>88%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n08-rf3/index.html">uc2nr-edfs-pdefault-n08-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>8</td><td>8</td><td>8</td><td>yes</td><td>4016</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n08-rf5/index.html">uc2nr-edfs-pdefault-n08-rf5</a></td>
+  <td>edfs</td><td>default</td><td>5</td><td>8</td><td>8</td><td>6</td><td>no</td><td>1820</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>75%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-phigh-n08-rf3/index.html">uc2nr-edfs-phigh-n08-rf3</a></td>
+  <td>edfs</td><td>high</td><td>3</td><td>8</td><td>5</td><td>5</td><td>yes</td><td>3968</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-plow-n08-rf3/index.html">uc2nr-edfs-plow-n08-rf3</a></td>
+  <td>edfs</td><td>low</td><td>3</td><td>8</td><td>8</td><td>6</td><td>no</td><td>4660</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>75%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n21-rf3/index.html">uc2nr-edfs-pdefault-n21-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>21</td><td>21</td><td>19</td><td>no</td><td>3207</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>90%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n100-rf1/index.html">uc2nr-edfs-pdefault-n100-rf1</a></td>
+  <td>edfs</td><td>default</td><td>1</td><td>100</td><td>100</td><td>100</td><td>yes</td><td>1788</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n100-rf3/index.html">uc2nr-edfs-pdefault-n100-rf3</a></td>
+  <td>edfs</td><td>default</td><td>3</td><td>100</td><td>100</td><td>100</td><td>yes</td><td>1732</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-pdefault-n100-rf5/index.html">uc2nr-edfs-pdefault-n100-rf5</a></td>
+  <td>edfs</td><td>default</td><td>5</td><td>100</td><td>100</td><td>100</td><td>yes</td><td>1675</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-phigh-n100-rf3/index.html">uc2nr-edfs-phigh-n100-rf3</a></td>
+  <td>edfs</td><td>high</td><td>3</td><td>100</td><td>100</td><td>100</td><td>yes</td><td>1845</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-edfs-plow-n100-rf3/index.html">uc2nr-edfs-plow-n100-rf3</a></td>
+  <td>edfs</td><td>low</td><td>3</td><td>100</td><td>100</td><td>8</td><td>no</td><td>5549</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>8%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n01/index.html">uc2nr-tus-n01</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>1</td><td>1</td><td>0</td><td>no</td><td>n/a</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>0%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n02/index.html">uc2nr-tus-n02</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>2</td><td>2</td><td>1</td><td>no</td><td>263</td>
+  <td><span class="badge bad">Failed</span></td>
+  <td>50%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n08/index.html">uc2nr-tus-n08</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>8</td><td>5</td><td>5</td><td>yes</td><td>4659</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n21/index.html">uc2nr-tus-n21</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>21</td><td>10</td><td>10</td><td>yes</td><td>3681</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>100%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n100/index.html">uc2nr-tus-n100</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>100</td><td>100</td><td>97</td><td>no</td><td>6289</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>97%</td>
+</tr>
+
+<tr>
+  <td><a href="uc2nr-tus-n200/index.html">uc2nr-tus-n200</a></td>
+  <td>tus</td><td>-</td><td>—</td><td>200</td><td>200</td><td>53</td><td>no</td><td>710</td>
+  <td><span class="badge ok">Success</span></td>
+  <td>98%</td>
+</tr>
+
+</table>
+
+
+
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="logo-accent">EDFS</span> <span class="logo-badge">ESA Φ-lab</span></div>
+      <p>Disruptive Technologies for Decentralized Storage and Provenance of EO Data — Theme 2.
+         YASS (Yet Another Satellite Simulator): EDFS vs TUS across use cases UC1–UC5.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Contract Info</div>
+      <div class="footer-meta">
+        <span>ESA Contract No:</span>
+        <span class="footer-contract-no">4000148100/25/I-NS</span>
+        <span class="footer-meta-label">Prime Contractor:</span>
+        <span><a href="https://cloudferro.com/" target="_blank" rel="noopener">CloudFerro S.A.</a> (PL)</span>
+        <span class="footer-meta-label">Sub-Contractor:</span>
+        <span>DuoBit Sp. z o.o. (PL)</span>
+        <span class="footer-meta-label">Funded By:</span>
+        <span><a href="https://philab.esa.int/" target="_blank" rel="noopener">ESA Φ-lab</a> (European Space Agency)</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="logo-accent">EDFS</span> · YASS — Yet Another Satellite Simulator · generated report</div>
+</footer>
+</body>
+</html>

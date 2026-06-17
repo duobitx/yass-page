@@ -1,14 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1RWYW0VDZK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-1RWYW0VDZK');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>UC4 — Sat Failure</title>
@@ -21,7 +13,7 @@
 <body>
 <nav class="site-nav">
   <div class="nav-inner">
-    <a href="https://edfs4eo.cloudferro.com/" class="nav-logo" aria-label="EDFS — YASS results home">
+    <a href="../index.html" class="nav-logo" aria-label="EDFS — YASS results home">
       <span class="logo-accent">EDFS</span>
       <span class="logo-badge">ESA Φ-lab</span>
       <span class="nav-sub">YASS results</span>
@@ -206,6 +198,17 @@ negative baseline.</p>
   to shuffle through ISLs to compensate for the producer's loss.</li>
 </ul></div>
 
+
+<h2>Charts</h2>
+<div class="charts">
+
+  <div class="chart"><img src="charts/uc4_delivery_pct.png" alt="EDFS delivery rate (% of produced files reaching a GA), HIGH priority only — high is the only priority run at every n, so the columns are directly comparable. Default behaves identically (see the priority breakdown below); low is the priority that fails. Coloured by destroy time (white-background copy: charts/uc4_delivery_pct_light.png)"><div class="cap">EDFS delivery rate (% of produced files reaching a GA), HIGH priority only — high is the only priority run at every n, so the columns are directly comparable. Default behaves identically (see the priority breakdown below); low is the priority that fails. Coloured by destroy time (white-background copy: charts/uc4_delivery_pct_light.png)</div></div>
+
+  <div class="chart"><img src="charts/uc4_priority_breakdown.png" alt="EDFS delivery rate by file priority for the n=21, dt=15m cell — low priority fails where default/high succeed (white-background copy: charts/uc4_priority_breakdown_light.png)"><div class="cap">EDFS delivery rate by file priority for the n=21, dt=15m cell — low priority fails where default/high succeed (white-background copy: charts/uc4_priority_breakdown_light.png)</div></div>
+
+</div>
+
+
 <h2>Variants (40)</h2>
 <table class="variants">
 <tr><th>variant</th><th>engine</th><th>priority</th><th>dt</th><th>sat</th><th>RF</th><th>delivered</th><th>firstGS(s)</th><th>state</th></tr>
@@ -214,240 +217,280 @@ negative baseline.</p>
   <td><a href="uc4-edfs-phigh-td15m-n01-rf3/index.html">uc4-edfs-phigh-td15m-n01-rf3</a></td>
   <td>edfs</td><td>high</td><td>15m</td><td>1</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td45m-n01-rf3/index.html">uc4-edfs-phigh-td45m-n01-rf3</a></td>
   <td>edfs</td><td>high</td><td>45m</td><td>1</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td15m-n02-rf3/index.html">uc4-edfs-phigh-td15m-n02-rf3</a></td>
-  <td>edfs</td><td>high</td><td>15m</td><td>2</td><td>3</td><td>yes</td><td>2800</td>
+  <td>edfs</td><td>high</td><td>15m</td><td>2</td><td>3</td><td>yes</td><td>2796</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td45m-n02-rf3/index.html">uc4-edfs-phigh-td45m-n02-rf3</a></td>
-  <td>edfs</td><td>high</td><td>45m</td><td>2</td><td>3</td><td>no</td><td>n/a</td>
+  <td>edfs</td><td>high</td><td>45m</td><td>2</td><td>3</td><td>yes</td><td>2807</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td5m-n02-rf3/index.html">uc4-edfs-phigh-td5m-n02-rf3</a></td>
-  <td>edfs</td><td>high</td><td>5m</td><td>2</td><td>3</td><td>yes</td><td>2804</td>
+  <td>edfs</td><td>high</td><td>5m</td><td>2</td><td>3</td><td>yes</td><td>2797</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-pdefault-td15m-n08-rf3/index.html">uc4-edfs-pdefault-td15m-n08-rf3</a></td>
-  <td>edfs</td><td>default</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1300</td>
+  <td>edfs</td><td>default</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1296</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-pdefault-td45m-n08-rf3/index.html">uc4-edfs-pdefault-td45m-n08-rf3</a></td>
   <td>edfs</td><td>default</td><td>45m</td><td>8</td><td>3</td><td>yes</td><td>1326</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td15m-n08-rf3/index.html">uc4-edfs-phigh-td15m-n08-rf3</a></td>
-  <td>edfs</td><td>high</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1322</td>
+  <td>edfs</td><td>high</td><td>15m</td><td>8</td><td>3</td><td>yes</td><td>1331</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td45m-n08-rf3/index.html">uc4-edfs-phigh-td45m-n08-rf3</a></td>
   <td>edfs</td><td>high</td><td>45m</td><td>8</td><td>3</td><td>yes</td><td>1293</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td5m-n08-rf3/index.html">uc4-edfs-phigh-td5m-n08-rf3</a></td>
-  <td>edfs</td><td>high</td><td>5m</td><td>8</td><td>3</td><td>yes</td><td>1330</td>
+  <td>edfs</td><td>high</td><td>5m</td><td>8</td><td>3</td><td>yes</td><td>1343</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td15m-n08-rf3/index.html">uc4-edfs-plow-td15m-n08-rf3</a></td>
   <td>edfs</td><td>low</td><td>15m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">Ongoing</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td45m-n08-rf3/index.html">uc4-edfs-plow-td45m-n08-rf3</a></td>
   <td>edfs</td><td>low</td><td>45m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td5m-n08-rf3/index.html">uc4-edfs-plow-td5m-n08-rf3</a></td>
   <td>edfs</td><td>low</td><td>5m</td><td>8</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">Ongoing</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-pdefault-td15m-n21-rf3/index.html">uc4-edfs-pdefault-td15m-n21-rf3</a></td>
   <td>edfs</td><td>default</td><td>15m</td><td>21</td><td>3</td><td>yes</td><td>1302</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-pdefault-td45m-n21-rf3/index.html">uc4-edfs-pdefault-td45m-n21-rf3</a></td>
   <td>edfs</td><td>default</td><td>45m</td><td>21</td><td>3</td><td>yes</td><td>1306</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-pdefault-td5m-n21-rf3/index.html">uc4-edfs-pdefault-td5m-n21-rf3</a></td>
-  <td>edfs</td><td>default</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1323</td>
+  <td>edfs</td><td>default</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1305</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td15m-n21-rf3/index.html">uc4-edfs-phigh-td15m-n21-rf3</a></td>
-  <td>edfs</td><td>high</td><td>15m</td><td>21</td><td>3</td><td>yes</td><td>1298</td>
+  <td>edfs</td><td>high</td><td>15m</td><td>21</td><td>3</td><td>yes</td><td>1296</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td45m-n21-rf3/index.html">uc4-edfs-phigh-td45m-n21-rf3</a></td>
   <td>edfs</td><td>high</td><td>45m</td><td>21</td><td>3</td><td>yes</td><td>1322</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td5m-n21-rf3/index.html">uc4-edfs-phigh-td5m-n21-rf3</a></td>
-  <td>edfs</td><td>high</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1301</td>
+  <td>edfs</td><td>high</td><td>5m</td><td>21</td><td>3</td><td>yes</td><td>1302</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td15m-n21-rf3/index.html">uc4-edfs-plow-td15m-n21-rf3</a></td>
   <td>edfs</td><td>low</td><td>15m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td45m-n21-rf3/index.html">uc4-edfs-plow-td45m-n21-rf3</a></td>
   <td>edfs</td><td>low</td><td>45m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-plow-td5m-n21-rf3/index.html">uc4-edfs-plow-td5m-n21-rf3</a></td>
   <td>edfs</td><td>low</td><td>5m</td><td>21</td><td>3</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td15m-n100-rf3/index.html">uc4-edfs-phigh-td15m-n100-rf3</a></td>
-  <td>edfs</td><td>high</td><td>15m</td><td>100</td><td>3</td><td>yes</td><td>62</td>
+  <td>edfs</td><td>high</td><td>15m</td><td>100</td><td>3</td><td>yes</td><td>84</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td45m-n100-rf3/index.html">uc4-edfs-phigh-td45m-n100-rf3</a></td>
   <td>edfs</td><td>high</td><td>45m</td><td>100</td><td>3</td><td>yes</td><td>101</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-edfs-phigh-td5m-n100-rf3/index.html">uc4-edfs-phigh-td5m-n100-rf3</a></td>
   <td>edfs</td><td>high</td><td>5m</td><td>100</td><td>3</td><td>yes</td><td>60</td>
   <td><span class="badge ok">Success</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td15m-n01/index.html">uc4-tus-td15m-n01</a></td>
   <td>tus</td><td>-</td><td>15m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td45m-n01/index.html">uc4-tus-td45m-n01</a></td>
   <td>tus</td><td>-</td><td>45m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td5m-n01/index.html">uc4-tus-td5m-n01</a></td>
   <td>tus</td><td>-</td><td>5m</td><td>1</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td15m-n02/index.html">uc4-tus-td15m-n02</a></td>
   <td>tus</td><td>-</td><td>15m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td45m-n02/index.html">uc4-tus-td45m-n02</a></td>
   <td>tus</td><td>-</td><td>45m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td5m-n02/index.html">uc4-tus-td5m-n02</a></td>
   <td>tus</td><td>-</td><td>5m</td><td>2</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td15m-n08/index.html">uc4-tus-td15m-n08</a></td>
   <td>tus</td><td>-</td><td>15m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td45m-n08/index.html">uc4-tus-td45m-n08</a></td>
   <td>tus</td><td>-</td><td>45m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td5m-n08/index.html">uc4-tus-td5m-n08</a></td>
   <td>tus</td><td>-</td><td>5m</td><td>8</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td15m-n21/index.html">uc4-tus-td15m-n21</a></td>
   <td>tus</td><td>-</td><td>15m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td45m-n21/index.html">uc4-tus-td45m-n21</a></td>
   <td>tus</td><td>-</td><td>45m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td5m-n21/index.html">uc4-tus-td5m-n21</a></td>
   <td>tus</td><td>-</td><td>5m</td><td>21</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td15m-n100/index.html">uc4-tus-td15m-n100</a></td>
   <td>tus</td><td>-</td><td>15m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td45m-n100/index.html">uc4-tus-td45m-n100</a></td>
   <td>tus</td><td>-</td><td>45m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 <tr>
   <td><a href="uc4-tus-td5m-n100/index.html">uc4-tus-td5m-n100</a></td>
   <td>tus</td><td>-</td><td>5m</td><td>100</td><td>—</td><td>no</td><td>n/a</td>
   <td><span class="badge bad">TimedOut</span></td>
+  
 </tr>
 
 </table>

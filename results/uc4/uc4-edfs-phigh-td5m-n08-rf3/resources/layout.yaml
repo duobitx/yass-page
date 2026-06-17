@@ -7,11 +7,11 @@ metadata:
     yass.experiments/sat-selection: round-robin across RAAN buckets for orbital-plane
       diversity
     yass.experiments/source-tles: ../../_common_/oneweb-roster.yaml
-  creationTimestamp: "2026-06-04T21:58:16Z"
+  creationTimestamp: "2026-06-03T18:24:18Z"
   generation: 2
   name: uc4-n08
-  resourceVersion: "1753814"
-  uid: 3a5be8c1-5cec-44fc-8b7a-f1c5f349f0d3
+  resourceVersion: "25495444"
+  uid: 29bfd506-28cb-4174-9511-c90ed487d3ec
 spec:
 - fsNode: producer
   hardwareSpecRef: oneweb
